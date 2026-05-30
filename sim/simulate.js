@@ -18,7 +18,7 @@ const SECTORS = [
 ];
 
 const COUNTRIES = {
-  korea:  { flag:'🇰🇷', name:'한국', volMod:0,  divMod:-50, startMod:0,    swanChance:0.08, swanSteps:2, sig:{worldAmplify:true, sectorBoost:['tech','auto']}, co:{tech:'삼성전자',phone:'SK텔레콤',auto:'현대차',shop:'쿠팡',bank:'KB금융',game:'엔씨소프트'} },
+  korea:  { flag:'🇰🇷', name:'한국', volMod:0,  divMod:-50, startMod:0,    swanChance:0.08, swanSteps:2, sig:{worldAmplify:true, sectorBoost:['tech','auto']}, co:{tech:'삼성전자',phone:'SK텔레콤',auto:'현대차',shop:'쿠팡',bank:'KB금융',game:'스마일게이트'} },
   usa:    { flag:'🇺🇸', name:'미국', volMod:-1, divMod:50,  startMod:500,  swanChance:0.04, swanSteps:2, sig:{}, co:{tech:'엔비디아',phone:'애플',auto:'테슬라',shop:'아마존',bank:'JP모건',game:'EA게임즈'} },
   japan:  { flag:'🇯🇵', name:'일본', volMod:-1, divMod:30,  startMod:200,  swanChance:0.04, swanSteps:2, sig:{compressBig:true}, co:{tech:'키옥시아',phone:'소니',auto:'도요타',shop:'유니클로',bank:'미쓰비시UFJ',game:'닌텐도'} },
   china:  { flag:'🇨🇳', name:'중국', volMod:1,  divMod:-30, startMod:-200, swanChance:0.14, swanSteps:2, sig:{}, co:{tech:'SMIC',phone:'샤오미',auto:'BYD',shop:'알리바바',bank:'공상은행',game:'텐센트'} },

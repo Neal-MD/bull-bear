@@ -86,40 +86,42 @@
   .tb-ico{ width:38px; height:38px; border-radius:50%; background:var(--surface); font-size:18px;
            display:grid; place-items:center; box-shadow:var(--shadow-sm); flex:0 0 auto; }
 
-  /* 예보 스트립 */
+  /* 예보 스트립 — 크고 잘 보이게 (남는 공간 차지) */
   .fcstrip{ flex:0 0 auto; display:flex; gap:var(--sp-2); align-items:stretch; }
-  .fcbox{ flex:1; border-radius:var(--r); padding:7px 11px; box-shadow:var(--shadow-sm); display:flex;
-          flex-direction:column; gap:3px; min-width:0; }
-  .fcbox.now{ background:linear-gradient(160deg, oklch(0.97 0.05 95), oklch(0.93 0.08 80)); }
+  .fcbox{ flex:1; border-radius:var(--r); padding:12px 15px; box-shadow:var(--shadow-sm); display:flex;
+          flex-direction:column; gap:9px; min-width:0; justify-content:center; }
+  .fcbox.now{ background:linear-gradient(160deg, oklch(0.97 0.06 95), oklch(0.92 0.10 78)); }
   .fcbox.next{ background:var(--surface); }
-  .fcbox.fog{ background:repeating-linear-gradient(45deg, var(--surface), var(--surface) 8px, var(--surface-2) 8px, var(--surface-2) 16px); }
-  .fc-lbl{ font-size:11px; font-weight:900; color:var(--ink-soft); letter-spacing:.02em; }
-  .mini-ev{ display:flex; align-items:center; gap:6px; }
-  .mini-ev .mi-ico{ font-size:18px; flex:0 0 auto; }
-  .mini-ev .mi-tx{ font-size:12px; font-weight:700; flex:1; line-height:1.15; min-width:0;
-                   overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .mini-ev .mi-ef{ font-size:12px; font-weight:900; white-space:nowrap; }
+  .fcbox.fog{ background:repeating-linear-gradient(45deg, var(--surface), var(--surface) 9px, var(--surface-2) 9px, var(--surface-2) 18px); }
+  .fc-lbl{ font-size:13px; font-weight:900; color:var(--ink-soft); }
+  .mini-ev{ display:flex; align-items:center; gap:9px; }
+  .mini-ev .mi-ico{ font-size:26px; flex:0 0 auto; }
+  .mini-ev .mi-tx{ font-size:14.5px; font-weight:800; flex:1; line-height:1.2; min-width:0; }
+  .mini-ev .mi-ef{ font-size:14.5px; font-weight:900; white-space:nowrap; }
   .mini-ev .mi-ef.up{ color:var(--up-ink); } .mini-ev .mi-ef.down{ color:var(--down-ink); }
 
-  /* 보드 (주인공) */
-  .board{ flex:1 1 auto; min-height:0; display:grid; grid-template-columns:repeat(3,1fr);
-          grid-auto-rows:1fr; gap:var(--sp-2); }
+  /* 보드 — 타일 컴팩트(고정 높이, 공간 낭비 줄임) */
+  .board{ flex:1 1 auto; align-content:center; min-height:0; display:grid; grid-template-columns:repeat(3,1fr);
+          grid-auto-rows:minmax(112px, 168px); gap:var(--sp-2); }
   .tile{ background:var(--surface); border-radius:var(--r); box-shadow:var(--shadow); position:relative;
-         display:flex; flex-direction:column; align-items:center; justify-content:space-between;
-         padding:8px 6px 7px; overflow:hidden; border-top:6px solid var(--mid-c); }
+         display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+         padding:7px 6px; overflow:hidden; border-top:6px solid var(--mid-c); }
   .tile.growth{ border-top-color:var(--grow); }
   .tile.divid{ border-top-color:var(--divd); }
   .tile.dead{ opacity:.5; filter:grayscale(.7); }
-  .tile .t-ico{ font-size:clamp(26px, 5vh, 40px); line-height:1; }
-  .tile .t-nm{ font-size:11px; font-weight:700; color:var(--ink-soft); }
-  .tile .t-pr{ font-size:clamp(17px, 3.2vh, 24px); font-weight:900; color:var(--ink); }
-  .tile .t-chg{ font-size:12px; font-weight:900; min-height:15px; }
+  .tile .t-head{ display:flex; align-items:center; gap:5px; }
+  .tile .t-ico{ font-size:24px; line-height:1; }
+  .tile .t-sector{ font-size:13.5px; font-weight:900; color:var(--ink); }
+  .tile .t-nm{ font-size:11px; font-weight:700; color:var(--ink-soft); line-height:1; }
+  .tile .t-prc{ display:flex; align-items:baseline; gap:6px; }
+  .tile .t-pr{ font-size:clamp(18px, 2.7vh, 23px); font-weight:900; color:var(--ink); }
+  .tile .t-chg{ font-size:12.5px; font-weight:900; }
   .tile .t-chg.up{ color:var(--up-ink); } .tile .t-chg.down{ color:var(--down-ink); }
-  .tile .t-own{ position:absolute; top:8px; right:7px; font-size:11px; font-weight:900; color:var(--ink);
+  .tile .t-own{ position:absolute; top:7px; right:7px; font-size:11px; font-weight:900; color:var(--ink);
                 background:var(--gold); border-radius:999px; padding:1px 7px; box-shadow:var(--shadow-sm); }
-  .tile .t-coach{ position:absolute; top:8px; left:7px; font-size:16px; }
-  .t-pm{ display:flex; gap:6px; width:100%; margin-top:4px; }
-  .t-pm button{ flex:1; padding:9px 0; font-size:18px; font-weight:900; border-radius:var(--r-sm); color:#fff;
+  .tile .t-coach{ position:absolute; top:7px; left:7px; font-size:16px; }
+  .t-pm{ display:flex; gap:6px; width:100%; margin-top:3px; }
+  .t-pm button{ flex:1; padding:8px 0; font-size:17px; font-weight:900; border-radius:var(--r-sm); color:#fff;
                 box-shadow:var(--shadow-sm); }
   .t-pm .minus{ background:var(--down); }
   .t-pm .plus{ background:var(--up); }
@@ -170,61 +172,64 @@
   /* ===================================================================
      SETUP — 밝은 보드 톤
      =================================================================== */
-  .setup{ padding:32px 20px 48px; text-align:center; }
-  .setup .logo{ font-size:64px; margin-bottom:4px; filter:drop-shadow(0 4px 5px oklch(0.5 0.06 60 /.25)); }
-  .brand{ font-size:clamp(46px,13vw,84px); font-weight:900; line-height:.95; letter-spacing:-.03em;
-          margin-bottom:6px; text-shadow:0 4px 0 oklch(0.86 0.04 78), 0 7px 12px oklch(0.55 0.06 65 /.2); }
+  .setup{ position:fixed; inset:0; overflow:hidden; display:flex; flex-direction:column; gap:8px;
+          padding:calc(env(safe-area-inset-top) + 12px) calc(env(safe-area-inset-right) + 14px)
+                  calc(env(safe-area-inset-bottom) + 8px) calc(env(safe-area-inset-left) + 14px);
+          background:radial-gradient(circle at 50% -8%, oklch(0.97 0.05 95 /.9), transparent 50%), var(--board); }
+  .setup-head{ text-align:center; flex:0 0 auto; }
+  .setup .logo{ font-size:32px; line-height:1; filter:drop-shadow(0 3px 4px oklch(0.5 0.06 60 /.25)); }
+  .brand{ font-size:clamp(30px,7vw,48px); font-weight:900; line-height:.92; letter-spacing:-.03em;
+          text-shadow:0 3px 0 oklch(0.86 0.04 78); }
   .brand .b-bull{ color:var(--up-ink); }
   .brand .b-bear{ color:var(--down-ink); }
   .brand .b-amp{ color:var(--gold-deep); margin:0 .1em; font-size:.78em; vertical-align:.06em; }
-  .brand-sub{ font-size:clamp(16px,4.5vw,21px); font-weight:900; color:var(--ink); margin-bottom:2px; }
-  .setup .tag{ color:var(--ink-soft); margin-bottom:26px; font-size:14px; font-weight:600; }
-  .setup .card{ background:var(--surface); border-radius:var(--r); padding:18px; margin-bottom:14px;
-                text-align:left; box-shadow:var(--shadow); }
-  .setup .card h3{ font-size:15px; margin-bottom:12px; color:var(--ink); font-weight:900; }
-  .pcount{ display:flex; gap:8px; }
-  .pcount button{ flex:1; padding:14px; background:var(--surface-2); font-size:17px; box-shadow:var(--shadow-sm); }
+  .brand-sub{ font-size:12.5px; font-weight:700; color:var(--ink-soft); }
+
+  .setup-cols{ flex:1 1 auto; min-height:0; display:grid; grid-template-columns:1fr 1fr; gap:10px; align-items:start; }
+  .setup .card{ background:var(--surface); border-radius:var(--r); padding:13px 14px; text-align:left;
+                box-shadow:var(--shadow); overflow:hidden; }
+  .setup .card h3{ font-size:12.5px; margin-bottom:7px; color:var(--ink-soft); font-weight:900; }
+  .setup .card h3.mt{ margin-top:12px; }
+
+  .pcount{ display:flex; gap:7px; }
+  .pcount button{ flex:1; padding:9px; background:var(--surface-2); font-size:15px; box-shadow:var(--shadow-sm); }
   .pcount button.sel{ background:var(--gold); }
 
-  .preset-row{ display:flex; flex-direction:column; gap:8px; }
-  .preset{ background:var(--surface-2); padding:13px 14px; text-align:left; border:3px solid transparent;
+  .preset-row{ display:flex; gap:6px; }
+  .preset{ flex:1; background:var(--surface-2); padding:9px 6px; text-align:center; border:3px solid transparent;
            border-radius:var(--r-sm); box-shadow:var(--shadow-sm); }
   .preset.sel{ background:oklch(0.92 0.07 90); border-color:var(--gold); }
-  .preset .pr-name{ font-size:15px; font-weight:900; margin-bottom:2px; }
-  .preset .pr-desc{ font-size:12px; color:var(--ink-soft); }
-  .adv-toggle{ width:100%; background:none; color:var(--ink-soft); padding:10px; margin-top:10px; font-size:13px; }
-  .adv-box{ display:none; margin-top:10px; background:var(--surface-2); border-radius:var(--r-sm); padding:14px; }
-  .adv-box.show{ display:block; }
-  .adv-row{ display:flex; align-items:center; gap:10px; margin-bottom:9px; flex-wrap:wrap; }
-  .adv-lbl{ font-size:12.5px; color:var(--ink-soft); min-width:130px; font-weight:700; }
-  .adv-opts{ display:flex; gap:5px; flex-wrap:wrap; flex:1; }
-  .adv-opts button{ padding:7px 11px; background:var(--surface); font-size:12px; box-shadow:var(--shadow-sm); }
-  .adv-opts button.sel{ background:var(--gold); }
-  .adv-note{ font-size:11.5px; color:var(--ink-soft); margin-top:6px; }
+  .preset .pr-name{ font-size:14px; font-weight:900; }
+  .preset .pr-desc{ font-size:10px; color:var(--ink-soft); line-height:1.2; margin-top:2px; }
 
-  .country-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-  .country-btn{ background:var(--surface-2); padding:10px 6px; border:3px solid transparent; border-radius:var(--r-sm);
+  .opts{ display:flex; flex-direction:column; gap:5px; }
+  .opt-row{ display:flex; align-items:center; gap:8px; justify-content:space-between; }
+  .opt-lbl{ font-size:12px; font-weight:700; color:var(--ink-soft); white-space:nowrap; }
+  .opt-btns{ display:flex; gap:4px; }
+  .opt-btns button{ padding:5px 9px; background:var(--surface-2); font-size:11.5px; box-shadow:var(--shadow-sm); }
+  .opt-btns button.sel{ background:var(--gold); }
+
+  .country-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+  .country-btn{ background:var(--surface-2); padding:7px 4px; border:3px solid transparent; border-radius:var(--r-sm);
                 text-align:center; box-shadow:var(--shadow-sm); }
   .country-btn.sel{ background:oklch(0.94 0.06 90); border-color:var(--gold); }
-  .ct-flag{ font-size:30px; }
-  .ct-name{ font-size:13px; font-weight:900; margin:2px 0; }
-  .ct-desc{ font-size:10.5px; color:var(--ink-soft); line-height:1.3; }
-  .ct-badge{ font-size:12px; margin-top:3px; }
-  .cd-kid{ margin-top:6px; font-size:12px; line-height:1.45; color:var(--ink); }
-  .country-detail{ background:var(--surface-2); border-radius:var(--r-sm); padding:12px; margin-top:10px; font-size:12px; }
-  .cd-flag{ margin-bottom:6px; } .cd-flag b{ color:var(--gold-deep); }
-  .cd-cos{ display:flex; flex-wrap:wrap; gap:6px; }
-  .cd-co{ background:var(--surface); padding:3px 8px; border-radius:999px; font-size:11px; box-shadow:var(--shadow-sm); }
-  .pname{ display:flex; gap:8px; margin-bottom:8px; align-items:center; }
-  .pname input{ flex:1; padding:12px 14px; border-radius:var(--r-sm); border:2px solid var(--line);
-                background:var(--surface); color:var(--ink); font-size:15px; font-family:inherit; font-weight:700; }
+  .ct-flag{ font-size:24px; }
+  .ct-name{ font-size:12px; font-weight:900; margin:1px 0; }
+  .ct-badge{ font-size:11px; }
+  .cd-kid{ margin-top:5px; font-size:11.5px; line-height:1.4; color:var(--ink); }
+  .country-detail{ background:var(--surface-2); border-radius:var(--r-sm); padding:8px 10px; margin-top:7px; font-size:11.5px; }
+  .cd-flag{ margin-bottom:4px; } .cd-flag b{ color:var(--gold-deep); }
+  .cd-cos{ display:flex; flex-wrap:wrap; gap:5px; }
+  .cd-co{ background:var(--surface); padding:2px 7px; border-radius:999px; font-size:10.5px; box-shadow:var(--shadow-sm); }
+  .pname{ display:flex; gap:7px; margin-bottom:6px; align-items:center; }
+  .pname input{ flex:1; padding:8px 11px; border-radius:var(--r-sm); border:2px solid var(--line);
+                background:var(--surface); color:var(--ink); font-size:14px; font-family:inherit; font-weight:700; }
   .pname input:focus{ outline:none; border-color:var(--gold); }
-  .pname .em{ font-size:26px; width:36px; text-align:center; }
-  .start-btn{ width:100%; padding:18px; background:linear-gradient(160deg, var(--gold), var(--gold-deep));
-              color:var(--ink); font-size:21px; margin-top:10px; box-shadow:var(--shadow); font-weight:900; }
-  .learn-row{ display:flex; gap:8px; margin-top:14px; }
-  .learn-row button{ flex:1; padding:14px 6px; background:var(--surface); font-size:13px; box-shadow:var(--shadow-sm); }
-  .learn-note{ font-size:11.5px; color:var(--ink-soft); margin-top:10px; }
+  .pname .em{ font-size:22px; width:30px; text-align:center; }
+  .start-btn{ width:100%; padding:14px; background:linear-gradient(160deg, var(--gold), var(--gold-deep));
+              color:var(--ink); font-size:18px; margin-top:12px; box-shadow:var(--shadow); font-weight:900; }
+  .setup-foot{ flex:0 0 auto; display:flex; gap:6px; justify-content:center; flex-wrap:wrap; }
+  .setup-foot button{ background:none; color:var(--ink-soft); text-decoration:underline; font-size:12.5px; padding:5px 8px; font-weight:700; }
   /* 보조 버튼(지난 기록/지우기 등) — 밝은 테마 호환 */
   .act-pass{ background:var(--surface) !important; color:var(--ink) !important; box-shadow:var(--shadow-sm); }
 
@@ -375,7 +380,7 @@ const COUNTRIES = {
     divTier: 1,
     kid: '만능손! 반도체·자동차 잘해요. 잘되면 확 세지만 세계 흔들리면 출렁. 용돈은 짠 대신 회사를 키워요.',
     tip: '한 곳에 다 걸지 말기',
-    co: { tech:'삼성전자', phone:'SK텔레콤', auto:'현대차', shop:'쿠팡', bank:'KB금융', game:'엔씨소프트' }
+    co: { tech:'삼성전자', phone:'SK텔레콤', auto:'현대차', shop:'쿠팡', bank:'KB금융', game:'스마일게이트' }
   },
   usa: {
     flag:'🇺🇸', name:'미국', desc:'비싸지만 안전 · 꾸준히 오름',
@@ -516,13 +521,13 @@ const GOALS = [
 ];
 
 const AVATARS = ['👨','👩','👧','👦','🧑','👵'];
-const TOTAL_ROUNDS = 12, ACTIONS_PER_TURN = 2;
+const TOTAL_ROUNDS = 12, DEFAULT_ACTIONS = 2;
 
 // ---------- 난이도 옵션 ----------
 const PRESETS = {
-  easy:   { name:'🌱 초급',  desc:'쉽고 여유롭게 (처음 배울 때)', buyLimit:5, forecastLen:3, divEvery:1, startCash:25000, coachOn:true,  downsideBuffer:1, forecastFog:false },
-  normal: { name:'🌿 표준',  desc:'균형 잡힌 기본 모드',            buyLimit:3, forecastLen:2, divEvery:1, startCash:20000, coachOn:false, downsideBuffer:0, forecastFog:false },
-  hard:   { name:'🌳 고급',  desc:'전략적 도전 (가족 고수용)',      buyLimit:2, forecastLen:1, divEvery:2, startCash:15000, coachOn:false, downsideBuffer:0, forecastFog:true  },
+  easy:   { name:'초급',  desc:'쉽고 여유롭게 (처음 배울 때)', buyLimit:5, forecastLen:3, divEvery:1, startCash:25000, coachOn:true,  downsideBuffer:1, forecastFog:false, actionsPerTurn:3 },
+  normal: { name:'표준',  desc:'균형 잡힌 기본 모드',            buyLimit:3, forecastLen:2, divEvery:1, startCash:20000, coachOn:false, downsideBuffer:0, forecastFog:false, actionsPerTurn:2 },
+  hard:   { name:'고급',  desc:'전략적 도전 (가족 고수용)',      buyLimit:2, forecastLen:1, divEvery:2, startCash:15000, coachOn:false, downsideBuffer:0, forecastFog:true,  actionsPerTurn:2 },
 };
 // forecastLen: 1=이번만, 2=이번+다음, 3=이번+다음+다다음 (각 슬롯은 사건 2개)
 // divEvery: 1=매라운드, 2=2라운드마다, 3=3라운드마다
@@ -627,101 +632,67 @@ function renderSetup(){
   if(!G) G={};
   if(!G.setupOpts) G.setupOpts = {...PRESETS.normal, preset:'normal'};
   const opts = G.setupOpts;
+  const cashLbl={15000:'1.5만',20000:'2만',25000:'2.5만',30000:'3만'};
+  const cbtn=(key,val,txt)=>`<button class="${opts[key]===val?'sel':''}" onclick="setOpt('${key}',${val})">${txt}</button>`;
+  const optRow=(label,btns)=>`<div class="opt-row"><span class="opt-lbl">${label}</span><div class="opt-btns">${btns}</div></div>`;
   $('#app').innerHTML = `
-    <div class="setup">
+   <div class="setup">
+    <div class="setup-head">
       <div class="logo">🐂🐻</div>
       <h1 class="brand"><span class="b-bull">Bull</span><span class="b-amp">&</span><span class="b-bear">Bear</span></h1>
-      <div class="brand-sub">불앤베어 꼬마투자단</div>
-      <div class="tag">가족이 함께하는 주식 투자 보드게임</div>
+      <div class="brand-sub">불앤베어 꼬마투자단 · 가족 주식 보드게임</div>
+    </div>
 
+    <div class="setup-cols">
       <div class="card">
-        <h3>몇 명이 함께 하나요?</h3>
-        <div class="pcount">
-          ${[2,3,4].map(n=>`<button class="${n===np?'sel':''}" onclick="setCount(${n})">${n}명</button>`).join('')}
-        </div>
-      </div>
-      <div class="card">
-        <h3>플레이어 이름</h3>
+        <h3>인원</h3>
+        <div class="pcount">${[2,3,4].map(n=>`<button class="${n===np?'sel':''}" onclick="setCount(${n})">${n}명</button>`).join('')}</div>
+        <h3 class="mt">이름</h3>
         <div id="names"></div>
-      </div>
-
-      <div class="card">
-        <h3>🌍 어느 나라 주식시장?</h3>
+        <h3 class="mt">어느 나라 주식시장?</h3>
         <div class="country-grid">
           ${Object.entries(COUNTRIES).map(([k,c])=>`
             <button class="country-btn ${(G.setupCountry||'korea')===k?'sel':''}" onclick="setCountry('${k}')">
               <div class="ct-flag">${c.flag}</div>
               <div class="ct-name">${c.name}</div>
               <div class="ct-badge">${riskBadge(c)} ${dividendBadge(c)}</div>
-              <div class="ct-desc">${c.flavor}</div>
             </button>`).join('')}
         </div>
         <div class="country-detail" id="ctDetail">${countryDetailHTML(G.setupCountry||'korea')}</div>
       </div>
 
       <div class="card">
-        <h3>난이도 선택</h3>
+        <h3>난이도</h3>
         <div class="preset-row">
           ${Object.entries(PRESETS).map(([k,p])=>`
             <button class="preset ${opts.preset===k?'sel':''}" onclick="setPreset('${k}')">
-              <div class="pr-name">${p.name}</div>
-              <div class="pr-desc">${p.desc}</div>
+              <div class="pr-name">${p.name}</div><div class="pr-desc">${p.desc}</div>
             </button>`).join('')}
         </div>
-        <button class="adv-toggle" onclick="$('#advBox').classList.toggle('show'); this.textContent = $('#advBox').classList.contains('show')?'▲ 세부 옵션 닫기':'▼ 세부 옵션 펼치기'">▼ 세부 옵션 펼치기</button>
-        <div class="adv-box" id="advBox">
-          <div class="adv-row">
-            <span class="adv-lbl">한 턴 같은 회사 매수</span>
-            <div class="adv-opts">
-              ${[2,3,5].map(n=>`<button class="${opts.buyLimit===n?'sel':''}" onclick="setOpt('buyLimit',${n})">${n}주</button>`).join('')}
-            </div>
-          </div>
-          <div class="adv-row">
-            <span class="adv-lbl">예보 길이</span>
-            <div class="adv-opts">
-              <button class="${opts.forecastLen===1?'sel':''}" onclick="setOpt('forecastLen',1)">이번만</button>
-              <button class="${opts.forecastLen===2?'sel':''}" onclick="setOpt('forecastLen',2)">이번+다음</button>
-              <button class="${opts.forecastLen===3?'sel':''}" onclick="setOpt('forecastLen',3)">3라운드 앞까지</button>
-            </div>
-          </div>
-          <div class="adv-row">
-            <span class="adv-lbl">배당 주기</span>
-            <div class="adv-opts">
-              <button class="${opts.divEvery===1?'sel':''}" onclick="setOpt('divEvery',1)">매라운드</button>
-              <button class="${opts.divEvery===2?'sel':''}" onclick="setOpt('divEvery',2)">2R마다</button>
-              <button class="${opts.divEvery===3?'sel':''}" onclick="setOpt('divEvery',3)">3R마다</button>
-            </div>
-          </div>
-          <div class="adv-row">
-            <span class="adv-lbl">시작 자금</span>
-            <div class="adv-opts">
-              ${[15000,20000,25000,30000].map(n=>`<button class="${opts.startCash===n?'sel':''}" onclick="setOpt('startCash',${n})">${(n/10000).toFixed(1)}만</button>`).join('')}
-            </div>
-          </div>
-          <div class="adv-row">
-            <span class="adv-lbl">투자 도우미 시작 상태</span>
-            <div class="adv-opts">
-              <button class="${opts.coachOn?'sel':''}" onclick="setOpt('coachOn',true)">🟢 켜짐</button>
-              <button class="${!opts.coachOn?'sel':''}" onclick="setOpt('coachOn',false)">⚪ 꺼짐</button>
-            </div>
-          </div>
-          <div class="adv-note">💡 게임 중 도우미는 상단 버튼으로 언제든 켜고 끌 수 있어요.</div>
+        <h3 class="mt">세부 설정</h3>
+        <div class="opts">
+          ${optRow('한 턴 행동 수', [1,2,3].map(n=>cbtn('actionsPerTurn',n,`${n}번`)).join(''))}
+          ${optRow('한 턴 같은 회사 매수', [2,3,5].map(n=>cbtn('buyLimit',n,`${n}주`)).join(''))}
+          ${optRow('예보 길이', cbtn('forecastLen',1,'이번만')+cbtn('forecastLen',2,'이번+다음')+cbtn('forecastLen',3,'3R 앞'))}
+          ${optRow('배당 주기', cbtn('divEvery',1,'매R')+cbtn('divEvery',2,'2R')+cbtn('divEvery',3,'3R'))}
+          ${optRow('시작 자금', [15000,20000,25000,30000].map(n=>cbtn('startCash',n,cashLbl[n])).join(''))}
+          ${optRow('투자 도우미', `<button class="${opts.coachOn?'sel':''}" onclick="setOpt('coachOn',true)">켜짐</button><button class="${!opts.coachOn?'sel':''}" onclick="setOpt('coachOn',false)">꺼짐</button>`)}
         </div>
+        <button class="start-btn" onclick="startGame()">게임 시작</button>
       </div>
+    </div>
 
-      <button class="start-btn" onclick="startGame()">🎮 게임 시작!</button>
-      <button class="act-pass" style="width:100%;padding:13px;margin-top:8px;color:#fff;" onclick="showHistory()">📊 지난 게임 기록 보기</button>
-      <div class="learn-row">
-        <button onclick="showDoc('rules')">📖 게임 규칙</button>
-        <button onclick="showDoc('concepts')">📚 주식 개념</button>
-        <button onclick="showDoc('income')">💰 돈 이야기</button>
-      </div>
-      <div class="learn-note">📄 자세한 인쇄용 자료는 따로 있어요. 여기선 핵심만 읽을 수 있어요.</div>
-    </div>`;
+    <div class="setup-foot">
+      <button onclick="showDoc('rules')">게임 규칙</button>
+      <button onclick="showDoc('concepts')">주식 개념</button>
+      <button onclick="showDoc('income')">돈 이야기</button>
+      <button onclick="showHistory()">지난 기록</button>
+    </div>
+   </div>`;
   renderNames(np);
 }
 window.setPreset = function(k){ saveNames(); G.setupOpts = {...PRESETS[k], preset:k}; renderSetup(); };
-window.setOpt = function(key,val){ saveNames(); G.setupOpts[key]=val; G.setupOpts.preset='custom'; renderSetup(); $('#advBox').classList.add('show'); };
+window.setOpt = function(key,val){ saveNames(); G.setupOpts[key]=val; G.setupOpts.preset='custom'; renderSetup(); };
 window.setCountry = function(k){ saveNames(); G.setupCountry = k; renderSetup(); };
 function dividendBadge(c){ return '💰'.repeat(c.divTier||1); }
 function riskBadge(c){
@@ -780,7 +751,7 @@ window.startGame = function(){
   G = {
     setupCount:np, setupNames:names, setupOpts:opts, setupCountry:countryKey, country,
     players, prices, prevPrices:{...prices}, eventDeck, actionDeck, forecast,
-    round:1, turnIdx:0, actionsLeft:ACTIONS_PER_TURN, buyCountThisTurn:{}, maxBuyThisTurn:opts.buyLimit, baseBuyLimit:opts.buyLimit,
+    round:1, turnIdx:0, actionsPerTurn:(opts.actionsPerTurn||DEFAULT_ACTIONS), actionsLeft:(opts.actionsPerTurn||DEFAULT_ACTIONS), buyCountThisTurn:{}, maxBuyThisTurn:opts.buyLimit, baseBuyLimit:opts.buyLimit,
     phase:'pass', infoPeek:null, flipNext:false, lastChanges:{},
     coachMode: opts.coachOn,
     log:{ delisted:[], maxConcentration:{}, divTotals:{}, peakStock:{}, trades:0, startTime:Date.now() }
@@ -803,29 +774,30 @@ function showPassScreen(){
     </div>`;
 }
 window.beginTurn = function(){
-  G.actionsLeft = ACTIONS_PER_TURN;
+  G.actionsLeft = G.actionsPerTurn;
   G.buyCountThisTurn = {};
   G.maxBuyThisTurn = G.baseBuyLimit;
   G.phase='turn';
-  // 턴 시작 시점 스냅샷 저장 (Undo용)
-  const p = G.players[G.turnIdx];
-  G.turnSnapshot = {
-    cash: p.cash,
-    shares: {...p.shares},
-    hand: p.hand.map(c=>c), // shallow copy of card refs
-    insured: {...p.insured},
-    infoPeek: G.infoPeek,
-    flipNext: G.flipNext,
-    maxBuyThisTurn: G.maxBuyThisTurn
-  };
+  G.undoStack = []; // 한 행동씩 되돌리기 스택
   render();
 };
 
-// 턴 처음으로 되돌리기 (사기/팔기/카드사용 모두 원복)
-window.undoTurn = function(){
-  if(!G.turnSnapshot) return;
+// 행동 직전 상태를 스택에 저장 (각 거래/카드 핸들러가 호출)
+function pushUndo(){
   const p = G.players[G.turnIdx];
-  const snap = G.turnSnapshot;
+  (G.undoStack = G.undoStack || []).push({
+    cash: p.cash, shares: {...p.shares}, hand: p.hand.map(c=>c), insured: {...p.insured},
+    infoPeek: G.infoPeek, flipNext: G.flipNext, maxBuyThisTurn: G.maxBuyThisTurn,
+    actionsLeft: G.actionsLeft, buyCountThisTurn: {...G.buyCountThisTurn}
+  });
+}
+
+// 직전 행동 하나만 되돌리기 (여러 번 누르면 차례로 취소)
+window.undoTurn = function(){
+  const st = G.undoStack;
+  if(!st || !st.length){ toast('되돌릴 행동이 없어요'); return; }
+  const snap = st.pop();
+  const p = G.players[G.turnIdx];
   p.cash = snap.cash;
   p.shares = {...snap.shares};
   p.hand = snap.hand.map(c=>c);
@@ -833,9 +805,9 @@ window.undoTurn = function(){
   G.infoPeek = snap.infoPeek;
   G.flipNext = snap.flipNext;
   G.maxBuyThisTurn = snap.maxBuyThisTurn;
-  G.actionsLeft = ACTIONS_PER_TURN;
-  G.buyCountThisTurn = {};
-  toast('↩️ 턴 처음으로 되돌렸어요');
+  G.actionsLeft = snap.actionsLeft;
+  G.buyCountThisTurn = {...snap.buyCountThisTurn};
+  toast('↩️ 한 행동 되돌렸어요');
   renderTurn();
 };
 
@@ -843,6 +815,9 @@ window.undoTurn = function(){
 function render(){
   if(G.phase==='turn') renderTurn();
 }
+
+// 섹터(업종) 한글 이름 — "어떤 회사인지" 표기용
+const SECTOR_KR = { tech:'반도체', phone:'휴대폰', auto:'자동차', shop:'쇼핑', bank:'은행', game:'게임' };
 
 // 보드 타일 — 시세 + 거래(＋/－)를 하나로 통합
 function boardTileHTML(c,p){
@@ -858,12 +833,14 @@ function boardTileHTML(c,p){
   let coach='';
   if(G.coachMode && pr>0){ const a=analyzeAdvice({fog:!!G.setupOpts.forecastFog})[c.id]; coach = a.dir==='buy'?'👍':a.dir==='sell'?'👎':''; }
   return `<div class="tile ${c.type} ${dead?'dead':''}" id="tile-${c.id}">
-    ${own>0?`<span class="t-own num">${own}</span>`:''}
+    ${own>0?`<span class="t-own num">${own}주</span>`:''}
     ${coach?`<span class="t-coach">${coach}</span>`:''}
-    <div class="t-ico">${c.ico}</div>
+    <div class="t-head"><span class="t-ico">${c.ico}</span><span class="t-sector">${SECTOR_KR[c.sector]||''}</span></div>
     <div class="t-nm">${c.nm}</div>
-    <div class="t-pr num">${dead?'💀 상폐':won(pr)}</div>
-    <div class="t-chg ${chgCls}">${dead?'':chgStr}</div>
+    <div class="t-prc">
+      <span class="t-pr num">${dead?'💀 상폐':won(pr)}</span>
+      <span class="t-chg ${chgCls}">${dead?'':chgStr}</span>
+    </div>
     <div class="t-pm">
       <button class="minus" onclick="sell('${c.id}')" ${canSell?'':'disabled'}>－</button>
       <button class="plus" onclick="buy('${c.id}')" ${canBuy?'':'disabled'}>＋</button>
@@ -914,7 +891,7 @@ function fcStripHTML(){
   const evs=(slot)=>slot.map((ev,i)=>miniEvHTML(ev, fog && i===1)).join('');
   return `<div class="fcstrip">
     <div class="fcbox now ${fog?'fog':''}">
-      <div class="fc-lbl">🔮 이번 칸 사건</div>
+      <div class="fc-lbl">이번 칸 사건</div>
       ${evs(now)}
     </div>
     ${next?`<div class="fcbox next ${fog?'fog':''}">
@@ -943,11 +920,11 @@ function renderTurn(){
   const sv=stockValue(p,G.prices);
   const isLastRound = G.round===TOTAL_ROUNDS;
 
-  const dots = Array.from({length:ACTIONS_PER_TURN},(_,i)=>`<span class="act-dot ${i<G.actionsLeft?'on':''}"></span>`).join('');
+  const dots = Array.from({length:G.actionsPerTurn},(_,i)=>`<span class="act-dot ${i<G.actionsLeft?'on':''}"></span>`).join('');
   $('#app').innerHTML = `
    <div class="turn">
     <div class="topbar">
-      <span class="tb-round num">🎲 ${G.round}/${TOTAL_ROUNDS}</span>
+      <span class="tb-round num">${G.round} / ${TOTAL_ROUNDS} 라운드</span>
       <span class="tb-country">${G.country.flag} ${G.country.name}</span>
       <span class="tb-me"><span class="av">${p.av}</span><span class="nm">${p.name}</span><span class="money num">💰${won(nw)}</span></span>
       <span class="tb-rank">${topRankHTML()}</span>
@@ -978,10 +955,10 @@ function renderTurn(){
 
     <div class="actionbar">
       <span class="act-left">행동 ${dots}</span>
-      <button class="ab-btn ab-card" onclick="toggleHand()">🃏 ${p.hand.length}</button>
-      <button class="ab-btn ab-pass" onclick="doPass()" ${G.actionsLeft<=0?'disabled':''}>💰 패스</button>
-      <button class="ab-btn ab-undo" onclick="undoTurn()" ${G.actionsLeft===ACTIONS_PER_TURN?'disabled':''}>↩️</button>
-      <button class="ab-btn ab-end" onclick="endTurn()">✅ 턴 종료</button>
+      <button class="ab-btn ab-card" onclick="toggleHand()">카드 ${p.hand.length}</button>
+      <button class="ab-btn ab-pass" onclick="doPass()" ${G.actionsLeft<=0?'disabled':''}>패스 +500</button>
+      <button class="ab-btn ab-undo" onclick="undoTurn()" ${(G.undoStack&&G.undoStack.length)?'':'disabled'}>↩︎ 되돌리기</button>
+      <button class="ab-btn ab-end" onclick="endTurn()">턴 종료</button>
     </div>
 
     <div class="mascot bull" id="bull">🐂</div>
@@ -1084,6 +1061,7 @@ window.buy = function(cid){
   const bought=G.buyCountThisTurn[cid]||0;
   if(bought>=G.maxBuyThisTurn){ toast('이번 턴 이 회사는 더 못 사요'); return; }
   if(p.shares[cid]>=MAX_SHARES){ toast(`한 회사 최대 ${MAX_SHARES}주까지!`); return; }
+  pushUndo();
   p.cash-=pr; p.shares[cid]++; G.buyCountThisTurn[cid]=bought+1;
   G.actionsLeft--;
   renderTurn(); tileFx(cid, 1);
@@ -1091,6 +1069,7 @@ window.buy = function(cid){
 window.sell = function(cid){
   const p=G.players[G.turnIdx]; const pr=G.prices[cid];
   if(G.actionsLeft<=0||p.shares[cid]<=0) return;
+  pushUndo();
   let price=pr;
   if(p.insured[cid]){ // insurance: guarantee buy price -> use max(current, insuredPrice)
     price=Math.max(pr, p.insured[cid]); delete p.insured[cid]; toast('🛡️ 보험 적용! 산 가격 보장');
@@ -1103,6 +1082,7 @@ window.sell = function(cid){
 window.doPass = function(){
   const p=G.players[G.turnIdx];
   if(G.actionsLeft<=0) return;
+  pushUndo();
   p.cash+=500; G.actionsLeft--;
   toast('💰 +500원');
   renderTurn();
@@ -1111,6 +1091,7 @@ window.doPass = function(){
 window.drawCard = function(){
   const p=G.players[G.turnIdx];
   if(G.actionsLeft<=0) return;
+  pushUndo();
   if(!G.actionDeck.length) G.actionDeck=shuffle([...ACTIONS,...ACTIONS]);
   p.hand.push(G.actionDeck.pop());
   G.actionsLeft--;
@@ -1123,6 +1104,7 @@ window.useCard = function(i){
   const p=G.players[G.turnIdx]; const card=p.hand[i];
   if(!card) return;
   if(card.id!=='extra' && G.actionsLeft<=0) return;
+  pushUndo();
 
   switch(card.id){
     case 'extra':
