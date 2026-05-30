@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>불앤베어 꼬마투자단</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:#0f1929; color:#e8edf5; overflow-x:hidden; }
+  #app { max-width:900px; margin:0 auto; min-height:100vh; }
+
+  button { font-family:inherit; cursor:pointer; border:none; border-radius:10px; font-weight:700; transition:transform .08s, filter .15s; }
+  button:active { transform:scale(.96); }
+  button:disabled { opacity:.35; cursor:not-allowed; }
+
+  /* ===== SETUP ===== */
+  .setup { padding:40px 24px; text-align:center; }
+  .setup .logo { font-size:60px; margin-bottom:8px; }
+  .setup h1 { font-size:32px; margin-bottom:6px; color:#ffd23f; }
+  .setup .tag { opacity:.7; margin-bottom:30px; font-size:14px; }
+  .setup .card { background:#1a2740; border-radius:16px; padding:24px; margin-bottom:16px; text-align:left; }
+  .setup .card h3 { font-size:15px; margin-bottom:12px; color:#9fb3d1; }
+  .pcount { display:flex; gap:8px; }
+  .pcount button { flex:1; padding:14px; background:#243a5e; color:#fff; font-size:16px; }
+  .pcount button.sel { background:#ffd23f; color:#16213e; }
+
+  /* preset & advanced options */
+  .preset-row { display:flex; flex-direction:column; gap:8px; }
+  .preset { background:#243a5e; color:#fff; padding:13px 14px; text-align:left; border:2px solid transparent; border-radius:12px; }
+  .preset.sel { background:linear-gradient(135deg,#3d5a8a,#2a3a64); border-color:#ffd23f; }
+  .preset .pr-name { font-size:15px; font-weight:800; margin-bottom:2px; }
+  .preset .pr-desc { font-size:12px; opacity:.8; }
+  .adv-toggle { width:100%; background:none; color:#9fb3d1; padding:10px; margin-top:10px; font-size:13px; }
+  .adv-box { display:none; margin-top:10px; background:#0f1929; border-radius:10px; padding:14px; }
+  .adv-box.show { display:block; }
+  .adv-row { display:flex; align-items:center; gap:10px; margin-bottom:9px; flex-wrap:wrap; }
+  .adv-lbl { font-size:12.5px; opacity:.85; min-width:130px; }
+  .adv-opts { display:flex; gap:5px; flex-wrap:wrap; flex:1; }
+  .adv-opts button { padding:6px 10px; background:#243a5e; color:#fff; font-size:12px; }
+  .adv-opts button.sel { background:#ffd23f; color:#16213e; }
+  .adv-note { font-size:11.5px; opacity:.6; margin-top:6px; }
+
+  /* country selection */
+  .country-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+  .country-btn { background:#243a5e; color:#fff; padding:10px 6px; border:2px solid transparent; border-radius:10px; text-align:center; }
+  .country-btn.sel { background:linear-gradient(135deg,#3d5a8a,#2a3a64); border-color:#ffd23f; }
+  .ct-flag { font-size:26px; }
+  .ct-name { font-size:13px; font-weight:800; margin:2px 0; }
+  .ct-desc { font-size:10.5px; opacity:.75; line-height:1.3; }
+  .country-detail { background:#0f1929; border-radius:10px; padding:12px; margin-top:10px; font-size:12px; }
+  .cd-flag { margin-bottom:6px; }
+  .cd-flag b { color:#ffd23f; }
+  .cd-cos { display:flex; flex-wrap:wrap; gap:6px; }
+  .cd-co { background:#1a2740; padding:3px 8px; border-radius:12px; font-size:11px; }
+  .pname { display:flex; gap:8px; margin-bottom:8px; align-items:center; }
+  .pname input { flex:1; padding:12px 14px; border-radius:10px; border:2px solid #2d4366; background:#0f1929; color:#fff; font-size:15px; }
+  .pname input:focus { outline:none; border-color:#ffd23f; }
+  .pname .em { font-size:24px; width:34px; text-align:center; }
+  .start-btn { width:100%; padding:18px; background:linear-gradient(135deg,#ffd23f,#ffb700); color:#16213e; font-size:20px; margin-top:10px; }
+  .rules-toggle { background:none; color:#9fb3d1; text-decoration:underline; font-size:13px; margin-top:18px; padding:8px; }
+  .rules-box { background:#1a2740; border-radius:12px; padding:18px; margin-top:14px; text-align:left; font-size:13.5px; line-height:1.7; display:none; }
+  .rules-box.show { display:block; }
+  .rules-box b { color:#ffd23f; }
+
+  /* learn buttons */
+  .learn-row { display:flex; gap:8px; margin-top:14px; }
+  .learn-row button { flex:1; padding:14px 6px; background:#1a2740; color:#cfe0f5; font-size:13px; border:1px solid #2d4366; }
+  .learn-row button:active { background:#243a5e; }
+  .learn-note { font-size:11.5px; opacity:.55; margin-top:10px; }
+
+  /* doc viewer */
+  .doc-view { padding:18px 18px 60px; max-width:760px; margin:0 auto; }
+  .doc-hdr { display:flex; align-items:center; gap:12px; margin-bottom:16px; position:sticky; top:0; background:#0f1929; padding:10px 0; }
+  .doc-hdr h1 { font-size:20px; color:#ffd23f; }
+  .back-btn { background:#243a5e; color:#fff; padding:8px 14px; font-size:13px; }
+  .doc-body { background:#1a2740; border-radius:14px; padding:20px 22px; text-align:left; line-height:1.7; }
+  .doc-body h3 { font-size:15px; color:#7dd3fc; margin:16px 0 5px; }
+  .doc-body h3:first-child { margin-top:0; }
+  .doc-body p { font-size:14px; opacity:.9; margin-bottom:4px; }
+  .doc-body b { color:#ffd23f; }
+
+  /* ===== HEADER ===== */
+  .hdr { background:#16213e; padding:10px 16px; display:flex; align-items:center; gap:10px; position:sticky; top:0; z-index:50; box-shadow:0 2px 12px rgba(0,0,0,.4); }
+  .hdr .round { background:#ffd23f; color:#16213e; padding:4px 12px; border-radius:20px; font-weight:800; font-size:13px; }
+  .hdr .country-tag { background:#243a5e; padding:4px 10px; border-radius:14px; font-size:12px; font-weight:700; }
+  .hdr .phase { font-size:13px; opacity:.8; margin-right:auto; }
+  .hdr .menu-btn { background:#243a5e; color:#fff; padding:6px 10px; font-size:12px; }
+
+  /* mini ranking bar */
+  .mini-rank { background:#13203a; display:flex; gap:6px; overflow-x:auto; padding:7px 12px; font-size:11px; border-bottom:1px solid #1f3050; position:sticky; top:44px; z-index:49; }
+  .mr-item { white-space:nowrap; background:#1a2740; padding:4px 9px; border-radius:14px; opacity:.75; }
+  .mr-item b { color:#ffd23f; margin-left:2px; }
+  .mr-item.me { opacity:1; border:1px solid #ffd23f; background:#22304d; }
+
+  /* mini event in forecast */
+  .mini-ev { display:flex; align-items:center; gap:5px; background:rgba(0,0,0,.25); border-radius:8px; padding:5px 7px; margin-top:5px; text-align:left; }
+  .mini-ev .mi-ico { font-size:18px; }
+  .mini-ev .mi-tx { font-size:11px; font-weight:700; flex:1; line-height:1.2; }
+  .mini-ev .mi-ef { font-size:10.5px; font-weight:800; white-space:nowrap; }
+  .mini-ev .mi-ef.up { color:#4ade80; } .mini-ev .mi-ef.down { color:#f87171; }
+
+  /* event reveal pair */
+  .ev-pair { display:flex; gap:8px; margin-bottom:14px; }
+  .ev-one { flex:1; border-radius:12px; padding:12px 8px; }
+  .ev-one.up { background:linear-gradient(135deg,#16331f,#1d4029); border:2px solid #4ade80; }
+  .ev-one.down { background:linear-gradient(135deg,#3a1c1c,#4d2424); border:2px solid #f87171; }
+  .ev-one.divev { background:linear-gradient(135deg,#332a14,#4a3c1a); border:2px solid #ffd23f; }
+  .ev-one.divev .eo-ef { color:#ffd23f; }
+  .ev-one .eo-ico { font-size:32px; }
+  .ev-one .eo-tx { font-size:13px; font-weight:800; margin:3px 0; line-height:1.25; }
+  .ev-one .eo-ef { font-size:12px; font-weight:700; opacity:.9; }
+
+  .rank-row { font-weight:600; }
+  .delta { font-size:11px; font-weight:800; margin-left:4px; }
+  .delta.up { color:#4ade80; } .delta.down { color:#f87171; }
+
+  /* ===== MARKET ===== */
+  .market { padding:12px 14px; }
+  .market h2 { font-size:13px; color:#9fb3d1; margin-bottom:8px; padding-left:4px; }
+  .stocks { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .stock { background:#1a2740; border-radius:12px; padding:10px 8px; text-align:center; position:relative; border:2px solid transparent; }
+  .stock .ico { font-size:26px; }
+  .stock .nm { font-size:11px; opacity:.8; margin:1px 0; height:14px; }
+  .stock .pr { font-size:17px; font-weight:800; }
+  .stock .chg { font-size:11px; font-weight:700; height:14px; }
+  .stock .chg.up { color:#4ade80; } .stock .chg.down { color:#f87171; }
+  .stock .own { font-size:10px; background:#243a5e; border-radius:10px; padding:1px 6px; margin-top:3px; display:inline-block; min-height:14px; }
+  .stock.growth { border-color:rgba(248,113,113,.3); }
+  .stock.divid { border-color:rgba(74,222,128,.25); }
+  .stock .badge { position:absolute; top:4px; right:4px; font-size:9px; opacity:.6; }
+
+  /* ===== FORECAST ===== */
+  .forecast { padding:8px 14px; }
+  .forecast h2 { font-size:13px; color:#9fb3d1; margin-bottom:8px; padding-left:4px; }
+  .fc-cards { display:flex; gap:10px; }
+  .fc-cards-1 .fc { flex:1; }
+  .fc-cards-3 { flex-wrap:wrap; }
+  .fc-cards-3 .fc { flex:1 1 calc(33% - 10px); min-width:130px; }
+  .fc { flex:1; border-radius:12px; padding:12px 10px; text-align:center; position:relative; }
+  .fc.now { background:linear-gradient(135deg,#3d2020,#5a2828); border:2px solid #f87171; }
+  .fc.next { background:linear-gradient(135deg,#1a2a44,#23375a); border:2px solid #60a5fa; }
+  .fc.hidden-fc { background:#1a2740; border:2px dashed #4a5d80; }
+  .fc .lbl { font-size:10px; font-weight:700; opacity:.8; }
+  .fc.now .lbl { color:#f87171; } .fc.next .lbl { color:#60a5fa; }
+  .fc .ic { font-size:24px; }
+  .fc .tx { font-size:12px; font-weight:700; line-height:1.3; }
+  .fc .ef { font-size:12px; margin-top:2px; font-weight:800; }
+  .fc .ef.up { color:#4ade80; } .fc .ef.down { color:#f87171; }
+  .fc .qm { font-size:32px; opacity:.5; }
+
+  /* ===== PLAYER PANEL ===== */
+  .player-panel { padding:10px 14px 14px; }
+  .pturn { background:linear-gradient(135deg,#1a2740,#22304d); border-radius:14px; padding:14px; margin-bottom:10px; }
+  .pturn .top { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .pturn .av { font-size:30px; }
+  .pturn .nm { font-size:17px; font-weight:800; }
+  .pturn .net { margin-left:auto; text-align:right; }
+  .pturn .net .l { font-size:10px; opacity:.6; }
+  .pturn .net .v { font-size:18px; font-weight:800; color:#ffd23f; }
+  .pturn .stats { display:flex; gap:8px; font-size:12px; }
+  .pturn .stat { flex:1; background:#0f1929; border-radius:8px; padding:6px 8px; text-align:center; }
+  .pturn .stat .l { opacity:.6; font-size:10px; }
+  .pturn .stat .v { font-weight:800; font-size:14px; }
+
+  .actions-left { text-align:center; font-size:12px; opacity:.7; margin-bottom:8px; }
+  .actions-left b { color:#ffd23f; font-size:15px; }
+
+  /* trade grid */
+  .trade { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin-bottom:10px; }
+  .tcard { background:#1a2740; border-radius:10px; padding:8px 6px; text-align:center; }
+  .tcard .ti { font-size:20px; }
+  .tcard .tp { font-size:13px; font-weight:800; }
+  .tcard .town { font-size:10px; opacity:.6; min-height:13px; }
+  .tbtns { display:flex; gap:4px; margin-top:5px; }
+  .tbtns button { flex:1; padding:7px 0; font-size:13px; }
+  .buy { background:#1971c2; color:#fff; }
+  .sell { background:#c2410c; color:#fff; }
+
+  .other-actions { display:flex; gap:8px; }
+
+  /* coach panel */
+  .coach-panel { background:#13243f; border:1px solid #2d4366; border-radius:12px; padding:12px; margin-bottom:10px; }
+  .coach-head { font-size:12px; font-weight:800; color:#7dd3fc; margin-bottom:8px; }
+  .coach-row { font-size:12px; padding:5px 8px; border-radius:8px; margin-bottom:4px; line-height:1.4; }
+  .coach-row.buy-row { background:rgba(74,222,128,.12); }
+  .coach-row.sell-row { background:rgba(248,113,113,.12); }
+  .coach-row b { color:#fff; }
+  .cr-tag { font-weight:800; font-size:11px; }
+  .buy-row .cr-tag { color:#4ade80; } .sell-row .cr-tag { color:#f87171; }
+  .tc-badge { position:absolute; top:3px; left:5px; font-size:14px; }
+  .tcard { position:relative; }
+  .other-actions button { flex:1; padding:13px; font-size:13px; }
+  .act-card { background:#7c3aed; color:#fff; }
+  .act-pass { background:#334155; color:#fff; }
+  .act-done { background:#059669; color:#fff; }
+  .act-undo { background:#7c2d12; color:#fff; }
+
+  /* hand */
+  .hand { margin-top:10px; }
+  .hand h3 { font-size:12px; color:#9fb3d1; margin-bottom:6px; }
+  .hand-cards { display:flex; gap:7px; overflow-x:auto; padding-bottom:4px; }
+  .hcard { min-width:130px; background:linear-gradient(135deg,#3b2a5e,#4c357a); border-radius:10px; padding:9px; font-size:11px; }
+  .hcard .hi { font-size:20px; text-align:center; }
+  .hcard .hn { font-weight:800; text-align:center; font-size:12px; margin:2px 0; }
+  .hcard .he { opacity:.85; line-height:1.3; font-size:10.5px; min-height:42px; }
+  .hcard button { width:100%; padding:6px; background:#ffd23f; color:#16213e; margin-top:5px; font-size:11px; }
+
+  /* ===== MODAL / TOAST ===== */
+  .overlay { position:fixed; inset:0; background:rgba(0,0,0,.7); display:flex; align-items:center; justify-content:center; z-index:200; padding:20px; }
+  .modal { background:#1a2740; border-radius:18px; padding:24px; max-width:420px; width:100%; text-align:center; border:2px solid #2d4366; }
+  .modal .mi { font-size:48px; }
+  .modal h2 { font-size:22px; margin:8px 0; }
+  .modal p { opacity:.85; margin-bottom:16px; line-height:1.5; font-size:14px; }
+  .modal .mbtn { width:100%; padding:15px; background:#ffd23f; color:#16213e; font-size:16px; }
+  .modal .mbtn.sec { background:#334155; color:#fff; margin-top:8px; }
+  .pass-player { background:linear-gradient(135deg,#16213e,#22304d); }
+
+  .toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#16213e; border:2px solid #ffd23f; color:#fff; padding:12px 22px; border-radius:30px; z-index:300; font-size:14px; font-weight:600; box-shadow:0 6px 20px rgba(0,0,0,.5); animation:pop .3s; max-width:88%; text-align:center; }
+  @keyframes pop { from{opacity:0; transform:translateX(-50%) translateY(10px);} to{opacity:1; transform:translateX(-50%) translateY(0);} }
+
+  /* event reveal */
+  .event-reveal .mi { font-size:56px; }
+  .ev-effect { font-size:18px; font-weight:800; margin:10px 0; }
+  .ev-detail { background:#0f1929; border-radius:10px; padding:12px; font-size:13px; margin-bottom:16px; text-align:left; }
+  .ev-detail .row { display:flex; justify-content:space-between; padding:3px 0; }
+  .ev-detail .row .up { color:#4ade80; } .ev-detail .row .down { color:#f87171; }
+
+  /* results */
+  .results { padding:20px; }
+  .results h1 { text-align:center; font-size:28px; color:#ffd23f; margin-bottom:4px; }
+  .results .sub { text-align:center; opacity:.7; margin-bottom:20px; font-size:13px; }
+  .rank { background:#1a2740; border-radius:14px; padding:16px; margin-bottom:10px; display:flex; align-items:center; gap:12px; }
+  .rank.win { border:2px solid #ffd23f; background:linear-gradient(135deg,#2a2410,#1a2740); }
+  .rank .medal { font-size:30px; }
+  .rank .info { flex:1; }
+  .rank .info .n { font-size:16px; font-weight:800; }
+  .rank .info .d { font-size:11px; opacity:.6; }
+  .rank .total { font-size:20px; font-weight:800; color:#ffd23f; }
+  .breakdown { font-size:11px; opacity:.7; margin-top:3px; }
+
+  .scroll-area { padding-bottom:30px; }
+  .hint-tip { background:rgba(255,210,63,.1); border-radius:8px; padding:8px 12px; font-size:12px; margin:8px 14px; color:#ffe27a; }
+
+  /* insights */
+  .insights { margin-top:22px; }
+  .insights h2 { font-size:16px; color:#ffd23f; margin-bottom:12px; text-align:center; }
+  .insight { display:flex; gap:12px; background:#1a2740; border-radius:12px; padding:14px; margin-bottom:9px; text-align:left; }
+  .insight .in-ico { font-size:26px; flex-shrink:0; }
+  .insight .in-title { font-weight:800; font-size:14px; margin-bottom:3px; color:#e8edf5; }
+  .insight .in-text { font-size:12.5px; opacity:.82; line-height:1.5; }
+
+  /* history */
+  .stat-box { background:#1a2740; border-radius:12px; padding:16px; margin-bottom:12px; text-align:left; }
+  .sb-title { font-weight:800; font-size:14px; margin-bottom:10px; color:#ffd23f; }
+  .sb-row { display:flex; justify-content:space-between; padding:5px 0; font-size:14px; border-bottom:1px dashed #2d4366; }
+  .sb-row:last-child { border-bottom:none; }
+  .sb-row b { color:#ffd23f; }
+  .hist-game { background:#0f1929; border-radius:10px; padding:11px; margin-bottom:8px; }
+  .hg-head { display:flex; justify-content:space-between; font-size:12px; opacity:.7; margin-bottom:5px; }
+  .hg-win { color:#ffd23f; font-weight:700; opacity:1; }
+  .hg-players { font-size:12px; line-height:1.5; }
+  .hg-ins { font-size:11px; opacity:.6; margin-top:5px; color:#ffe27a; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+// ============================================================
+// 불앤베어 꼬마투자단 - 디지털 플레이 앱 (최종 확정 규칙 기반)
+// ============================================================
+
+// 6개 슬롯 (모든 나라가 공통으로 가지는 아이콘 기반 섹터)
+// type: growth(성장주) / divid(배당주) / mid(중간)
+const SECTORS = [
+  { slot:'tech',   ico:'💻', type:'growth' }, // 반도체·AI
+  { slot:'phone',  ico:'📱', type:'mid'    }, // 휴대폰·통신
+  { slot:'auto',   ico:'🚗', type:'mid'    }, // 자동차
+  { slot:'shop',   ico:'🛒', type:'divid'  }, // 쇼핑·소비재
+  { slot:'bank',   ico:'🏦', type:'divid'  }, // 은행
+  { slot:'game',   ico:'🎮', type:'growth' }, // 게임·엔터
+];
+
+// 나라 데이터 (이름·국기·각 슬롯별 회사명·성격)
+const COUNTRIES = {
+  korea: {
+    flag:'🇰🇷', name:'한국', desc:'세지만 출렁임 · 칩·자동차 강함',
+    volMod: 0,    // 변동성 보정(+1=더 출렁, -1=더 안정)
+    divMod: 0,    // 배당 보정 원 단위
+    startMod: 0,  // 시작가 보정 원
+    flavor: '🌶️ 변동성 보통',
+    co: { tech:'삼성전자', phone:'SK텔레콤', auto:'현대차', shop:'쿠팡', bank:'KB금융', game:'엔씨소프트' }
+  },
+  usa: {
+    flag:'🇺🇸', name:'미국', desc:'비싸지만 안전 · 꾸준히 오름',
+    volMod: -1, divMod: 50, startMod: 500,
+    flavor: '🛡️ 안전 · 배당 좋음',
+    co: { tech:'엔비디아', phone:'애플', auto:'테슬라', shop:'아마존', bank:'JP모건', game:'EA게임즈' }
+  },
+  japan: {
+    flag:'🇯🇵', name:'일본', desc:'안전한 장인의 나라 · 큰 손해 없음',
+    volMod: -1, divMod: 30, startMod: 200,
+    flavor: '🛡️ 가장 안전',
+    co: { tech:'키옥시아', phone:'소니', auto:'도요타', shop:'유니클로', bank:'미쓰비시UFJ', game:'닌텐도' }
+  },
+  china: {
+    flag:'🇨🇳', name:'중국', desc:'크지만 가끔 정부 규제로 위험',
+    volMod: 1, divMod: 0, startMod: -200,
+    flavor: '⚠️ 가끔 큰 폭락',
+    co: { tech:'SMIC', phone:'샤오미', auto:'BYD', shop:'알리바바', bank:'공상은행', game:'텐센트' }
+  },
+  taiwan: {
+    flag:'🇹🇼', name:'대만', desc:'반도체💻 천재 · 칩이 모든 걸 좌우',
+    volMod: 0, divMod: 0, startMod: 0,
+    flavor: '💻 칩 호황·악재에 민감',
+    co: { tech:'TSMC', phone:'미디어텍', auto:'폭스콘', shop:'유니프레지던트', bank:'캐세이금융', game:'유니솔트' }
+  },
+  india: {
+    flag:'🇮🇳', name:'인도', desc:'싸지만 쑥쑥 크는 미래 기대주',
+    volMod: 1, divMod: -30, startMod: -500,
+    flavor: '🌱 싸고 성장 잠재력',
+    co: { tech:'인포시스', phone:'에어텔', auto:'타타모터스', shop:'릴라이언스리테일', bank:'HDFC은행', game:'나자라' }
+  }
+};
+
+// 선택된 나라의 회사 목록 생성
+function buildCompanies(countryKey){
+  const country = COUNTRIES[countryKey];
+  return SECTORS.map(s=>{
+    const baseStart = s.type==='growth'?2000 : s.type==='divid'?1000 : 1500;
+    const baseDiv = s.type==='growth' ? (s.slot==='tech'?100:100) : s.type==='divid' ? 250 : 150;
+    return {
+      id: s.slot,
+      ico: s.ico,
+      nm: country.co[s.slot],
+      sector: s.slot,
+      type: s.type,
+      start: Math.max(500, baseStart + country.startMod),
+      div: Math.max(0, baseDiv + country.divMod),
+      volMod: country.volMod
+    };
+  });
+}
+
+let COMPANIES = buildCompanies('korea'); // 기본 한국, startGame에서 재설정
+const PRICE_STEPS = [0,500,1000,1500,2000,2500,3000,3500,4000,4500,5000,5500];
+const MAX_PRICE = 5500, MIN_PRICE = 0, MAX_SHARES = 15;
+
+// 이벤트: who(회사id 배열 또는 'all'), steps(+/-), text, chain
+// 이벤트는 섹터 슬롯 기준 (어느 나라든 통용)
+const EVENTS = [
+  // 💻 반도체/AI (tech)
+  { ico:'🤖', tx:'AI 붐! 반도체 호황',         who:['tech'],  steps:3, chain:{who:'game',steps:1} },
+  { ico:'📉', tx:'반도체 공급 과잉',           who:['tech'],  steps:-2, chain:null },
+  // 📱 휴대폰 (phone)
+  { ico:'📱', tx:'신형 휴대폰 대히트!',         who:['phone'], steps:2, chain:null },
+  { ico:'🔋', tx:'배터리 결함 리콜',           who:['phone'], steps:-2, chain:null },
+  // 🚗 자동차 (auto)
+  { ico:'🏁', tx:'신차 출시 흥행!',            who:['auto'],  steps:2, chain:null },
+  { ico:'⛽', tx:'기름값 폭등, 자동차 수요↓',   who:['auto'],  steps:-1, chain:null },
+  { ico:'⚡', tx:'전기차 판매 신기록',          who:['auto'],  steps:2, chain:{who:'tech',steps:1} },
+  // 🛒 쇼핑 (shop)
+  { ico:'🎁', tx:'블랙프라이데이 대박',         who:['shop'],  steps:2, chain:null },
+  { ico:'📦', tx:'물류 차질로 매출 부진',       who:['shop'],  steps:-1, chain:null },
+  // 🏦 은행 (bank)
+  { ico:'📈', tx:'금리 인상으로 은행 이익↑',    who:['bank'],  steps:1, chain:null },
+  { ico:'⚠️', tx:'금융 부실 우려',             who:['bank'],  steps:-2, chain:null },
+  // 🎮 게임 (game)
+  { ico:'🏆', tx:'게임 신작 대박!',            who:['game'],  steps:3, chain:{who:'tech',steps:1} },
+  { ico:'📵', tx:'게임 서버 장애',             who:['game'],  steps:-2, chain:null },
+  { ico:'🎒', tx:'방학 시작, 게임 호황',        who:['game'],  steps:2, chain:null },
+  // 전체
+  { ico:'📈', tx:'경기 호황!',                 who:'all',     steps:1, chain:null },
+  { ico:'📉', tx:'경기 침체',                  who:'all',     steps:-1, chain:null },
+  // 추가 변동
+  { ico:'💰', tx:'외국인 매수 급증',           who:['tech','game'], steps:1, chain:null },
+  { ico:'😱', tx:'세계 증시 동반 하락',         who:'all',     steps:-1, chain:null },
+  // ===== 배당 이벤트 =====
+  { ico:'🎉', tx:'은행 사상 최대 실적! 배당 2배', who:['bank'], steps:0, divMul:2, kind:'div' },
+  { ico:'🎉', tx:'쇼핑몰 분기 호조! 배당 2배',    who:['shop'], steps:0, divMul:2, kind:'div' },
+  { ico:'🎉', tx:'자동차 흑자 전환! 배당 1.5배',  who:['auto'], steps:0, divMul:1.5, kind:'div' },
+  { ico:'📃', tx:'은행 충당금 적립, 배당 절반',   who:['bank'], steps:0, divMul:0.5, kind:'div' },
+  { ico:'📃', tx:'쇼핑몰 실적 부진, 배당 절반',   who:['shop'], steps:0, divMul:0.5, kind:'div' },
+  { ico:'🚫', tx:'게임사 적자 전환, 배당 중단',   who:['game'], steps:0, divMul:0, kind:'div' },
+  { ico:'🚫', tx:'반도체 적자, 배당 중단',       who:['tech'], steps:0, divMul:0, kind:'div' },
+  { ico:'💝', tx:'경기 좋아 모두 배당 추가!',    who:'all',    steps:0, divMul:1.5, kind:'div' },
+];
+
+// 대응카드
+const ACTIONS = [
+  { id:'cut',   ico:'✂️', nm:'손절매',     desc:'내 주식 1종을 즉시 현재가로 전부 팔아요.' },
+  { id:'avg',   ico:'💧', nm:'물타기',     desc:'가진 회사 주식을 현재가보다 200원 싸게 1주 추가 매수.' },
+  { id:'info',  ico:'🔮', nm:'정보 입수',  desc:'다음다음 이벤트의 회사 이름만 미리 봐요(방향은 비밀).' },
+  { id:'ins',   ico:'🛡️', nm:'보험가입',   desc:'내 주식 1종에 보험. 다음에 팔 때 산 가격을 보장.' },
+  { id:'extra', ico:'⚡', nm:'단타찬스',   desc:'이번 턴에 행동을 1개 더 해요.' },
+  { id:'div',   ico:'🎁', nm:'특별배당',   desc:'지금 가진 모든 주식에서 주당 100원씩 즉시.' },
+  { id:'flip',  ico:'🔁', nm:'이벤트 뒤집기', desc:'이번 라운드 이벤트 효과를 반대로! (상승↔하락)' },
+  { id:'cash',  ico:'💰', nm:'긴급자금',   desc:'즉시 3,000원! 이번 턴 같은 회사 5주까지 매수 허용.' },
+];
+
+// 목표카드
+const GOALS = [
+  { ico:'🌈', nm:'분산 투자왕', desc:'서로 다른 4개 회사 보유', reward:5000, check:(p)=>Object.values(p.shares).filter(n=>n>0).length>=4 },
+  { ico:'🚀', nm:'모험가',     desc:'우주탐험 3주 이상 보유',  reward:4000, check:(p)=>p.shares.space>=3 },
+  { ico:'🛡️', nm:'안전 제일',  desc:'배당주(장난감·빵집)만 보유', reward:2500, check:(p)=>{const has=Object.entries(p.shares).filter(([k,v])=>v>0).map(([k])=>k); return has.length>0 && has.every(k=>k==='toy'||k==='bakery');} },
+  { ico:'💵', nm:'현금 부자',  desc:'현금 8,000원 이상 보유',  reward:2000, check:(p)=>p.cash>=8000 },
+  { ico:'📈', nm:'대박 노리기', desc:'한 회사 주가 4,000원↑일 때 그 주식 보유', reward:3500, check:(p,st)=>COMPANIES.some(c=>st.prices[c.id]>=4000 && p.shares[c.id]>0) },
+  { ico:'⚖️', nm:'균형 투자',  desc:'성장주 2주+배당주 2주 이상', reward:3000, check:(p)=>{const g=COMPANIES.filter(c=>c.type==='growth').reduce((s,c)=>s+p.shares[c.id],0); const d=COMPANIES.filter(c=>c.type==='divid').reduce((s,c)=>s+p.shares[c.id],0); return g>=2&&d>=2;} },
+];
+
+const AVATARS = ['👨','👩','👧','👦','🧑','👵'];
+const TOTAL_ROUNDS = 12, ACTIONS_PER_TURN = 2;
+
+// ---------- 난이도 옵션 ----------
+const PRESETS = {
+  easy:   { name:'🌱 초급',  desc:'쉽고 여유롭게 (처음 배울 때)', buyLimit:5, forecastLen:3, divEvery:1, startCash:25000, coachOn:true },
+  normal: { name:'🌿 표준',  desc:'균형 잡힌 기본 모드',            buyLimit:3, forecastLen:2, divEvery:1, startCash:20000, coachOn:false },
+  hard:   { name:'🌳 고급',  desc:'전략적 도전 (가족 고수용)',      buyLimit:2, forecastLen:1, divEvery:3, startCash:15000, coachOn:false },
+};
+// forecastLen: 1=이번만, 2=이번+다음, 3=이번+다음+다다음 (각 슬롯은 사건 2개)
+// divEvery: 1=매라운드, 2=2라운드마다, 3=3라운드마다
+
+// ---------- 추천 분석 (초보 모드 도우미) ----------
+function analyzeAdvice(){
+  const advice={};
+  COMPANIES.forEach(c=>advice[c.id]={score:0, reasons:[]});
+  // flatten all forecast events with their slot index
+  const allEvents=[];
+  G.forecast.forEach((slot,i)=>slot.forEach(ev=>allEvents.push({ev,slot:i})));
+  allEvents.forEach(({ev,slot})=>{
+    const when = slot===0 ? '곧' : slot===1 ? '다음 라운드에' : `${slot+1}라운드 뒤에`;
+    const targets = ev.who==='all' ? COMPANIES.map(c=>c.id) : ev.who;
+    targets.forEach(cid=>{
+      const nm=COMPANIES.find(c=>c.id===cid).nm;
+      if(ev.kind==='div'){
+        if(ev.divMul>1){ advice[cid].score+=1; advice[cid].reasons.push(`${when} ${nm} 배당이 늘어요 (${ev.tx})`); }
+        else if(ev.divMul<1){ advice[cid].score-=0.5; advice[cid].reasons.push(`${when} ${nm} 배당이 줄어요`); }
+      } else {
+        if(ev.steps>0){ advice[cid].score+=ev.steps; advice[cid].reasons.push(`${when} ${nm} 주가가 올라요 (${ev.tx})`); }
+        else if(ev.steps<0){ advice[cid].score+=ev.steps; advice[cid].reasons.push(`${when} ${nm} 주가가 내려요 (${ev.tx})`); }
+      }
+    });
+    if(ev.chain && ev.who!=='all'){
+      const cid=ev.chain.who; const nm=COMPANIES.find(c=>c.id===cid).nm;
+      if(ev.chain.steps>0){ advice[cid].score+=ev.chain.steps; advice[cid].reasons.push(`${when} ${nm} 주가가 함께 올라요 (연동)`); }
+      else if(ev.chain.steps<0){ advice[cid].score+=ev.chain.steps; advice[cid].reasons.push(`${when} ${nm} 주가가 함께 내려요 (연동)`); }
+    }
+  });
+  Object.values(advice).forEach(a=>{ a.dir = a.score>0?'buy' : a.score<0?'sell' : null; });
+  return advice;
+}
+
+let G = null; // game state
+
+// ---------- UTIL ----------
+const $ = sel => document.querySelector(sel);
+const won = n => n.toLocaleString('ko-KR')+'원';
+const clampPrice = p => Math.max(MIN_PRICE, Math.min(MAX_PRICE, p));
+function movePrice(price, steps){
+  // move along PRICE_STEPS grid
+  let idx = PRICE_STEPS.indexOf(price);
+  if(idx<0){ // nearest
+    idx = PRICE_STEPS.reduce((best,v,i)=>Math.abs(v-price)<Math.abs(PRICE_STEPS[best]-price)?i:best,0);
+  }
+  idx = Math.max(0, Math.min(PRICE_STEPS.length-1, idx+steps));
+  return PRICE_STEPS[idx];
+}
+function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+// 회사가 살아있는지 확인 (상장폐지=0원 아니면 살아있음)
+function isAlive(cid){ return G && G.prices && G.prices[cid] > 0; }
+
+// 이벤트가 살아있는 회사에 영향을 주는지 확인 (모두 죽었으면 의미없음)
+function isEventRelevant(ev){
+  if(!G || !G.prices) return true; // 게임 시작 전엔 통과
+  if(ev.who === 'all'){
+    return COMPANIES.some(c=>isAlive(c.id)); // 모든 회사 대상이면 살아있는 게 하나라도 있으면 OK
+  }
+  return ev.who.some(cid=>isAlive(cid)); // 대상 회사 중 하나라도 살아있으면 OK
+}
+
+// draw a pair of DISTINCT, RELEVANT events
+function drawPair(deck){
+  if(deck.length<2) { const fresh=shuffle([...EVENTS,...EVENTS]); while(fresh.length) deck.push(fresh.pop()); }
+  // 살아있는 회사 영향 이벤트만 통과시키기 위해 최대 N번 시도
+  const drawOne = ()=>{
+    for(let i=0; i<20 && deck.length; i++){
+      const card = deck.pop();
+      if(isEventRelevant(card)) return card;
+      // 무관한 카드(전부 상장폐지된 회사)는 버림
+    }
+    return null;
+  };
+  const a = drawOne();
+  let b = drawOne();
+  if(b && a && b.tx===a.tx && deck.length){ const c=drawOne(); if(c){ deck.push(b); b=c; } }
+  return [a,b].filter(Boolean);
+}
+function netWorth(p, prices){
+  let stock=0; COMPANIES.forEach(c=>stock+=p.shares[c.id]*prices[c.id]);
+  return p.cash + stock;
+}
+function stockValue(p, prices){ let s=0; COMPANIES.forEach(c=>s+=p.shares[c.id]*prices[c.id]); return s; }
+
+function toast(msg){
+  const t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+  document.body.appendChild(t); setTimeout(()=>t.remove(), 2200);
+}
+
+// ---------- SETUP ----------
+function renderSetup(){
+  const np = G?.setupCount || 3;
+  if(!G) G={};
+  if(!G.setupOpts) G.setupOpts = {...PRESETS.normal, preset:'normal'};
+  const opts = G.setupOpts;
+  $('#app').innerHTML = `
+    <div class="setup">
+      <div class="logo">🐂🐻</div>
+      <h1>불앤베어 꼬마투자단</h1>
+      <div class="tag">황소와 곰의 주식 투자 게임 · 가족과 함께</div>
+
+      <div class="card">
+        <h3>몇 명이 함께 하나요?</h3>
+        <div class="pcount">
+          ${[2,3,4].map(n=>`<button class="${n===np?'sel':''}" onclick="setCount(${n})">${n}명</button>`).join('')}
+        </div>
+      </div>
+      <div class="card">
+        <h3>플레이어 이름</h3>
+        <div id="names"></div>
+      </div>
+
+      <div class="card">
+        <h3>🌍 어느 나라 주식시장?</h3>
+        <div class="country-grid">
+          ${Object.entries(COUNTRIES).map(([k,c])=>`
+            <button class="country-btn ${(G.setupCountry||'korea')===k?'sel':''}" onclick="setCountry('${k}')">
+              <div class="ct-flag">${c.flag}</div>
+              <div class="ct-name">${c.name}</div>
+              <div class="ct-desc">${c.flavor}</div>
+            </button>`).join('')}
+        </div>
+        <div class="country-detail" id="ctDetail">${countryDetailHTML(G.setupCountry||'korea')}</div>
+      </div>
+
+      <div class="card">
+        <h3>난이도 선택</h3>
+        <div class="preset-row">
+          ${Object.entries(PRESETS).map(([k,p])=>`
+            <button class="preset ${opts.preset===k?'sel':''}" onclick="setPreset('${k}')">
+              <div class="pr-name">${p.name}</div>
+              <div class="pr-desc">${p.desc}</div>
+            </button>`).join('')}
+        </div>
+        <button class="adv-toggle" onclick="$('#advBox').classList.toggle('show'); this.textContent = $('#advBox').classList.contains('show')?'▲ 세부 옵션 닫기':'▼ 세부 옵션 펼치기'">▼ 세부 옵션 펼치기</button>
+        <div class="adv-box" id="advBox">
+          <div class="adv-row">
+            <span class="adv-lbl">한 턴 같은 회사 매수</span>
+            <div class="adv-opts">
+              ${[2,3,5].map(n=>`<button class="${opts.buyLimit===n?'sel':''}" onclick="setOpt('buyLimit',${n})">${n}주</button>`).join('')}
+            </div>
+          </div>
+          <div class="adv-row">
+            <span class="adv-lbl">예보 길이</span>
+            <div class="adv-opts">
+              <button class="${opts.forecastLen===1?'sel':''}" onclick="setOpt('forecastLen',1)">이번만</button>
+              <button class="${opts.forecastLen===2?'sel':''}" onclick="setOpt('forecastLen',2)">이번+다음</button>
+              <button class="${opts.forecastLen===3?'sel':''}" onclick="setOpt('forecastLen',3)">3라운드 앞까지</button>
+            </div>
+          </div>
+          <div class="adv-row">
+            <span class="adv-lbl">배당 주기</span>
+            <div class="adv-opts">
+              <button class="${opts.divEvery===1?'sel':''}" onclick="setOpt('divEvery',1)">매라운드</button>
+              <button class="${opts.divEvery===2?'sel':''}" onclick="setOpt('divEvery',2)">2R마다</button>
+              <button class="${opts.divEvery===3?'sel':''}" onclick="setOpt('divEvery',3)">3R마다</button>
+            </div>
+          </div>
+          <div class="adv-row">
+            <span class="adv-lbl">시작 자금</span>
+            <div class="adv-opts">
+              ${[15000,20000,25000,30000].map(n=>`<button class="${opts.startCash===n?'sel':''}" onclick="setOpt('startCash',${n})">${(n/10000).toFixed(1)}만</button>`).join('')}
+            </div>
+          </div>
+          <div class="adv-row">
+            <span class="adv-lbl">투자 도우미 시작 상태</span>
+            <div class="adv-opts">
+              <button class="${opts.coachOn?'sel':''}" onclick="setOpt('coachOn',true)">🟢 켜짐</button>
+              <button class="${!opts.coachOn?'sel':''}" onclick="setOpt('coachOn',false)">⚪ 꺼짐</button>
+            </div>
+          </div>
+          <div class="adv-note">💡 게임 중 도우미는 상단 버튼으로 언제든 켜고 끌 수 있어요.</div>
+        </div>
+      </div>
+
+      <button class="start-btn" onclick="startGame()">🎮 게임 시작!</button>
+      <button class="act-pass" style="width:100%;padding:13px;margin-top:8px;color:#fff;" onclick="showHistory()">📊 지난 게임 기록 보기</button>
+      <div class="learn-row">
+        <button onclick="showDoc('rules')">📖 게임 규칙</button>
+        <button onclick="showDoc('concepts')">📚 주식 개념</button>
+        <button onclick="showDoc('income')">💰 돈 이야기</button>
+      </div>
+      <div class="learn-note">📄 자세한 인쇄용 자료는 따로 있어요. 여기선 핵심만 읽을 수 있어요.</div>
+    </div>`;
+  renderNames(np);
+}
+window.setPreset = function(k){ saveNames(); G.setupOpts = {...PRESETS[k], preset:k}; renderSetup(); };
+window.setOpt = function(key,val){ saveNames(); G.setupOpts[key]=val; G.setupOpts.preset='custom'; renderSetup(); $('#advBox').classList.add('show'); };
+window.setCountry = function(k){ saveNames(); G.setupCountry = k; renderSetup(); };
+function countryDetailHTML(k){
+  const c = COUNTRIES[k];
+  const cos = SECTORS.map(s=>`<span class="cd-co">${s.ico} ${c.co[s.slot]}</span>`).join('');
+  return `<div class="cd-flag">${c.flag} <b>${c.name}</b> — ${c.desc}</div><div class="cd-cos">${cos}</div>`;
+}
+function renderNames(np){
+  const defaults=['아빠','엄마','큰딸','막내'];
+  let h='';
+  for(let i=0;i<np;i++){
+    const val = G?.setupNames?.[i] ?? defaults[i] ?? `플레이어${i+1}`;
+    h+=`<div class="pname"><span class="em">${AVATARS[i]}</span><input id="pn${i}" value="${val}" maxlength="6" placeholder="이름"></div>`;
+  }
+  $('#names').innerHTML=h;
+}
+window.setCount = n => { saveNames(); G = G||{}; G.setupCount=n; renderSetup(); };
+function saveNames(){
+  const np=G?.setupCount||3; G=G||{}; G.setupNames=[];
+  for(let i=0;i<np;i++){ const el=$('#pn'+i); if(el) G.setupNames[i]=el.value.trim()||`P${i+1}`; }
+}
+
+// ---------- START ----------
+window.startGame = function(){
+  saveNames();
+  const np = G.setupCount||3;
+  const names = G.setupNames || [];
+  const opts = G.setupOpts || PRESETS.normal;
+  const countryKey = G.setupCountry || 'korea';
+  // 선택된 나라로 COMPANIES 재구성
+  COMPANIES = buildCompanies(countryKey);
+  const country = COUNTRIES[countryKey];
+  const prices={}; COMPANIES.forEach(c=>prices[c.id]=c.start);
+  const goalDeck = shuffle(GOALS);
+  const players=[];
+  for(let i=0;i<np;i++){
+    const shares={}; COMPANIES.forEach(c=>shares[c.id]=0);
+    players.push({
+      name: names[i]||`P${i+1}`, av:AVATARS[i],
+      cash:opts.startCash, shares, goal:goalDeck[i%goalDeck.length],
+      hand:[], insured:{}, dividendCount:0, history:[opts.startCash]
+    });
+  }
+  let actionDeck = shuffle([...ACTIONS, ...ACTIONS]);
+  players.forEach(p=>{ p.hand=[actionDeck.pop(), actionDeck.pop()]; });
+  let eventDeck = shuffle([...EVENTS, ...EVENTS, ...EVENTS]);
+  const forecast = [];
+  for(let i=0;i<opts.forecastLen;i++) forecast.push(drawPair(eventDeck));
+
+  G = {
+    setupCount:np, setupNames:names, setupOpts:opts, setupCountry:countryKey, country,
+    players, prices, prevPrices:{...prices}, eventDeck, actionDeck, forecast,
+    round:1, turnIdx:0, actionsLeft:ACTIONS_PER_TURN, buyCountThisTurn:{}, maxBuyThisTurn:opts.buyLimit, baseBuyLimit:opts.buyLimit,
+    phase:'pass', infoPeek:null, flipNext:false, lastChanges:{},
+    coachMode: opts.coachOn,
+    log:{ delisted:[], maxConcentration:{}, divTotals:{}, peakStock:{}, trades:0, startTime:Date.now() }
+  };
+  players.forEach(p=>{ G.log.divTotals[p.name]=0; G.log.maxConcentration[p.name]=0; });
+  showPassScreen();
+};
+
+// ---------- PASS SCREEN (hand to next player) ----------
+function showPassScreen(){
+  const p = G.players[G.turnIdx];
+  $('#app').innerHTML = `
+    <div class="overlay">
+      <div class="modal pass-player">
+        <div class="mi">${p.av}</div>
+        <h2>${p.name}님 차례</h2>
+        <p>${G.round}라운드 · 기기를 ${p.name}님께 전달하세요.<br>준비되면 시작을 눌러주세요.</p>
+        <button class="mbtn" onclick="beginTurn()">내 차례 시작 ▶</button>
+      </div>
+    </div>`;
+}
+window.beginTurn = function(){
+  G.actionsLeft = ACTIONS_PER_TURN;
+  G.buyCountThisTurn = {};
+  G.maxBuyThisTurn = G.baseBuyLimit;
+  G.phase='turn';
+  // 턴 시작 시점 스냅샷 저장 (Undo용)
+  const p = G.players[G.turnIdx];
+  G.turnSnapshot = {
+    cash: p.cash,
+    shares: {...p.shares},
+    hand: p.hand.map(c=>c), // shallow copy of card refs
+    insured: {...p.insured},
+    infoPeek: G.infoPeek,
+    flipNext: G.flipNext,
+    maxBuyThisTurn: G.maxBuyThisTurn
+  };
+  render();
+};
+
+// 턴 처음으로 되돌리기 (사기/팔기/카드사용 모두 원복)
+window.undoTurn = function(){
+  if(!G.turnSnapshot) return;
+  const p = G.players[G.turnIdx];
+  const snap = G.turnSnapshot;
+  p.cash = snap.cash;
+  p.shares = {...snap.shares};
+  p.hand = snap.hand.map(c=>c);
+  p.insured = {...snap.insured};
+  G.infoPeek = snap.infoPeek;
+  G.flipNext = snap.flipNext;
+  G.maxBuyThisTurn = snap.maxBuyThisTurn;
+  G.actionsLeft = ACTIONS_PER_TURN;
+  G.buyCountThisTurn = {};
+  toast('↩️ 턴 처음으로 되돌렸어요');
+  renderTurn();
+};
+
+// ---------- MAIN RENDER ----------
+function render(){
+  if(G.phase==='turn') renderTurn();
+}
+
+function stockCardHTML(c){
+  const pr=G.prices[c.id];
+  const chg = pr - (G.prevPrices[c.id]??pr);
+  const chgStr = chg>0?`▲${chg}`:chg<0?`▼${-chg}`:'-';
+  const chgCls = chg>0?'up':chg<0?'down':'';
+  const p=G.players[G.turnIdx];
+  const own=p.shares[c.id];
+  return `<div class="stock ${c.type==='growth'?'growth':c.type==='divid'?'divid':''}">
+    <span class="badge">${c.type==='growth'?'성장':c.type==='divid'?'배당':''}</span>
+    <div class="ico">${c.ico}</div>
+    <div class="nm">${c.nm}</div>
+    <div class="pr">${pr===0?'상폐':won(pr)}</div>
+    <div class="chg ${chgCls}">${chgStr}</div>
+    <div class="own">${own>0?`보유 ${own}`:'　'}</div>
+  </div>`;
+}
+
+function evShort(ev){
+  const who = ev.who==='all'?'모든 회사':ev.who.map(id=>COMPANIES.find(c=>c.id===id).nm).join('·');
+  return { who, steps:ev.steps };
+}
+function miniEvHTML(ev){
+  if(ev.kind==='div'){
+    const who = ev.who==='all'?'모든 회사':ev.who.map(id=>COMPANIES.find(c=>c.id===id).nm).join('·');
+    const label = ev.divMul===0?'배당 X':ev.divMul<1?'배당↓':'배당↑';
+    return `<div class="mini-ev">
+      <span class="mi-ico">${ev.ico}</span>
+      <span class="mi-tx">${ev.tx}</span>
+      <span class="mi-ef ${ev.divMul>=1?'up':'down'}">${who} ${label}</span>
+    </div>`;
+  }
+  const e=evShort(ev);
+  return `<div class="mini-ev">
+    <span class="mi-ico">${ev.ico}</span>
+    <span class="mi-tx">${ev.tx}</span>
+    <span class="mi-ef ${ev.steps>0?'up':'down'}">${e.who} ${ev.steps>0?'▲':'▼'}${Math.abs(ev.steps)}</span>
+  </div>`;
+}
+function forecastHTML(){
+  const now=G.forecast[0], next=G.forecast[1];
+  return `<div class="fc-cards">
+    <div class="fc now">
+      <div class="lbl">◀ 이번 라운드 (사건 2개!)</div>
+      ${now.map(miniEvHTML).join('')}
+    </div>
+    <div class="fc next">
+      <div class="lbl">다음 예보 ▶</div>
+      ${next.map(miniEvHTML).join('')}
+    </div>
+  </div>`;
+}
+
+function miniRankHTML(){
+  const ranked=G.players.map(p=>({p, nw:netWorth(p,G.prices)})).sort((a,b)=>b.nw-a.nw);
+  const cur=G.players[G.turnIdx];
+  return `<div class="mini-rank">
+    ${ranked.map((r,i)=>`<span class="mr-item ${r.p===cur?'me':''}">${['🥇','🥈','🥉','4️⃣'][i]} ${r.p.av}${r.p.name} <b>${won(r.nw)}</b></span>`).join('')}
+  </div>`;
+}
+
+window.toggleCoach = function(){ G.coachMode=!G.coachMode; toast(G.coachMode?'🟢 투자 도우미 켜짐 (추천 표시)':'⚪ 도우미 꺼짐 (스스로 판단!)'); renderTurn(); };
+
+function renderTurn(){
+  const p=G.players[G.turnIdx];
+  const nw=netWorth(p,G.prices);
+  const sv=stockValue(p,G.prices);
+  const isLastRound = G.round===TOTAL_ROUNDS;
+
+  $('#app').innerHTML = `
+    <div class="hdr">
+      <span class="round">${G.round}/${TOTAL_ROUNDS}R</span>
+      <span class="country-tag">${G.country.flag} ${G.country.name}</span>
+      <span class="phase">${p.av} ${p.name}</span>
+      <button class="menu-btn" onclick="toggleCoach()">${G.coachMode?'🟢':'⚪'}</button>
+      <button class="menu-btn" onclick="showGoal()">🎯</button>
+    </div>
+    ${miniRankHTML()}
+
+    <div class="scroll-area">
+      <div class="market">
+        <h2>📊 시세 현황</h2>
+        <div class="stocks">${COMPANIES.map(stockCardHTML).join('')}</div>
+      </div>
+
+      <div class="forecast">
+        <h2>🔮 시장 예보 ${isLastRound?'(마지막 라운드는 다음 예보 비공개!)':''}</h2>
+        ${isLastRoundForecast(isLastRound)}
+      </div>
+
+      ${G.infoPeek?`<div class="hint-tip">🔮 정보 입수: 다다음 이벤트는 "${G.infoPeek}"에 관한 일이에요 (방향은 비밀)</div>`:''}
+
+      <div class="player-panel">
+        <div class="pturn">
+          <div class="top">
+            <span class="av">${p.av}</span>
+            <span class="nm">${p.name}</span>
+            <div class="net"><div class="l">순자산</div><div class="v">${won(nw)}</div></div>
+          </div>
+          <div class="stats">
+            <div class="stat"><div class="l">현금</div><div class="v">${won(p.cash)}</div></div>
+            <div class="stat"><div class="l">주식 평가액</div><div class="v">${won(sv)}</div></div>
+          </div>
+        </div>
+
+        <div class="actions-left">남은 행동 <b>${G.actionsLeft}</b>개 ${G.maxBuyThisTurn>3?'· ⚡5주 매수 가능':''}</div>
+
+        ${G.coachMode?coachPanelHTML():''}
+
+        <div class="trade">
+          ${COMPANIES.map(c=>tradeCardHTML(c,p)).join('')}
+        </div>
+
+        <div class="other-actions">
+          <button class="act-undo" onclick="undoTurn()" ${G.actionsLeft===ACTIONS_PER_TURN?'disabled':''}>↩️ 되돌리기</button>
+          <button class="act-pass" onclick="doPass()" ${G.actionsLeft<=0?'disabled':''}>💰 패스 +500</button>
+          <button class="act-done" onclick="endTurn()">✅ 턴 종료</button>
+        </div>
+
+        <div class="hand">
+          <h3>🃏 내 대응 카드 (${p.hand.length}장)</h3>
+          <div class="hand-cards">
+            ${p.hand.length? p.hand.map((c,i)=>handCardHTML(c,i)).join('') : '<div style="opacity:.5;font-size:12px;padding:10px;">카드 없음 — 턴에 1장 뽑을 수 있어요</div>'}
+            <div class="hcard" style="background:linear-gradient(135deg,#1e3a5f,#2a4d7a);min-width:110px;">
+              <div class="hi">🎴</div><div class="hn">카드 뽑기</div>
+              <div class="he">덱에서 대응카드 1장을 가져와요 (행동 1개 소모)</div>
+              <button onclick="drawCard()" ${G.actionsLeft<=0?'disabled':''}>뽑기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function isLastRoundForecast(isLast){
+  if(!isLast) return forecastHTML();
+  const now=G.forecast[0];
+  return `<div class="fc-cards">
+    <div class="fc now">
+      <div class="lbl">◀ 이번 라운드 (사건 2개!)</div>
+      ${now.map(miniEvHTML).join('')}
+    </div>
+    <div class="fc hidden-fc">
+      <div class="lbl">다음 예보 ▶</div>
+      <div class="qm">❓</div>
+      <div class="tx">비공개</div>
+    </div>
+  </div>`;
+}
+
+function coachPanelHTML(){
+  const adv=analyzeAdvice();
+  const buys=COMPANIES.filter(c=>adv[c.id].dir==='buy' && G.prices[c.id]>0);
+  const sells=COMPANIES.filter(c=>adv[c.id].dir==='sell' && G.prices[c.id]>0);
+  let rows='';
+  buys.forEach(c=>{
+    rows+=`<div class="coach-row buy-row"><span class="cr-tag">👍 추천</span> <b>${c.ico}${c.nm}</b> — ${adv[c.id].reasons[0]}</div>`;
+  });
+  sells.forEach(c=>{
+    rows+=`<div class="coach-row sell-row"><span class="cr-tag">👎 주의</span> <b>${c.ico}${c.nm}</b> — ${adv[c.id].reasons[0]}</div>`;
+  });
+  if(!rows) rows=`<div class="coach-row" style="opacity:.6;">지금은 뚜렷한 추천이 없어요. 예보를 보고 직접 판단해 보세요!</div>`;
+  return `<div class="coach-panel">
+    <div class="coach-head">🧑‍🏫 투자 도우미 <span style="opacity:.6;font-weight:400;">(예보를 보고 알려줘요 · 정답은 아니에요!)</span></div>
+    ${rows}
+  </div>`;
+}
+
+function tradeCardHTML(c,p){
+  const pr=G.prices[c.id];
+  const own=p.shares[c.id];
+  const bought=G.buyCountThisTurn[c.id]||0;
+  const canBuy = G.actionsLeft>0 && pr>0 && p.cash>=pr && bought<G.maxBuyThisTurn && own<MAX_SHARES;
+  const canSell = G.actionsLeft>0 && own>0;
+  let badge='';
+  if(G.coachMode && pr>0){
+    const adv=analyzeAdvice()[c.id];
+    if(adv.dir==='buy') badge='<div class="tc-badge buy-b">👍</div>';
+    else if(adv.dir==='sell') badge='<div class="tc-badge sell-b">👎</div>';
+  }
+  return `<div class="tcard">
+    ${badge}
+    <div class="ti">${c.ico}</div>
+    <div class="tp">${pr===0?'상폐':won(pr)}</div>
+    <div class="town">${own>0?`${own}주`:'　'}</div>
+    <div class="tbtns">
+      <button class="buy" onclick="buy('${c.id}')" ${canBuy?'':'disabled'}>사기</button>
+      <button class="sell" onclick="sell('${c.id}')" ${canSell?'':'disabled'}>팔기</button>
+    </div>
+  </div>`;
+}
+
+function handCardHTML(c,i){
+  return `<div class="hcard">
+    <div class="hi">${c.ico}</div>
+    <div class="hn">${c.nm}</div>
+    <div class="he">${c.desc}</div>
+    <button onclick="useCard(${i})" ${G.actionsLeft<=0 && c.id!=='extra'?'disabled':''}>사용</button>
+  </div>`;
+}
+
+// ---------- TRADE ACTIONS ----------
+window.buy = function(cid){
+  const p=G.players[G.turnIdx]; const pr=G.prices[cid];
+  if(G.actionsLeft<=0||pr<=0||p.cash<pr) return;
+  const bought=G.buyCountThisTurn[cid]||0;
+  if(bought>=G.maxBuyThisTurn){ toast('이번 턴 이 회사는 더 못 사요'); return; }
+  if(p.shares[cid]>=MAX_SHARES){ toast('한 회사 최대 15주까지!'); return; }
+  p.cash-=pr; p.shares[cid]++; G.buyCountThisTurn[cid]=bought+1;
+  // count buy as action only when finishing? -> each buy is part of an action; we treat 1 action = buy phase. Simplify: each buy = 1 action.
+  G.actionsLeft--;
+  renderTurn();
+};
+window.sell = function(cid){
+  const p=G.players[G.turnIdx]; const pr=G.prices[cid];
+  if(G.actionsLeft<=0||p.shares[cid]<=0) return;
+  let price=pr;
+  if(p.insured[cid]){ // insurance: guarantee buy price -> use max(current, insuredPrice)
+    price=Math.max(pr, p.insured[cid]); delete p.insured[cid]; toast('🛡️ 보험 적용! 산 가격 보장');
+  }
+  p.cash+=price; p.shares[cid]--;
+  G.actionsLeft--;
+  renderTurn();
+};
+
+window.doPass = function(){
+  const p=G.players[G.turnIdx];
+  if(G.actionsLeft<=0) return;
+  p.cash+=500; G.actionsLeft--;
+  toast('💰 +500원');
+  renderTurn();
+};
+
+window.drawCard = function(){
+  const p=G.players[G.turnIdx];
+  if(G.actionsLeft<=0) return;
+  if(!G.actionDeck.length) G.actionDeck=shuffle([...ACTIONS,...ACTIONS]);
+  p.hand.push(G.actionDeck.pop());
+  G.actionsLeft--;
+  toast('🎴 카드를 뽑았어요');
+  renderTurn();
+};
+
+// ---------- ACTION CARDS ----------
+window.useCard = function(i){
+  const p=G.players[G.turnIdx]; const card=p.hand[i];
+  if(!card) return;
+  if(card.id!=='extra' && G.actionsLeft<=0) return;
+
+  switch(card.id){
+    case 'extra':
+      G.actionsLeft++; p.hand.splice(i,1); toast('⚡ 행동 +1!'); renderTurn(); return;
+    case 'cash':
+      p.cash+=3000; G.maxBuyThisTurn=5; p.hand.splice(i,1); G.actionsLeft--;
+      toast('💰 +3,000원 · 5주 매수 가능!'); renderTurn(); return;
+    case 'div': {
+      let total=0; COMPANIES.forEach(c=>total+=p.shares[c.id]*100);
+      p.cash+=total; p.hand.splice(i,1); G.actionsLeft--;
+      toast(`🎁 특별배당 +${won(total)}`); renderTurn(); return;
+    }
+    case 'flip':
+      G.flipNext=true; p.hand.splice(i,1); G.actionsLeft--;
+      toast('🔁 이번 이벤트 효과가 반대로!'); renderTurn(); return;
+    case 'info': {
+      // peek the card after next (3rd) - we peek eventDeck top
+      const peek = G.eventDeck[G.eventDeck.length-1];
+      G.infoPeek = peek ? (peek.who==='all'?'모든 회사':peek.who.map(id=>COMPANIES.find(c=>c.id===id).nm).join('·')) : '알 수 없음';
+      p.hand.splice(i,1); G.actionsLeft--; renderTurn(); return;
+    }
+    case 'cut':
+      chooseStock('손절매 — 어느 회사를 전부 팔까요?', (cid)=>{
+        const pr=G.prices[cid]; const n=p.shares[cid];
+        if(n<=0){ toast('가진 주식이 없어요'); return; }
+        p.cash+=pr*n; p.shares[cid]=0; p.hand.splice(i,1); G.actionsLeft--;
+        toast(`✂️ ${COMPANIES.find(c=>c.id===cid).nm} ${n}주 매도`); renderTurn();
+      }, (cid)=>p.shares[cid]>0); return;
+    case 'avg':
+      chooseStock('물타기 — 어느 회사를 싸게 살까요?', (cid)=>{
+        const pr=Math.max(0,G.prices[cid]-200);
+        if(p.cash<pr){ toast('현금이 부족해요'); return; }
+        if(p.shares[cid]>=MAX_SHARES){ toast('15주 상한!'); return; }
+        p.cash-=pr; p.shares[cid]++; p.hand.splice(i,1); G.actionsLeft--;
+        toast(`💧 ${COMPANIES.find(c=>c.id===cid).nm} 200원 싸게 매수`); renderTurn();
+      }, (cid)=>p.shares[cid]>0); return;
+    case 'ins':
+      chooseStock('보험가입 — 어느 회사 주식을 보호할까요?', (cid)=>{
+        if(p.shares[cid]<=0){ toast('가진 주식이 없어요'); return; }
+        p.insured[cid]=G.prices[cid]; p.hand.splice(i,1); G.actionsLeft--;
+        toast(`🛡️ ${COMPANIES.find(c=>c.id===cid).nm} 보험 가입 (${won(G.prices[cid])} 보장)`); renderTurn();
+      }, (cid)=>p.shares[cid]>0); return;
+  }
+};
+
+function chooseStock(title, cb, filter){
+  const p=G.players[G.turnIdx];
+  const opts=COMPANIES.filter(c=> filter? filter(c.id):true);
+  if(!opts.length){ toast('대상이 없어요'); return; }
+  const ov=document.createElement('div'); ov.className='overlay'; ov.id='chooseOv';
+  ov.innerHTML=`<div class="modal"><h2 style="font-size:18px;">${title}</h2>
+    <div class="trade" style="margin:14px 0;">
+      ${opts.map(c=>`<div class="tcard"><div class="ti">${c.ico}</div><div class="tp">${won(G.prices[c.id])}</div><div class="town">${p.shares[c.id]}주</div>
+        <button class="buy" style="margin-top:5px;width:100%;" onclick="pickStock('${c.id}')">선택</button></div>`).join('')}
+    </div>
+    <button class="mbtn sec" onclick="$('#chooseOv').remove()">취소</button></div>`;
+  document.body.appendChild(ov);
+  window._pickCb=cb;
+}
+window.pickStock = function(cid){ $('#chooseOv')?.remove(); if(window._pickCb) window._pickCb(cid); };
+
+window.showGoal = function(){
+  const p=G.players[G.turnIdx];
+  const ov=document.createElement('div'); ov.className='overlay';
+  ov.innerHTML=`<div class="modal"><div class="mi">${p.goal.ico}</div>
+    <h2>비밀 목표: ${p.goal.nm}</h2>
+    <p>${p.goal.desc}<br><b style="color:#ffd23f;">달성 시 +${won(p.goal.reward)}</b></p>
+    <p style="font-size:12px;opacity:.6;">남에게 보여주지 마세요! 게임 끝에 공개됩니다.</p>
+    <button class="mbtn" onclick="this.closest('.overlay').remove()">닫기</button></div>`;
+  document.body.appendChild(ov);
+};
+
+// ---------- END TURN ----------
+window.endTurn = function(){
+  // next player or resolve round
+  G.turnIdx++;
+  if(G.turnIdx>=G.players.length){
+    G.turnIdx=0;
+    resolveRound();
+  } else {
+    showPassScreen();
+  }
+};
+
+// ---------- RESOLVE ROUND (execute BOTH forecast events, dividends, advance) ----------
+function resolveRound(){
+  const events=G.forecast[0]; // array of up to 2 events
+  G.prevPrices={...G.prices};
+  const changes=[];
+  const flip = G.flipNext; G.flipNext=false;
+
+  // dividend multipliers for THIS round (default 1)
+  const divMul={}; COMPANIES.forEach(c=>divMul[c.id]=1);
+  const divEvents=[];
+
+  events.forEach(ev=>{
+    if(ev.kind==='div'){
+      // dividend event: no price move, set multiplier
+      const targets = ev.who==='all' ? COMPANIES.map(c=>c.id) : ev.who;
+      targets.forEach(cid=>{ divMul[cid] = ev.divMul; });
+      divEvents.push(ev);
+      return;
+    }
+    let steps = flip ? -ev.steps : ev.steps;
+    // 나라별 변동성 보정 (volMod): -1=완화, +1=증폭
+    const volMod = COMPANIES[0]?.volMod || 0;
+    if(steps > 0) steps = Math.max(1, steps + volMod);  // 상승은 최소 1칸은 오름
+    else if(steps < 0) steps = Math.min(-1, steps - volMod); // 하락은 최소 -1칸은 떨어짐
+    const applyTo = ev.who==='all' ? COMPANIES.map(c=>c.id) : ev.who;
+    applyTo.forEach(cid=>{
+      if(G.prices[cid]<=0) return;
+      const before=G.prices[cid];
+      G.prices[cid]=movePrice(G.prices[cid], steps);
+      changes.push({cid, before, after:G.prices[cid], evIco:ev.ico, evTx:ev.tx});
+    });
+    if(ev.chain && ev.who!=='all'){
+      const cid=ev.chain.who; let cs=flip?-ev.chain.steps:ev.chain.steps;
+      if(G.prices[cid]>0){
+        const before=G.prices[cid];
+        G.prices[cid]=movePrice(G.prices[cid], cs);
+        changes.push({cid, before, after:G.prices[cid], chain:true, evIco:ev.ico, evTx:ev.tx});
+      }
+    }
+  });
+
+  // dividends (with this round's multipliers) — only on divEvery rounds
+  const divPaid=[];
+  const divThisRound = (G.round % G.setupOpts.divEvery === 0);
+  G.players.forEach(p=>{
+    let total=0;
+    if(divThisRound){
+      COMPANIES.forEach(c=>{ if(p.shares[c.id]>0 && c.div>0 && G.prices[c.id]>0){ total+=Math.round(p.shares[c.id]*c.div*divMul[c.id]); } });
+    }
+    if(total>0){ p.cash+=total; p.dividendCount++; G.log.divTotals[p.name]+=total; }
+    divPaid.push({name:p.name, av:p.av, amount:total});
+  });
+
+  // track delisting + concentration
+  changes.forEach(ch=>{
+    if(ch.after===0){
+      const c=COMPANIES.find(x=>x.id===ch.cid);
+      G.players.forEach(p=>{ if(p.shares[ch.cid]>0 && !G.log.delisted.find(d=>d.cid===ch.cid)){ G.log.delisted.push({cid:ch.cid, nm:c.nm, ico:c.ico, victim:p.name}); } });
+    }
+  });
+  G.players.forEach(p=>{
+    const maxShare=Math.max(...COMPANIES.map(c=>p.shares[c.id]*G.prices[c.id]));
+    const totalStock=stockValue(p,G.prices);
+    if(totalStock>0){ const conc=maxShare/totalStock; if(conc>G.log.maxConcentration[p.name]) G.log.maxConcentration[p.name]=conc; }
+  });
+
+  // record net worth history
+  G.players.forEach(p=> p.history.push(netWorth(p,G.prices)) );
+
+  // 상장폐지 회사가 있으면, 예보 칸에서 그 회사 관련 이벤트 제거 & 새 카드로 교체
+  const justDelisted = changes.filter(ch=>ch.after===0).map(ch=>ch.cid);
+  if(justDelisted.length){
+    for(let i=0; i<G.forecast.length; i++){
+      G.forecast[i] = G.forecast[i].filter(ev=>{
+        if(ev.who==='all') return true; // 모든 회사 이벤트는 살아있는 회사 있으면 유효
+        return ev.who.some(cid=>isAlive(cid)); // 대상 중 살아있는 회사 있으면 유지
+      });
+      // 사건 2개가 안 되면 새로 뽑아 채움
+      while(G.forecast[i].length < 2){
+        const fresh = drawPair(G.eventDeck);
+        if(fresh.length===0) break;
+        G.forecast[i].push(fresh[0]);
+        if(G.forecast[i].length < 2 && fresh[1]) G.forecast[i].push(fresh[1]);
+      }
+    }
+  }
+
+  G.lastChanges={events, flip, changes, divPaid, divEvents, justDelisted};
+  showEventReveal();
+}
+
+function showEventReveal(){
+  const {events, changes, divPaid, divEvents}=G.lastChanges;
+  const isLast = G.round===TOTAL_ROUNDS;
+
+  // ranking with delta from previous round
+  const ranked=G.players.map((p,idx)=>{
+    const nw=p.history[p.history.length-1];
+    const prev=p.history.length>=2?p.history[p.history.length-2]:nw;
+    return {p, nw, delta:nw-prev, idx};
+  }).sort((a,b)=>b.nw-a.nw);
+  const medals=['🥇','🥈','🥉','4️⃣'];
+
+  const evCardHTML = ev => {
+    if(ev.kind==='div'){
+      const who = ev.who==='all'?'모든 회사':ev.who.map(id=>COMPANIES.find(c=>c.id===id).nm).join('·');
+      const label = ev.divMul===0?'배당 없음':ev.divMul<1?'배당 줄어요':'배당 늘어요';
+      return `<div class="ev-one divev">
+        <div class="eo-ico">${ev.ico}</div>
+        <div class="eo-tx">${ev.tx}</div>
+        <div class="eo-ef">${who} · ${label}</div>
+      </div>`;
+    }
+    const e=evShort(ev);
+    return `<div class="ev-one ${ev.steps>0?'up':'down'}">
+      <div class="eo-ico">${ev.ico}</div>
+      <div class="eo-tx">${ev.tx}</div>
+      <div class="eo-ef">${e.who} ${ev.steps>0?'▲':'▼'}${Math.abs(ev.steps)}칸</div>
+    </div>`;
+  };
+
+  $('#app').innerHTML = `
+    <div class="overlay">
+      <div class="modal event-reveal" style="max-width:460px;">
+        <div style="font-size:13px;opacity:.7;margin-bottom:6px;">${G.round}라운드 결과</div>
+        <div class="ev-pair">
+          ${events.map(evCardHTML).join('')}
+        </div>
+
+        ${changes.length?`<div class="ev-detail">
+          <div style="font-weight:700;margin-bottom:4px;font-size:12px;">📊 주가 변동</div>
+          ${changes.map(ch=>{
+            const c=COMPANIES.find(x=>x.id===ch.cid);
+            const diff=ch.after-ch.before;
+            return `<div class="row"><span>${c.ico} ${c.nm}${ch.chain?' (연동)':''}</span>
+              <span class="${diff>=0?'up':'down'}">${won(ch.before)} → ${won(ch.after)}${ch.after===0?' 💀':''}</span></div>`;
+          }).join('')}
+        </div>`:''}
+
+        ${divEvents&&divEvents.length?`<div class="ev-detail" style="border:1px solid #ffd23f;">
+          <div style="font-weight:700;margin-bottom:4px;font-size:12px;color:#ffd23f;">🎁 이번 라운드 배당 변동!</div>
+          ${divEvents.map(ev=>{
+            const who = ev.who==='all'?'모든 회사':ev.who.map(id=>COMPANIES.find(c=>c.id===id).nm).join('·');
+            const label = ev.divMul===0?'이번 배당 없음 🚫':ev.divMul<1?`배당 ${ev.divMul}배로 줄어요`:`배당 ${ev.divMul}배로 늘어요!`;
+            return `<div class="row"><span>${ev.ico} ${who}</span><span class="${ev.divMul>=1?'up':'down'}">${label}</span></div>`;
+          }).join('')}
+        </div>`:''}
+
+        <div class="ev-detail">
+          <div style="font-weight:700;margin-bottom:4px;font-size:12px;">🏆 자산 순위 (지난 라운드 대비)</div>
+          ${ranked.map((r,i)=>`<div class="row rank-row">
+            <span>${medals[i]} ${r.p.av} ${r.p.name}</span>
+            <span>${won(r.nw)} <span class="delta ${r.delta>=0?'up':'down'}">${r.delta>=0?'▲':'▼'}${won(Math.abs(r.delta))}</span></span>
+          </div>`).join('')}
+        </div>
+
+        <div class="ev-detail">
+          <div style="font-weight:700;margin-bottom:4px;font-size:12px;">💰 배당금 ${G.setupOpts.divEvery>1?`(${G.setupOpts.divEvery}라운드마다 지급)`:''}</div>
+          ${(G.round % G.setupOpts.divEvery !== 0) ? `<div style="text-align:center;opacity:.6;font-size:12px;padding:4px;">이번 라운드는 배당이 없어요. 다음 배당까지 ${G.setupOpts.divEvery - (G.round % G.setupOpts.divEvery)}라운드 남았어요.</div>` : 
+            divPaid.map(d=>`<div class="row"><span>${d.av} ${d.name}</span><span class="${d.amount>0?'up':''}">${d.amount>0?'+'+won(d.amount):'-'}</span></div>`).join('')
+          }
+        </div>
+
+        <button class="mbtn" onclick="advanceRound()">${isLast?'🏁 최종 결과 보기':`${G.round+1}라운드로 ▶`}</button>
+      </div>
+    </div>`;
+}
+
+window.advanceRound = function(){
+  if(G.round>=TOTAL_ROUNDS){ showResults(); return; }
+  // shift forecast slots forward, draw a new one at the end
+  G.forecast.shift();
+  G.forecast.push(drawPair(G.eventDeck));
+  G.infoPeek=null;
+  G.round++;
+  G.turnIdx=0;
+  showPassScreen();
+};
+
+// ---------- RESULTS ----------
+// ---------- INSIGHT GENERATION ----------
+function generateInsights(ranked){
+  const ins=[];
+  const winner=ranked[0];
+  const loser=ranked[ranked.length-1];
+
+  // 1. winner strategy
+  const wConc=G.log.maxConcentration[winner.p.name]||0;
+  if(wConc>=0.7){
+    ins.push({ico:'🎯', title:'집중 투자가 통한 판', text:`${winner.p.name}님은 한 회사에 크게 투자해서 이겼어요. 운이 좋으면 크게 벌 수 있지만, 진짜 주식에서는 그 회사가 어려워지면 한 번에 잃을 수도 있어요. 게임이 짧아서 통한 거예요.`});
+  } else if(wConc<=0.45){
+    ins.push({ico:'🌈', title:'분산투자의 승리', text:`${winner.p.name}님은 여러 회사에 골고루 나눠 투자해서 이겼어요. 한 회사가 떨어져도 다른 회사가 받쳐줬죠. "계란을 한 바구니에 담지 마라"가 통한 거예요.`});
+  }
+
+  // 2. dividend
+  const divEntries=Object.entries(G.log.divTotals).sort((a,b)=>b[1]-a[1]);
+  if(divEntries[0] && divEntries[0][1]>=8000){
+    ins.push({ico:'🎁', title:'배당의 힘', text:`${divEntries[0][0]}님은 배당금만 ${won(divEntries[0][1])}을 받았어요! 주식을 팔지 않고 가지고만 있어도 돈이 들어오는 게 배당이에요. 안정적인 회사(빵집·장난감)를 모은 보람이죠.`});
+  }
+
+  // 3. delisting
+  if(G.log.delisted.length){
+    const d=G.log.delisted[0];
+    ins.push({ico:'💀', title:'상장폐지를 겪었어요', text:`${d.ico} ${d.nm} 회사가 주가 0원이 되어 사라졌어요(상장폐지). ${d.victim}님이 그 주식을 가지고 있었다면 휴지가 됐죠. 이래서 한 회사에 다 걸면 위험하고, 나눠 투자하는 게 안전해요.`});
+  }
+
+  // 4. close vs blowout
+  const gap=winner.total-loser.total;
+  if(gap<=5000){
+    ins.push({ico:'🤝', title:'손에 땀을 쥔 접전!', text:`1등과 꼴찌 차이가 ${won(gap)}밖에 안 났어요. 모두가 비슷하게 잘했다는 뜻이에요. 다음엔 누가 이길까요?`});
+  } else if(gap>=20000){
+    ins.push({ico:'🚀', title:'큰 점수 차가 난 판', text:`점수 차이가 ${won(gap)}이나 났어요. ${winner.p.name}님의 어떤 선택이 이렇게 큰 차이를 만들었을까요? 함께 되돌아보면 좋아요.`});
+  }
+
+  // 5. goal achievement
+  const metGoals=ranked.filter(r=>r.goalMet);
+  if(metGoals.length){
+    ins.push({ico:'🏅', title:'목표를 이룬 사람', text:`${metGoals.map(r=>r.p.name).join(', ')}님이 비밀 목표를 달성해 보너스를 받았어요. 투자에서도 "왜 투자하는지" 목표를 정하면 흔들리지 않아요.`});
+  }
+
+  // 6. always-on reminder
+  ins.push({ico:'🌍', title:'기억해요', text:`이 게임에서는 예보로 앞날을 봤지만, 진짜 주식 시장에서는 아무도 내일을 알 수 없어요. 그래서 나눠 사고, 오래 기다리고, "무조건 오른다"는 말은 믿지 않는 거예요.`});
+
+  // 7. dividend changes reminder
+  ins.push({ico:'🎁', title:'배당도 변해요', text:`회사가 돈을 잘 벌면 배당을 늘리고(증배), 어려우면 줄이거나 안 주기도 해요(감배·중단). 주가만 보지 말고, 그 회사가 배당을 잘 주는지도 살펴보는 게 진짜 투자자랍니다.`});
+
+  return ins;
+}
+
+// ---------- SAVE / LOAD HISTORY ----------
+async function saveGameRecord(ranked, insights){
+  try{
+    let list=[];
+    try{ const r=await window.storage.get('game-history'); if(r&&r.value) list=JSON.parse(r.value); }catch(e){}
+    const rec={
+      date:new Date().toLocaleDateString('ko-KR'),
+      time:new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}),
+      players:ranked.map(r=>({name:r.p.name, av:r.p.av, total:r.total, goalMet:r.goalMet})),
+      winner:ranked[0].p.name,
+      gap:ranked[0].total-ranked[ranked.length-1].total,
+      insightTitles:insights.map(i=>i.title)
+    };
+    list.unshift(rec);
+    if(list.length>50) list=list.slice(0,50);
+    await window.storage.set('game-history', JSON.stringify(list));
+    return true;
+  }catch(e){ return false; }
+}
+
+function showResults(){
+  const ranked=G.players.map(p=>{
+    const base=netWorth(p,G.prices);
+    const goalMet=p.goal.check(p,G);
+    const bonus=goalMet?p.goal.reward:0;
+    return {p, base, goalMet, bonus, total:base+bonus, sv:stockValue(p,G.prices)};
+  }).sort((a,b)=>b.total-a.total);
+
+  const insights=generateInsights(ranked);
+  saveGameRecord(ranked, insights); // fire and forget
+
+  const medals=['🥇','🥈','🥉','4️⃣'];
+  $('#app').innerHTML = `
+    <div class="results">
+      <h1>🏆 게임 종료!</h1>
+      <div class="sub">12라운드 최종 결과</div>
+      ${ranked.map((r,i)=>`
+        <div class="rank ${i===0?'win':''}">
+          <span class="medal">${medals[i]}</span>
+          <div class="info">
+            <div class="n">${r.p.av} ${r.p.name}</div>
+            <div class="breakdown">현금 ${won(r.p.cash)} · 주식 ${won(r.sv)} ${r.goalMet?`· 🎯${r.p.goal.nm} +${won(r.bonus)}`:`· 목표 미달성`}</div>
+          </div>
+          <div class="total">${won(r.total)}</div>
+        </div>
+      `).join('')}
+
+      <div class="insights">
+        <h2>📚 오늘의 배울 점</h2>
+        ${insights.map(i=>`<div class="insight"><span class="in-ico">${i.ico}</span><div><div class="in-title">${i.title}</div><div class="in-text">${i.text}</div></div></div>`).join('')}
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:20px;">
+        <button class="act-pass" style="flex:1;padding:15px;" onclick="showHistory()">📊 지난 기록</button>
+        <button class="start-btn" style="flex:1;margin-top:0;" onclick="renderSetup()">🔄 다시 하기</button>
+      </div>
+      <div class="hint-tip" style="margin-top:16px;">💡 가족과 이야기 나눠보세요: "왜 그 회사를 샀어?", "예보를 보고 어떻게 판단했어?", "한 곳에 몰빵 vs 나누기, 뭐가 좋았을까?"</div>
+    </div>`;
+}
+
+// ---------- HISTORY SCREEN ----------
+window.showHistory = async function(){
+  let list=[];
+  try{ const r=await window.storage.get('game-history'); if(r&&r.value) list=JSON.parse(r.value); }catch(e){}
+
+  // aggregate stats
+  const winCount={};
+  list.forEach(rec=>{ winCount[rec.winner]=(winCount[rec.winner]||0)+1; });
+  const winners=Object.entries(winCount).sort((a,b)=>b[1]-a[1]);
+
+  $('#app').innerHTML = `
+    <div class="results">
+      <h1>📊 게임 기록</h1>
+      <div class="sub">지금까지 ${list.length}판을 플레이했어요</div>
+      ${list.length===0? `<div style="text-align:center;opacity:.6;padding:40px 20px;">아직 기록이 없어요.<br>게임을 한 판 끝내면 여기에 쌓여요!</div>` : `
+        ${winners.length? `<div class="stat-box"><div class="sb-title">🏆 누가 많이 이겼나</div>
+          ${winners.map(([n,c])=>`<div class="sb-row"><span>${n}</span><span><b>${c}</b>승</span></div>`).join('')}
+        </div>`:''}
+        <div class="stat-box"><div class="sb-title">📅 최근 게임들</div>
+          ${list.slice(0,15).map(rec=>`
+            <div class="hist-game">
+              <div class="hg-head"><span>${rec.date} ${rec.time}</span><span class="hg-win">🥇 ${rec.winner}</span></div>
+              <div class="hg-players">${rec.players.map((p,i)=>`${['🥇','🥈','🥉','4️⃣'][i]}${p.av}${p.name} ${won(p.total)}`).join('  ·  ')}</div>
+              ${rec.insightTitles&&rec.insightTitles.length?`<div class="hg-ins">📚 ${rec.insightTitles.slice(0,3).join(' / ')}</div>`:''}
+            </div>
+          `).join('')}
+        </div>
+        <button class="act-pass" style="width:100%;padding:12px;margin-top:10px;font-size:13px;" onclick="clearHistory()">🗑️ 기록 모두 지우기</button>
+      `}
+      <button class="start-btn" style="max-width:100%;margin-top:16px;" onclick="renderSetup()">🏠 처음으로</button>
+    </div>`;
+};
+
+window.clearHistory = async function(){
+  const ov=document.createElement('div'); ov.className='overlay';
+  ov.innerHTML=`<div class="modal"><div class="mi">🗑️</div><h2>기록을 모두 지울까요?</h2><p>지금까지의 모든 게임 기록이 사라져요. 되돌릴 수 없어요.</p>
+    <button class="mbtn" onclick="confirmClear(this)">네, 지울게요</button>
+    <button class="mbtn sec" onclick="this.closest('.overlay').remove()">취소</button></div>`;
+  document.body.appendChild(ov);
+};
+window.confirmClear = async function(btn){
+  try{ await window.storage.delete('game-history'); }catch(e){}
+  btn.closest('.overlay').remove();
+  toast('기록을 지웠어요');
+  showHistory();
+};
+
+// ---------- IN-APP DOCS (요약본 / 인쇄본은 별도) ----------
+const DOCS = {
+  rules: { title:'📖 게임 규칙', body:`
+    <h3>🎯 목표</h3>
+    <p>12라운드가 끝났을 때 <b>순자산(현금 + 주식 평가액 + 목표 보너스)</b>이 가장 많은 사람이 이겨요.</p>
+    <h3>🌍 나라 선택</h3>
+    <p>시작할 때 어느 나라 주식시장에서 플레이할지 골라요. 🇰🇷한국·🇺🇸미국·🇯🇵일본·🇨🇳중국·🇹🇼대만·🇮🇳인도. 나라마다 성격이 달라요: 미국·일본은 안전·꾸준함, 중국·인도는 변동성 큼, 한국·대만은 중간.</p>
+    <h3>🏢 6개 섹터</h3>
+    <p>어느 나라든 6개 섹터(💻반도체·📱휴대폰·🚗자동차·🛒쇼핑·🏦은행·🎮게임)가 있어요. 회사 이름은 나라마다 다르지만 섹터는 같아요.</p>
+    <h3>🔄 내 차례</h3>
+    <p>매 차례 <b>2가지 행동</b>을 골라요: 주식 사기 / 팔기 / 대응카드 / 패스(+500원). 매수는 한 턴에 같은 회사 <b>3주</b>까지예요. 실수하면 <b>↩️ 되돌리기</b>로 턴 처음으로 돌아갈 수 있어요!</p>
+    <h3>🔮 시장 예보</h3>
+    <p>이번 라운드 사건 2개 + 다음 라운드 사건 2개가 미리 보여요. 이걸 보고 미리 사거나 파는 게 핵심 전략.</p>
+    <h3>📊 사건의 종류</h3>
+    <p><b>주가 사건:</b> 회사 주가가 오르거나 내려요. <b>배당 사건:</b> 주가는 그대로지만 배당이 늘거나 줄거나 없어져요.</p>
+    <h3>⚠️ 꼭 알아두기</h3>
+    <p>주가가 0원이 되면 <b>상장폐지</b>(주식이 휴지가 돼요!). 상장폐지된 회사 예고는 더 이상 나오지 않아요. 5,500원에 닿으면 거기서 멈춰요. 한 회사는 최대 15주.</p>
+    <h3>🧑‍🏫 투자 도우미</h3>
+    <p>도우미를 켜면 예보를 바탕으로 추천👍/주의👎를 이유와 함께 알려줘요. 익숙해지면 끄고 스스로 판단해 보세요.</p>
+  `},
+  concepts: { title:'📚 주식 개념 (요약)', body:`
+    <h3>💰 싸게 사서 비싸게 팔기</h3>
+    <p>주식은 회사의 작은 조각이에요. 쌀 때 사두었다 값이 오르면 팔아서 돈을 벌어요.</p>
+    <h3>📰 주가는 왜 움직일까</h3>
+    <p>좋은 소식(호재)이 있으면 오르고, 나쁜 소식(악재)이 있으면 내려요.</p>
+    <h3>🔮 미래는 아무도 모른다 (가장 중요!)</h3>
+    <p>게임에선 예보로 앞날을 보지만, <b>진짜 시장에선 아무도 내일을 몰라요.</b> "무조건 오른다"는 말은 믿지 않아요.</p>
+    <h3>🌈 계란을 한 바구니에 담지 마라</h3>
+    <p>한 회사에 다 걸면 그 회사가 망할 때 전부 잃어요. 여러 회사에 나눠 사는 게 안전해요(분산투자).</p>
+    <h3>🛡️ 위험을 다루는 법</h3>
+    <p>값이 내릴 때 적당히 파는 걸 손절이라 해요. 자주 사고파는 게 꼭 좋은 건 아니에요.</p>
+    <h3>🎁 배당</h3>
+    <p>주식을 가지고만 있어도 회사가 나눠주는 돈이에요. 사과나무에서 열리는 사과 같은 거죠.</p>
+    <h3>🎯 목표와 시간</h3>
+    <p>왜 투자하는지 목표를 정하면 흔들리지 않아요. 그리고 시간이 가장 큰 힘이에요. 천천히 자라요.</p>
+    <p style="margin-top:10px;opacity:.7;font-size:12px;">📄 더 자세한 내용은 인쇄용 '학습 교재'에 7개 챕터로 있어요.</p>
+  `},
+  income: { title:'💰 두 가지 돈 이야기', body:`
+    <h3>💪 근로소득 — 일해서 버는 돈</h3>
+    <p>몸과 머리로 일하고 받는 돈이에요. 엄마·아빠 월급, 용돈처럼요. 일을 안 하면 안 생겨요.</p>
+    <h3>💰 금융소득 — 돈이 벌어주는 돈</h3>
+    <p>내가 가진 돈이나 주식이 스스로 벌어다 주는 돈이에요. 이자, 배당금처럼요. 가만히 있어도 들어와요.</p>
+    <h3>🍎 사과나무 비유</h3>
+    <p>근로소득은 매일 산에 사과를 따러 가는 일(안 가면 못 얻어요). 금융소득은 마당에 심은 사과나무(자는 동안에도 사과가 열려요).</p>
+    <h3>🎮 게임과 연결</h3>
+    <p>이 게임에서 받는 <b>배당금이 바로 금융소득</b>이에요! 주식을 사두면 가만히 있어도 돈이 들어오죠.</p>
+    <h3>⛄ 눈덩이처럼</h3>
+    <p>배당으로 받은 돈으로 또 주식을 사면 다음엔 더 많이 받아요. 오래 굴릴수록 커져요. 그래서 일찍 시작하는 게 좋아요.</p>
+    <p style="margin-top:10px;opacity:.7;font-size:12px;">📄 더 자세한 내용은 인쇄용 '두 가지 돈 이야기' 해설서에 있어요.</p>
+  `}
+};
+window.showDoc = function(key){
+  const d=DOCS[key];
+  $('#app').innerHTML=`<div class="doc-view">
+    <div class="doc-hdr"><button class="back-btn" onclick="renderSetup()">← 뒤로</button><h1>${d.title}</h1></div>
+    <div class="doc-body">${d.body}</div>
+    <button class="start-btn" style="max-width:100%;margin-top:10px;" onclick="renderSetup()">🏠 처음으로</button>
+  </div>`;
+};
+
+// ---------- INIT ----------
+renderSetup();
+</script>
+</body>
+</html>
