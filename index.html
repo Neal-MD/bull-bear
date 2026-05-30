@@ -24,10 +24,10 @@
     --line:      oklch(0.85 0.03 80);
     --gold:      oklch(0.82 0.16 84);   /* 돈/브랜드 */
     --gold-deep: oklch(0.68 0.16 70);
-    --up:        oklch(0.72 0.17 150);  /* 황소 그린 */
-    --up-ink:    oklch(0.48 0.15 152);
-    --down:      oklch(0.64 0.21 28);   /* 곰 레드 */
-    --down-ink:  oklch(0.52 0.21 28);
+    --up:        oklch(0.64 0.21 28);   /* 상승=빨강 (한국 증시 관습: 매수도 빨강) */
+    --up-ink:    oklch(0.55 0.22 28);
+    --down:      oklch(0.58 0.15 250);  /* 하락=파랑 (매도도 파랑) */
+    --down-ink:  oklch(0.48 0.17 252);
     --blue:      oklch(0.66 0.14 245);  /* 예보/정보 */
     --grow:      oklch(0.66 0.19 25);   /* 성장 섹터 */
     --divd:      oklch(0.64 0.15 230);  /* 배당 섹터 */
@@ -109,10 +109,10 @@
   .tile.growth{ border-top-color:var(--grow); }
   .tile.divid{ border-top-color:var(--divd); }
   .tile.dead{ opacity:.5; filter:grayscale(.7); }
-  .tile .t-head{ display:flex; align-items:center; gap:5px; }
-  .tile .t-ico{ font-size:24px; line-height:1; }
-  .tile .t-sector{ font-size:13.5px; font-weight:900; color:var(--ink); }
-  .tile .t-nm{ font-size:11px; font-weight:700; color:var(--ink-soft); line-height:1; }
+  .tile .t-ico{ font-size:22px; line-height:1; }
+  .tile .t-sector{ font-size:11px; font-weight:800; color:var(--ink-soft); background:var(--surface-2);
+                   padding:1px 9px; border-radius:999px; line-height:1.45; }
+  .tile .t-nm{ font-size:13.5px; font-weight:900; color:var(--ink); line-height:1.05; text-align:center; }
   .tile .t-prc{ display:flex; align-items:baseline; gap:6px; }
   .tile .t-pr{ font-size:clamp(18px, 2.7vh, 23px); font-weight:900; color:var(--ink); }
   .tile .t-chg{ font-size:12.5px; font-weight:900; }
@@ -152,8 +152,8 @@
                 box-shadow:var(--shadow-sm); max-height:74px; overflow-y:auto; }
   .coach-head{ font-size:12px; font-weight:900; color:var(--blue); margin-bottom:6px; }
   .coach-row{ font-size:12.5px; padding:5px 8px; border-radius:var(--r-sm); margin-bottom:4px; line-height:1.35; background:var(--surface-2); }
-  .coach-row.buy-row{ background:oklch(0.92 0.08 150); }
-  .coach-row.sell-row{ background:oklch(0.92 0.09 28); }
+  .coach-row.buy-row{ background:oklch(0.94 0.07 28); }
+  .coach-row.sell-row{ background:oklch(0.94 0.06 250); }
   .cr-tag{ font-weight:900; }
   .buy-row .cr-tag{ color:var(--up-ink); } .sell-row .cr-tag{ color:var(--down-ink); }
 
@@ -270,8 +270,8 @@
   /* 이벤트 공개 */
   .ev-pair{ display:flex; gap:8px; margin-bottom:14px; }
   .ev-one{ flex:1; border-radius:var(--r); padding:14px 8px; box-shadow:var(--shadow-sm); animation:flipIn .5s cubic-bezier(.2,.8,.3,1) backwards; }
-  .ev-one.up{ background:oklch(0.93 0.09 150); }
-  .ev-one.down{ background:oklch(0.93 0.10 28); }
+  .ev-one.up{ background:oklch(0.94 0.08 28); }
+  .ev-one.down{ background:oklch(0.94 0.07 250); }
   .ev-one.divev{ background:oklch(0.94 0.08 90); }
   .ev-one .eo-ico{ font-size:36px; }
   .ev-one .eo-tx{ font-size:13px; font-weight:900; margin:3px 0; line-height:1.25; }
@@ -336,8 +336,8 @@
      =================================================================== */
   .flash-up{ animation:flashUp .6s ease-out; }
   .flash-down{ animation:flashDown .6s ease-out; }
-  @keyframes flashUp{ 0%{ transform:translateY(0); } 30%{ transform:translateY(-7px); box-shadow:0 0 0 4px oklch(0.72 0.17 150 / .5), var(--shadow); } 100%{ transform:translateY(0); } }
-  @keyframes flashDown{ 0%{ transform:translateY(0); } 30%{ transform:translateY(6px); box-shadow:0 0 0 4px oklch(0.64 0.21 28 / .45), var(--shadow); } 100%{ transform:translateY(0); } }
+  @keyframes flashUp{ 0%{ transform:translateY(0); } 30%{ transform:translateY(-7px); box-shadow:0 0 0 4px oklch(0.64 0.21 28 / .5), var(--shadow); } 100%{ transform:translateY(0); } }
+  @keyframes flashDown{ 0%{ transform:translateY(0); } 30%{ transform:translateY(6px); box-shadow:0 0 0 4px oklch(0.58 0.15 250 / .45), var(--shadow); } 100%{ transform:translateY(0); } }
   @keyframes bullCharge{ 0%{ opacity:0; transform:translateX(0) translateY(10px) scale(.7); } 25%{ opacity:1; transform:translateX(12px) translateY(-12px) rotate(-9deg) scale(1.1); } 70%{ opacity:1; } 100%{ opacity:0; transform:translateX(0) translateY(0) scale(1); } }
   @keyframes bearDrop{ 0%{ opacity:0; transform:translateY(-8px) scale(.7); } 25%{ opacity:1; transform:translateY(12px) rotate(9deg) scale(1.1); } 70%{ opacity:1; } 100%{ opacity:0; transform:translateY(0) scale(1); } }
   @keyframes flipIn{ from{ opacity:0; transform:perspective(600px) rotateX(40deg) translateY(10px); } to{ opacity:1; transform:none; } }
@@ -841,7 +841,8 @@ function boardTileHTML(c,p){
   return `<div class="tile ${c.type} ${dead?'dead':''}" id="tile-${c.id}">
     ${own>0?`<span class="t-own num">${own}주</span>`:''}
     ${coach?`<span class="t-coach">${coach}</span>`:''}
-    <div class="t-head"><span class="t-ico">${c.ico}</span><span class="t-sector">${SECTOR_KR[c.sector]||''}</span></div>
+    <div class="t-ico">${c.ico}</div>
+    <div class="t-sector">${SECTOR_KR[c.sector]||''}</div>
     <div class="t-nm">${c.nm}</div>
     <div class="t-prc">
       <span class="t-pr num">${dead?'💀 상폐':won(pr)}</span>
