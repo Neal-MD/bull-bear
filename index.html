@@ -74,11 +74,13 @@
              padding:6px 13px; border-radius:999px; box-shadow:var(--shadow-sm); white-space:nowrap; }
   .tb-country{ background:var(--surface); padding:6px 12px; border-radius:999px; font-weight:800;
                font-size:14px; box-shadow:var(--shadow-sm); white-space:nowrap; }
-  .tb-me{ display:flex; align-items:center; gap:6px; background:var(--surface); padding:5px 12px 5px 8px;
-          border-radius:999px; box-shadow:var(--shadow-sm); }
-  .tb-me .av{ font-size:22px; }
-  .tb-me .nm{ font-weight:800; font-size:14px; }
-  .tb-me .money{ font-weight:900; font-size:16px; color:var(--gold-deep); }
+  .tb-me{ display:flex; align-items:center; gap:8px; background:var(--surface); padding:5px 14px 5px 9px;
+          border-radius:18px; box-shadow:var(--shadow-sm); }
+  .tb-me .av{ font-size:24px; flex:0 0 auto; }
+  .tb-me .me-fig{ display:flex; flex-direction:column; line-height:1.16; }
+  .tb-me .me-nm{ font-weight:800; font-size:11.5px; color:var(--ink-soft); }
+  .tb-me .me-total{ font-weight:900; font-size:17px; color:var(--gold-deep); }
+  .tb-me .me-split{ font-size:11px; font-weight:700; color:var(--ink-soft); }
   .tb-rank{ display:flex; gap:4px; margin-left:auto; align-items:center; overflow:hidden; }
   .tb-rk{ font-size:12px; font-weight:800; background:var(--surface-2); padding:4px 8px; border-radius:999px;
           white-space:nowrap; box-shadow:var(--shadow-sm); }
@@ -113,7 +115,8 @@
   .tile .t-sector{ font-size:11px; font-weight:800; color:var(--ink-soft); background:var(--surface-2);
                    padding:1px 9px; border-radius:999px; line-height:1.45; }
   .tile .t-nm{ font-size:13.5px; font-weight:900; color:var(--ink); line-height:1.05; text-align:center; }
-  .tile .t-prc{ display:flex; align-items:baseline; gap:6px; }
+  .tile .t-prc{ display:flex; align-items:baseline; gap:5px; cursor:pointer; }
+  .tile .t-chart-ic{ font-size:11px; opacity:.5; align-self:center; }
   .tile .t-pr{ font-size:clamp(18px, 2.7vh, 23px); font-weight:900; color:var(--ink); }
   .tile .t-chg{ font-size:12.5px; font-weight:900; }
   .tile .t-chg.up{ color:var(--up-ink); } .tile .t-chg.down{ color:var(--down-ink); }
@@ -126,6 +129,19 @@
   .t-pm .minus{ background:var(--down); }
   .t-pm .plus{ background:var(--up); }
   .t-pm button:disabled{ box-shadow:none; }
+
+  /* 가격 차트 모달 */
+  .chart-modal{ max-width:min(94vw,460px); }
+  .chart-modal .ch-head{ display:flex; align-items:center; gap:8px; }
+  .chart-modal .ch-ico{ font-size:26px; }
+  .chart-modal .ch-nm{ font-weight:900; font-size:18px; flex:1; text-align:left; }
+  .chart-modal .ch-cur{ font-weight:900; font-size:18px; }
+  .chart-modal .ch-sub{ font-size:11.5px; color:var(--ink-soft); margin:3px 0 8px; text-align:left; }
+  .chart-modal .ch-svg{ width:100%; height:auto; background:var(--surface-2); border-radius:var(--r-sm); display:block; }
+  .chart-modal .ch-div{ text-align:left; font-size:13px; line-height:1.5; background:oklch(0.97 0.06 95);
+                        border-radius:var(--r-sm); padding:10px 13px; margin:11px 0; }
+  .chart-modal .ch-div.none{ background:var(--surface-2); }
+  .chart-modal .ch-div-note{ font-size:11px; color:var(--ink-soft); margin-top:6px; }
 
   /* 하단 액션바 */
   .actionbar{ flex:0 0 auto; display:flex; align-items:center; gap:var(--sp-2); }
@@ -384,7 +400,7 @@ const COUNTRIES = {
     divTier: 1,
     kid: '만능손! 반도체·자동차 잘해요. 잘되면 확 세지만 세계 흔들리면 출렁. 용돈은 짠 대신 회사를 키워요.',
     tip: '한 곳에 다 걸지 말기',
-    co: { tech:'삼성전자', phone:'SK텔레콤', auto:'현대차', shop:'쿠팡', bank:'KB금융', game:'스마일게이트' }
+    co: { tech:'삼성전자', phone:'SK텔레콤', auto:'현대차', shop:'삼양식품', bank:'KB금융', game:'스마일게이트' }
   },
   usa: {
     flag:'🇺🇸', name:'미국', desc:'비싸지만 안전 · 꾸준히 오름',
@@ -475,9 +491,9 @@ const EVENTS = [
   { ico:'🏁', tx:'신차 출시 흥행!',            who:['auto'],  steps:2, chain:null },
   { ico:'⛽', tx:'기름값 폭등, 자동차 수요↓',   who:['auto'],  steps:-1, chain:null },
   { ico:'⚡', tx:'전기차 판매 신기록',          who:['auto'],  steps:2, chain:{who:'tech',steps:1} },
-  // 🛒 쇼핑 (shop)
-  { ico:'🎁', tx:'블랙프라이데이 대박',         who:['shop'],  steps:2, chain:null },
-  { ico:'📦', tx:'물류 차질로 매출 부진',       who:['shop'],  steps:-1, chain:null },
+  // 🛒 소비재 (shop) — 식품·유통·쇼핑 등 생활 소비
+  { ico:'🎁', tx:'소비 폭발! 불티나게 팔려요',   who:['shop'],  steps:2, chain:null },
+  { ico:'📦', tx:'원가 올라 이익 줄어',         who:['shop'],  steps:-1, chain:null },
   // 🏦 은행 (bank)
   { ico:'📈', tx:'금리 인상으로 은행 이익↑',    who:['bank'],  steps:1, chain:null },
   { ico:'⚠️', tx:'금융 부실 우려',             who:['bank'],  steps:-2, chain:null },
@@ -493,10 +509,10 @@ const EVENTS = [
   { ico:'😱', tx:'세계 증시 동반 하락',         who:'all',     steps:-1, chain:null },
   // ===== 배당 이벤트 =====
   { ico:'🎉', tx:'은행 사상 최대 실적! 배당 2배', who:['bank'], steps:0, divMul:2, kind:'div' },
-  { ico:'🎉', tx:'쇼핑몰 분기 호조! 배당 2배',    who:['shop'], steps:0, divMul:2, kind:'div' },
+  { ico:'🎉', tx:'소비재 실적 호조! 배당 2배',    who:['shop'], steps:0, divMul:2, kind:'div' },
   { ico:'🎉', tx:'자동차 흑자 전환! 배당 1.5배',  who:['auto'], steps:0, divMul:1.5, kind:'div' },
   { ico:'📃', tx:'은행 충당금 적립, 배당 절반',   who:['bank'], steps:0, divMul:0.5, kind:'div' },
-  { ico:'📃', tx:'쇼핑몰 실적 부진, 배당 절반',   who:['shop'], steps:0, divMul:0.5, kind:'div' },
+  { ico:'📃', tx:'소비 위축, 배당 절반',         who:['shop'], steps:0, divMul:0.5, kind:'div' },
   { ico:'🚫', tx:'게임사 적자 전환, 배당 중단',   who:['game'], steps:0, divMul:0, kind:'div' },
   { ico:'🚫', tx:'반도체 적자, 배당 중단',       who:['tech'], steps:0, divMul:0, kind:'div' },
   { ico:'💝', tx:'경기 좋아 모두 배당 추가!',    who:'all',    steps:0, divMul:1.5, kind:'div' },
@@ -515,13 +531,14 @@ const ACTIONS = [
 ];
 
 // 목표카드
+// 비밀 임무 — 모두 "내 결정"으로 달성 가능(순수 운·이중처벌 제거). 보상 좁은 차등(3,000 / 살짝 어려운 2종 4,000).
 const GOALS = [
-  { ico:'🌈', nm:'분산 투자왕', desc:'서로 다른 4개 회사 보유', reward:5000, check:(p)=>Object.values(p.shares).filter(n=>n>0).length>=4 },
-  { ico:'🚀', nm:'모험가',     desc:'성장주(💻반도체·🎮게임) 합쳐 3주 이상 보유',  reward:4000, check:(p,st)=>{ const comps=(st&&st.companies)||COMPANIES; const g=comps.filter(c=>c.type==='growth').reduce((s,c)=>s+(p.shares[c.id]||0),0); return g>=3; } },
-  { ico:'🛡️', nm:'안전 제일',  desc:'배당주(🛒쇼핑·🏦은행)만 보유', reward:2500, check:(p,st)=>{ const comps=(st&&st.companies)||COMPANIES; const has=comps.filter(c=>p.shares[c.id]>0); return has.length>0 && has.every(c=>c.type==='divid'); } },
-  { ico:'💵', nm:'현금 부자',  desc:'현금 8,000원 이상 보유',  reward:2000, check:(p)=>p.cash>=8000 },
-  { ico:'📈', nm:'대박 노리기', desc:'한 회사 주가 4,000원↑일 때 그 주식 보유', reward:3500, check:(p,st)=>COMPANIES.some(c=>st.prices[c.id]>=4000 && p.shares[c.id]>0) },
-  { ico:'⚖️', nm:'균형 투자',  desc:'성장주 2주+배당주 2주 이상', reward:3000, check:(p)=>{const g=COMPANIES.filter(c=>c.type==='growth').reduce((s,c)=>s+p.shares[c.id],0); const d=COMPANIES.filter(c=>c.type==='divid').reduce((s,c)=>s+p.shares[c.id],0); return g>=2&&d>=2;} },
+  { ico:'🌈', nm:'분산 투자왕', desc:'서로 다른 4개 회사 보유', reward:3000, check:(p)=>Object.values(p.shares).filter(n=>n>0).length>=4 },
+  { ico:'⚖️', nm:'균형 투자',  desc:'성장주 2주 + 배당주 2주 이상 보유', reward:3000, check:(p)=>{const g=COMPANIES.filter(c=>c.type==='growth').reduce((s,c)=>s+p.shares[c.id],0); const d=COMPANIES.filter(c=>c.type==='divid').reduce((s,c)=>s+p.shares[c.id],0); return g>=2&&d>=2;} },
+  { ico:'🎁', nm:'배당 수집가', desc:'배당주(🛒소비재·🏦은행) 합쳐 4주 이상 보유', reward:3000, check:(p,st)=>{ const comps=(st&&st.companies)||COMPANIES; return comps.filter(c=>c.type==='divid').reduce((s,c)=>s+(p.shares[c.id]||0),0)>=4; } },
+  { ico:'💵', nm:'현금 부자',  desc:'현금 8,000원 이상 보유', reward:3000, check:(p)=>p.cash>=8000 },
+  { ico:'🚀', nm:'성장 투자자', desc:'성장주(💻반도체·🎮게임) 합쳐 4주 이상 보유', reward:4000, check:(p,st)=>{ const comps=(st&&st.companies)||COMPANIES; return comps.filter(c=>c.type==='growth').reduce((s,c)=>s+(p.shares[c.id]||0),0)>=4; } },
+  { ico:'⏳', nm:'장기 투자자', desc:'한 회사를 10라운드 이상 안 팔고 계속 보유', reward:3000, check:(p)=>(p._maxHoldStreak||0)>=10 },
 ];
 
 const AVATARS = ['👨','👩','👧','👦','🧑','👵'];
@@ -572,6 +589,7 @@ let G = null; // game state
 // ---------- UTIL ----------
 const $ = sel => document.querySelector(sel);
 const won = n => n.toLocaleString('ko-KR')+'원';
+const wonK = n => n>=10000 ? (Math.round(n/1000)/10).toLocaleString('ko-KR')+'만' : Math.round(n).toLocaleString('ko-KR'); // 랭킹 칩 컴팩트 표기
 const clampPrice = p => Math.max(MIN_PRICE, Math.min(MAX_PRICE, p));
 function movePrice(price, steps){
   // move along PRICE_STEPS grid
@@ -733,19 +751,23 @@ window.startGame = function(){
   const np = G.setupCount||3;
   const names = G.setupNames || [];
   const opts = G.setupOpts || PRESETS.normal;
+  // 한 턴 행동 수가 기본(2)보다 많으면 시작자금을 그만큼 더 줌 (3행동=×1.5). 줄이진 않음(1·2행동=×1).
+  const _apt = opts.actionsPerTurn || DEFAULT_ACTIONS;
+  const startCash = Math.round((opts.startCash * Math.max(1, _apt / DEFAULT_ACTIONS)) / 500) * 500;
   const countryKey = G.setupCountry || 'korea';
   // 선택된 나라로 COMPANIES 재구성
   COMPANIES = buildCompanies(countryKey);
   const country = COUNTRIES[countryKey];
   const prices={}; COMPANIES.forEach(c=>prices[c.id]=c.start);
+  const priceHist={}; COMPANIES.forEach(c=>priceHist[c.id]=[c.start]); // 라운드별 종가 이력 (차트용)
   const goalDeck = shuffle(GOALS);
   const players=[];
   for(let i=0;i<np;i++){
     const shares={}; COMPANIES.forEach(c=>shares[c.id]=0);
     players.push({
       name: names[i]||`P${i+1}`, av:AVATARS[i],
-      cash:opts.startCash, shares, goal:goalDeck[i%goalDeck.length],
-      hand:[], insured:{}, dividendCount:0, history:[opts.startCash]
+      cash:startCash, shares, goal:goalDeck[i%goalDeck.length],
+      hand:[], insured:{}, dividendCount:0, history:[startCash], _holdStreak:{}, _maxHoldStreak:0
     });
   }
   let actionDeck = shuffle([...ACTIONS, ...ACTIONS]);
@@ -756,7 +778,7 @@ window.startGame = function(){
 
   G = {
     setupCount:np, setupNames:names, setupOpts:opts, setupCountry:countryKey, country,
-    players, prices, prevPrices:{...prices}, eventDeck, actionDeck, forecast,
+    players, prices, prevPrices:{...prices}, priceHist, eventDeck, actionDeck, forecast,
     round:1, turnIdx:0, actionsPerTurn:(opts.actionsPerTurn||DEFAULT_ACTIONS), actionsLeft:(opts.actionsPerTurn||DEFAULT_ACTIONS), buyCountThisTurn:{}, maxBuyThisTurn:opts.buyLimit, baseBuyLimit:opts.buyLimit,
     phase:'pass', infoPeek:null, flipNext:false, lastChanges:{},
     coachMode: opts.coachOn,
@@ -823,7 +845,7 @@ function render(){
 }
 
 // 섹터(업종) 한글 이름 — "어떤 회사인지" 표기용
-const SECTOR_KR = { tech:'반도체', phone:'휴대폰', auto:'자동차', shop:'쇼핑', bank:'은행', game:'게임' };
+const SECTOR_KR = { tech:'반도체', phone:'휴대폰', auto:'자동차', shop:'소비재', bank:'은행', game:'게임' };
 
 // 보드 타일 — 시세 + 거래(＋/－)를 하나로 통합
 function boardTileHTML(c,p){
@@ -844,9 +866,10 @@ function boardTileHTML(c,p){
     <div class="t-ico">${c.ico}</div>
     <div class="t-sector">${SECTOR_KR[c.sector]||''}</div>
     <div class="t-nm">${c.nm}</div>
-    <div class="t-prc">
+    <div class="t-prc" onclick="showChart('${c.id}')" title="가격 변동 차트 보기">
       <span class="t-pr num">${dead?'💀 상폐':won(pr)}</span>
       <span class="t-chg ${chgCls}">${dead?'':chgStr}</span>
+      <span class="t-chart-ic">📈</span>
     </div>
     <div class="t-pm">
       <button class="minus" onclick="sell('${c.id}')" ${canSell?'':'disabled'}>－</button>
@@ -916,6 +939,7 @@ function topRankHTML(){
   const ranked=G.players.map(p=>({p, nw:netWorth(p,G.prices)})).sort((a,b)=>b.nw-a.nw);
   const cur=G.players[G.turnIdx];
   const medals=['🥇','🥈','🥉','4️⃣'];
+  // 랭킹은 합산만(공간상 4인까지 안 잘리게). 현금/주식 분리는 내 현황판(tb-me)과 라운드 결과화면에 표시.
   return ranked.map((r,i)=>`<span class="tb-rk ${r.p===cur?'me':''}">${medals[i]} ${r.p.av}<b class="num"> ${won(r.nw)}</b></span>`).join('');
 }
 
@@ -933,7 +957,14 @@ function renderTurn(){
     <div class="topbar">
       <span class="tb-round num">${G.round} / ${TOTAL_ROUNDS} 라운드</span>
       <span class="tb-country">${G.country.flag} ${G.country.name}</span>
-      <span class="tb-me"><span class="av">${p.av}</span><span class="nm">${p.name}</span><span class="money num">💰${won(nw)}</span></span>
+      <span class="tb-me">
+        <span class="av">${p.av}</span>
+        <span class="me-fig">
+          <span class="me-nm">${p.name} · 합산</span>
+          <span class="me-total num">💰${won(nw)}</span>
+          <span class="me-split num">💵현금 ${won(p.cash)} · 📈주식 ${won(sv)}</span>
+        </span>
+      </span>
       <span class="tb-rank">${topRankHTML()}</span>
       <button class="tb-ico" onclick="toggleCoach()">${G.coachMode?'🟢':'⚪'}</button>
       <button class="tb-ico" onclick="showGoal()">🎯</button>
@@ -1184,6 +1215,57 @@ window.showGoal = function(){
   document.body.appendChild(ov);
 };
 
+// ---------- 가격 차트 + 배당 안내 모달 ----------
+window.showChart = function(cid){
+  const c = COMPANIES.find(x=>x.id===cid); if(!c) return;
+  const p = G.players[G.turnIdx];
+  const hist = (G.priceHist && G.priceHist[cid] && G.priceHist[cid].length) ? G.priceHist[cid] : [G.prices[cid]];
+  const own = p.shares[cid]||0;
+  const cur = G.prices[cid];
+  // SVG 좌표계
+  const W=320,H=172, padL=40,padR=14,padT=16,padB=26;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  const n=hist.length;
+  const xAt=i=> n<=1 ? padL+plotW/2 : padL + (i/(n-1))*plotW;
+  const yAt=v=> padT + (1 - Math.min(v,MAX_PRICE)/MAX_PRICE)*plotH;
+  const pts=hist.map((v,i)=>`${xAt(i).toFixed(1)},${yAt(v).toFixed(1)}`).join(' ');
+  const rising = hist[n-1] >= hist[0];
+  const lineCol = rising ? 'var(--up-ink)' : 'var(--down-ink)';
+  const grid=[0,2750,5500].map(v=>`<line x1="${padL}" y1="${yAt(v).toFixed(1)}" x2="${W-padR}" y2="${yAt(v).toFixed(1)}" stroke="oklch(0.86 0.02 250)" stroke-width="1" stroke-dasharray="3 3"/><text x="${padL-5}" y="${(yAt(v)+3).toFixed(1)}" text-anchor="end" font-size="9" fill="#999">${v.toLocaleString('ko-KR')}</text>`).join('');
+  const step = n>8?2:1;
+  let xlabels='';
+  for(let i=0;i<n;i+=step){ xlabels+=`<text x="${xAt(i).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="9" fill="#999">${i===0?'시작':i+'R'}</text>`; }
+  const dots=hist.map((v,i)=>`<circle cx="${xAt(i).toFixed(1)}" cy="${yAt(v).toFixed(1)}" r="${i===n-1?4:2.4}" fill="${i===n-1?lineCol:'#fff'}" stroke="${lineCol}" stroke-width="1.5"/>`).join('');
+  const lastLabel = `<text x="${xAt(n-1).toFixed(1)}" y="${(yAt(hist[n-1])-9).toFixed(1)}" text-anchor="middle" font-size="11" font-weight="900" fill="${lineCol}">${won(hist[n-1])}</text>`;
+
+  const divEvery = (G.setupOpts&&G.setupOpts.divEvery)||1;
+  let divHTML;
+  if(c.div<=0){
+    divHTML = `<div class="ch-div none"><b>${c.ico} ${c.nm}는 배당이 없어요.</b><br>대신 주가가 오르길 노리는 <b>성장주</b>예요. (용돈 X, 시세 차익 O)</div>`;
+  } else {
+    const mine = own>0
+      ? `<br>지금 <b>${own}주</b> 가지고 있으니 배당 때마다 약 <b style="color:var(--gold-deep)">${won(own*c.div)}</b> 받아요.`
+      : `<br>아직 안 가졌어요. 1주 사면 배당 때마다 <b>${won(c.div)}</b>.`;
+    divHTML = `<div class="ch-div"><b>💰 배당(가만히 받는 용돈)</b><br>주당 <b>${won(c.div)}</b> · <b>${divEvery===1?'매 라운드':divEvery+'라운드마다'}</b> 지급${mine}<div class="ch-div-note">※ 배당은 사건(증배·감배·중단)으로 그 라운드만 변할 수 있어요.</div></div>`;
+  }
+
+  const ov=document.createElement('div'); ov.className='overlay'; ov.id='chartOv';
+  ov.onclick=(e)=>{ if(e.target===ov) ov.remove(); };
+  ov.innerHTML = `<div class="modal chart-modal">
+    <div class="ch-head"><span class="ch-ico">${c.ico}</span><span class="ch-nm">${c.nm}</span>
+      <span class="ch-cur num" style="color:${lineCol}">${cur===0?'💀 상장폐지':won(cur)}</span></div>
+    <div class="ch-sub">라운드별 가격 변화 · 천장 ${won(MAX_PRICE)} · 0원=상장폐지</div>
+    <svg viewBox="0 0 ${W} ${H}" class="ch-svg" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${c.nm} 가격 차트">
+      ${grid}
+      <polyline points="${pts}" fill="none" stroke="${lineCol}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+      ${dots}${lastLabel}${xlabels}
+    </svg>
+    ${divHTML}
+    <button class="mbtn" onclick="this.closest('.overlay').remove()">닫기</button>
+  </div>`;
+  document.body.appendChild(ov);
+};
+
 // ---------- END TURN ----------
 window.endTurn = function(){
   // next player or resolve round
@@ -1312,6 +1394,14 @@ function resolveRound(){
 
   // record net worth history
   G.players.forEach(p=> p.history.push(netWorth(p,G.prices)) );
+  // record per-company price history (차트용) — 이번 라운드 종가
+  COMPANIES.forEach(c=>{ (G.priceHist[c.id]=G.priceHist[c.id]||[]).push(G.prices[c.id]); });
+  // 장기 보유 추적 (목표카드 '장기 투자자') — 안 팔고 연속 보유한 라운드 수
+  G.players.forEach(p=>{
+    p._holdStreak=p._holdStreak||{}; let best=p._maxHoldStreak||0;
+    COMPANIES.forEach(c=>{ if(p.shares[c.id]>0){ p._holdStreak[c.id]=(p._holdStreak[c.id]||0)+1; if(p._holdStreak[c.id]>best)best=p._holdStreak[c.id]; } else p._holdStreak[c.id]=0; });
+    p._maxHoldStreak=best;
+  });
 
   // 상장폐지 회사가 있으면, 예보 칸에서 그 회사 관련 이벤트 제거 & 새 카드로 교체
   const justDelisted = changes.filter(ch=>ch.after===0).map(ch=>ch.cid);
@@ -1452,7 +1542,8 @@ function generateInsights(ranked){
   // 2. dividend
   const divEntries=Object.entries(G.log.divTotals).sort((a,b)=>b[1]-a[1]);
   if(divEntries[0] && divEntries[0][1]>=8000){
-    ins.push({ico:'🎁', title:'배당의 힘', text:`${divEntries[0][0]}님은 배당금만 ${won(divEntries[0][1])}을 받았어요! 주식을 팔지 않고 가지고만 있어도 돈이 들어오는 게 배당이에요. 안정적인 회사(빵집·장난감)를 모은 보람이죠.`});
+    const dividNames=COMPANIES.filter(c=>c.type==='divid').map(c=>c.nm).join('·');
+    ins.push({ico:'🎁', title:'배당의 힘', text:`${divEntries[0][0]}님은 배당금만 ${won(divEntries[0][1])}을 받았어요! 주식을 팔지 않고 가지고만 있어도 돈이 들어오는 게 배당이에요. 배당을 잘 주는 안정적인 회사(${dividNames})를 모은 보람이죠.`});
   }
 
   // 3. delisting
@@ -1605,7 +1696,7 @@ const DOCS = {
     <b>💰</b> 배당(가만히 있어도 받는 용돈) — 개수가 많을수록 후해요.</p>
     <p>예) 미국·일본은 안전하고 배당 많음, 인도·중국은 출렁이지만 인도는 쑥쑥 자라요. 대만은 칩(💻)이, 한국은 칩·자동차가 강하지만 배당은 짠 대신 회사를 키워요. 중국은 가끔 예보에 없는 깜짝 폭락!</p>
     <h3>6개 섹터(업종)</h3>
-    <p>어느 나라든 6개 업종이 있어요: 💻반도체 · 📱휴대폰 · 🚗자동차 · 🛒쇼핑 · 🏦은행 · 🎮게임. 회사 이름은 나라마다 다르지만 업종은 같아요. (💻🎮=성장주, 🛒🏦=배당주)</p>
+    <p>어느 나라든 6개 업종이 있어요: 💻반도체 · 📱휴대폰 · 🚗자동차 · 🛒소비재 · 🏦은행 · 🎮게임. 회사 이름은 나라마다 다르지만 업종은 같아요. (💻🎮=성장주, 🛒🏦=배당주)</p>
     <h3>게임 흐름</h3>
     <p>한 라운드는 이렇게 가요: ① 모두가 차례대로 자기 턴을 해요 → ② 라운드 결산(예보 사건이 실제로 일어나 주가가 움직이고 배당을 줘요) → ③ 다음 라운드로.</p>
     <h3>내 차례에 하는 일</h3>
@@ -1614,6 +1705,7 @@ const DOCS = {
     <p>화면 위에 <b>이번 칸 사건</b>과 <b>다음</b> 예보가 미리 보여요. 이걸 보고 오를 회사를 미리 사두는 게 핵심! <b>주가 사건</b>은 값이 오르내리고(▲▼), <b>배당 사건</b>은 용돈이 늘거나 줄어요. (고급 모드에선 예보 일부가 ❓비공개)</p>
     <h3>사고팔기 규칙</h3>
     <p>주가는 500원~5,500원 사이를 칸칸이 움직여요. 0원이 되면 <b>상장폐지</b>(휴지!), 5,500원에 닿으면 멈춰요. 한 회사는 <b>최대 6주</b>까지, 한 턴에 같은 회사는 설정한 수만큼만 살 수 있어요.</p>
+    <p>💡 <b>종목(가격)을 누르면</b> 라운드별 <b>가격 변화 차트</b>와 그 회사의 <b>배당(용돈) 정보</b>를 볼 수 있어요. 사기 전에 살펴보세요!</p>
     <h3>배당(용돈)과 분산 보너스</h3>
     <p>주식을 가지고만 있어도 배당(용돈)이 들어와요 — 이게 바로 <b>금융소득</b>! 그리고 <b>서로 다른 4종류 이상</b> 회사를 가지면 <b>분산 보너스</b> 용돈을 더 줘요. 골고루 나눠 사면 이득!</p>
     <h3>상장폐지 & 깜짝 사건</h3>
@@ -1625,7 +1717,7 @@ const DOCS = {
     <p>사람마다 <b>비밀 임무</b>를 하나 받아요. 남에게 보여주지 말고, 끝에 달성하면 보너스 용돈!</p>
     ${GOALS.map(g=>`<p>${g.ico} <b>${g.nm}</b> — ${g.desc} <b style="color:var(--gold-deep);">+${won(g.reward)}</b></p>`).join('')}
     <h3>난이도</h3>
-    <p><b>초급</b>(처음·여유롭게, 도우미 켜짐) · <b>표준</b>(균형) · <b>고급</b>(예보 짧고 일부 비공개, 자원 빠듯). 시작화면 <b>세부 설정</b>에서 한 턴 행동 수·매수 제한·예보 길이·배당 주기·시작 자금·도우미를 직접 바꿀 수 있어요.</p>
+    <p><b>초급</b>(처음·여유롭게, 도우미 켜짐) · <b>표준</b>(균형) · <b>고급</b>(예보 짧고 일부 비공개, 자원 빠듯). 시작화면 <b>세부 설정</b>에서 한 턴 행동 수·매수 제한·예보 길이·배당 주기·시작 자금·도우미를 직접 바꿀 수 있어요. (한 턴 행동 수를 늘리면 그만큼 <b>시작 자금</b>도 늘어나요.)</p>
     <h3>끝나면</h3>
     <p>12라운드 후 순위와 <b>오늘의 배울 점</b>을 보여줘요. 기록은 저장돼서 다음에 누가 많이 이겼는지도 볼 수 있어요.</p>
     <h3>가족과 이야기 나눠요</h3>
@@ -1644,7 +1736,7 @@ const DOCS = {
     🇨🇳중국 — 가끔 예보에 없는 깜짝 폭락. 한 곳에 다 걸지 않기.<br>
     🇮🇳인도 — 싸지만 매번 조금씩 자라요. 싸게 사서 오래 들기.</p>
     <h3>🏢 6개 섹터</h3>
-    <p>어느 나라든 6개 섹터(💻반도체·📱휴대폰·🚗자동차·🛒쇼핑·🏦은행·🎮게임)가 있어요. 회사 이름은 나라마다 다르지만 섹터는 같아요.</p>
+    <p>어느 나라든 6개 섹터(💻반도체·📱휴대폰·🚗자동차·🛒소비재·🏦은행·🎮게임)가 있어요. 회사 이름은 나라마다 다르지만 섹터는 같아요.</p>
     <h3>🔄 내 차례</h3>
     <p>매 차례 <b>2가지 행동</b>을 골라요: 주식 사기 / 팔기 / 대응카드 / 패스(+500원). 매수는 한 턴에 같은 회사 <b>3주</b>까지예요. 실수하면 <b>↩️ 되돌리기</b>로 턴 처음으로 돌아갈 수 있어요!</p>
     <h3>🔮 시장 예보</h3>

@@ -18,7 +18,7 @@ const SECTORS = [
 ];
 
 const COUNTRIES = {
-  korea:  { flag:'🇰🇷', name:'한국', volMod:0,  divMod:-50, startMod:0,    swanChance:0.08, swanSteps:2, sig:{worldAmplify:true, sectorBoost:['tech','auto']}, co:{tech:'삼성전자',phone:'SK텔레콤',auto:'현대차',shop:'쿠팡',bank:'KB금융',game:'스마일게이트'} },
+  korea:  { flag:'🇰🇷', name:'한국', volMod:0,  divMod:-50, startMod:0,    swanChance:0.08, swanSteps:2, sig:{worldAmplify:true, sectorBoost:['tech','auto']}, co:{tech:'삼성전자',phone:'SK텔레콤',auto:'현대차',shop:'삼양식품',bank:'KB금융',game:'스마일게이트'} },
   usa:    { flag:'🇺🇸', name:'미국', volMod:-1, divMod:50,  startMod:500,  swanChance:0.04, swanSteps:2, sig:{}, co:{tech:'엔비디아',phone:'애플',auto:'테슬라',shop:'아마존',bank:'JP모건',game:'EA게임즈'} },
   japan:  { flag:'🇯🇵', name:'일본', volMod:-1, divMod:30,  startMod:200,  swanChance:0.04, swanSteps:2, sig:{compressBig:true}, co:{tech:'키옥시아',phone:'소니',auto:'도요타',shop:'유니클로',bank:'미쓰비시UFJ',game:'닌텐도'} },
   china:  { flag:'🇨🇳', name:'중국', volMod:1,  divMod:-30, startMod:-200, swanChance:0.14, swanSteps:2, sig:{}, co:{tech:'SMIC',phone:'샤오미',auto:'BYD',shop:'알리바바',bank:'공상은행',game:'텐센트'} },
@@ -38,8 +38,8 @@ const EVENTS = [
   { ico:'🏁', tx:'신차 출시 흥행!',            who:['auto'],  steps:2, chain:null },
   { ico:'⛽', tx:'기름값 폭등, 자동차 수요↓',   who:['auto'],  steps:-1, chain:null },
   { ico:'⚡', tx:'전기차 판매 신기록',          who:['auto'],  steps:2, chain:{who:'tech',steps:1} },
-  { ico:'🎁', tx:'블랙프라이데이 대박',         who:['shop'],  steps:2, chain:null },
-  { ico:'📦', tx:'물류 차질로 매출 부진',       who:['shop'],  steps:-1, chain:null },
+  { ico:'🎁', tx:'소비 폭발! 불티나게 팔려요',   who:['shop'],  steps:2, chain:null },
+  { ico:'📦', tx:'원가 올라 이익 줄어',         who:['shop'],  steps:-1, chain:null },
   { ico:'📈', tx:'금리 인상으로 은행 이익↑',    who:['bank'],  steps:1, chain:null },
   { ico:'⚠️', tx:'금융 부실 우려',             who:['bank'],  steps:-2, chain:null },
   { ico:'🏆', tx:'게임 신작 대박!',            who:['game'],  steps:3, chain:{who:'tech',steps:1} },
@@ -50,10 +50,10 @@ const EVENTS = [
   { ico:'💰', tx:'외국인 매수 급증',           who:['tech','game'], steps:1, chain:null },
   { ico:'😱', tx:'세계 증시 동반 하락',         who:'all',     steps:-1, chain:null },
   { ico:'🎉', tx:'은행 사상 최대 실적! 배당 2배', who:['bank'], steps:0, divMul:2, kind:'div' },
-  { ico:'🎉', tx:'쇼핑몰 분기 호조! 배당 2배',    who:['shop'], steps:0, divMul:2, kind:'div' },
+  { ico:'🎉', tx:'소비재 실적 호조! 배당 2배',    who:['shop'], steps:0, divMul:2, kind:'div' },
   { ico:'🎉', tx:'자동차 흑자 전환! 배당 1.5배',  who:['auto'], steps:0, divMul:1.5, kind:'div' },
   { ico:'📃', tx:'은행 충당금 적립, 배당 절반',   who:['bank'], steps:0, divMul:0.5, kind:'div' },
-  { ico:'📃', tx:'쇼핑몰 실적 부진, 배당 절반',   who:['shop'], steps:0, divMul:0.5, kind:'div' },
+  { ico:'📃', tx:'소비 위축, 배당 절반',         who:['shop'], steps:0, divMul:0.5, kind:'div' },
   { ico:'🚫', tx:'게임사 적자 전환, 배당 중단',   who:['game'], steps:0, divMul:0, kind:'div' },
   { ico:'🚫', tx:'반도체 적자, 배당 중단',       who:['tech'], steps:0, divMul:0, kind:'div' },
   { ico:'💝', tx:'경기 좋아 모두 배당 추가!',    who:'all',    steps:0, divMul:1.5, kind:'div' },
@@ -64,22 +64,24 @@ const ACTIONS = [
   { id:'extra' }, { id:'div' }, { id:'flip' }, { id:'cash' },
 ];
 
-// 목표카드 — index.html 원본 그대로 (B1 버그 포함: space/toy/bakery 는 존재 안 함)
+// 목표카드 — 재설계본(순수 운·이중처벌 제거, 결정으로 달성 가능, 좁은 차등 3000/4000)
 const GOALS = [
-  { nm:'분산 투자왕', reward:5000, check:(p)=>Object.values(p.shares).filter(n=>n>0).length>=4 },
-  { nm:'모험가', reward:4000, check:(p,st)=>{ const g=(st.companies).filter(c=>c.type==='growth').reduce((s,c)=>s+(p.shares[c.id]||0),0); return g>=3; } },
-  { nm:'안전 제일', reward:2500, check:(p,st)=>{ const has=(st.companies).filter(c=>p.shares[c.id]>0); return has.length>0 && has.every(c=>c.type==='divid'); } },
-  { nm:'현금 부자',  reward:2000, check:(p)=>p.cash>=8000 },
-  { nm:'대박 노리기', reward:3500, check:(p,st)=>st.companies.some(c=>st.prices[c.id]>=4000 && p.shares[c.id]>0) },
+  { nm:'분산 투자왕', reward:3000, check:(p)=>Object.values(p.shares).filter(n=>n>0).length>=4 },
   { nm:'균형 투자',  reward:3000, check:(p,st)=>{const g=st.companies.filter(c=>c.type==='growth').reduce((s,c)=>s+p.shares[c.id],0); const d=st.companies.filter(c=>c.type==='divid').reduce((s,c)=>s+p.shares[c.id],0); return g>=2&&d>=2;} },
+  { nm:'배당 수집가', reward:3000, check:(p,st)=>st.companies.filter(c=>c.type==='divid').reduce((s,c)=>s+(p.shares[c.id]||0),0)>=4 },
+  { nm:'현금 부자',  reward:3000, check:(p)=>p.cash>=8000 },
+  { nm:'성장 투자자', reward:4000, check:(p,st)=>st.companies.filter(c=>c.type==='growth').reduce((s,c)=>s+(p.shares[c.id]||0),0)>=4 },
+  { nm:'장기 투자자', reward:3000, check:(p)=>(p._maxHoldStreak||0)>=10 },
 ];
 
-const TOTAL_ROUNDS = 12, ACTIONS_PER_TURN = 2;
+const TOTAL_ROUNDS = 12, DEFAULT_ACTIONS = 2;
+// 한 턴 행동 수가 기본(2)보다 많으면 시작자금 비례 증액 (3행동=×1.5). 줄이진 않음.
+function scaleCash(startCash, ap){ return Math.round((startCash * Math.max(1, ap/DEFAULT_ACTIONS))/500)*500; }
 
 const PRESETS = {
-  easy:   { buyLimit:5, forecastLen:3, divEvery:1, startCash:25000, downsideBuffer:1, forecastFog:false },
-  normal: { buyLimit:3, forecastLen:2, divEvery:1, startCash:20000, downsideBuffer:0, forecastFog:false },
-  hard:   { buyLimit:2, forecastLen:1, divEvery:2, startCash:15000, downsideBuffer:0, forecastFog:true },
+  easy:   { actionsPerTurn:3, buyLimit:5, forecastLen:3, divEvery:1, startCash:25000, downsideBuffer:1, forecastFog:false },
+  normal: { actionsPerTurn:2, buyLimit:3, forecastLen:2, divEvery:1, startCash:20000, downsideBuffer:0, forecastFog:false },
+  hard:   { actionsPerTurn:2, buyLimit:2, forecastLen:1, divEvery:2, startCash:15000, downsideBuffer:0, forecastFog:true },
 };
 
 // ---------------- 헬퍼 ----------------
@@ -201,7 +203,7 @@ function maybeUseCard(G,p,state,adv){
 
 function takeTurn(G,p){
   const adv=analyzeAdvice(G.forecast, G.companies, G.prices, {fog: !!G.opts.forecastFog});
-  const state={ actionsLeft:ACTIONS_PER_TURN, buyCount:{}, maxBuy:G.opts.buyLimit, soldThisTurn:false, target:null };
+  const state={ actionsLeft:(G.opts.actionsPerTurn||DEFAULT_ACTIONS), buyCount:{}, maxBuy:G.opts.buyLimit, soldThisTurn:false, target:null };
   let guard=0;
   while(state.actionsLeft>0 && guard++<12){
     if(maybeUseCard(G,p,state,adv)) continue;
@@ -298,11 +300,12 @@ function playGame(countryKey, presetKey, strats){
   const companies=buildCompanies(countryKey);
   const prices={}; companies.forEach(c=>prices[c.id]=c.start);
   const goalDeck=shuffle(GOALS);
+  const startCash=scaleCash(opts.startCash, opts.actionsPerTurn||DEFAULT_ACTIONS);
   const players=[];
   for(let i=0;i<3;i++){
     const shares={}; companies.forEach(c=>shares[c.id]=0);
-    players.push({ name:'P'+i, strat:strats[i], cash:opts.startCash, shares, goal:goalDeck[i%goalDeck.length],
-      hand:[], insured:{}, divReceived:0, history:[opts.startCash] });
+    players.push({ name:'P'+i, strat:strats[i], cash:startCash, shares, goal:goalDeck[i%goalDeck.length],
+      hand:[], insured:{}, divReceived:0, history:[startCash], _holdStreak:{}, _maxHoldStreak:0 });
   }
   let actionDeck=shuffle([...ACTIONS,...ACTIONS]);
   players.forEach(p=>{ p.hand=[actionDeck.pop(), actionDeck.pop()]; });
@@ -314,6 +317,7 @@ function playGame(countryKey, presetKey, strats){
   for(G.round=1; G.round<=TOTAL_ROUNDS; G.round++){
     players.forEach(p=>takeTurn(G,p));
     resolveRound(G, players);
+    players.forEach(p=>{ let best=p._maxHoldStreak; companies.forEach(c=>{ if(p.shares[c.id]>0){ p._holdStreak[c.id]=(p._holdStreak[c.id]||0)+1; if(p._holdStreak[c.id]>best)best=p._holdStreak[c.id]; } else p._holdStreak[c.id]=0; }); p._maxHoldStreak=best; });
     if(G.round<TOTAL_ROUNDS){ G.forecast.shift(); G.forecast.push(drawPair(G.eventDeck, G.prices, G.companies)); }
   }
   const st={companies, prices:G.prices};
@@ -322,7 +326,7 @@ function playGame(countryKey, presetKey, strats){
     const goalMet=p.goal.check(p,st);
     const bonus=goalMet?p.goal.reward:0;
     return { strat:p.strat, base, goalMet, goalName:p.goal.nm, bonus, total:base+bonus,
-             sv:stockValue(p,G.prices,companies), div:p.divReceived, cash:p.cash, start:opts.startCash };
+             sv:stockValue(p,G.prices,companies), div:p.divReceived, cash:p.cash, start:startCash };
   });
   results.sort((a,b)=>b.total-a.total);
   return { results, delisted:G.log.delisted.length, ceilingHits:G.log.ceilingHits };
