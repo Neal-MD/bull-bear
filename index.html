@@ -102,6 +102,83 @@
   .mini-ev .mi-ef{ font-size:14.5px; font-weight:900; white-space:nowrap; }
   .mini-ev .mi-ef.up{ color:var(--up-ink); } .mini-ev .mi-ef.down{ color:var(--down-ink); }
 
+  /* 예보 슬롯 릴 — 세로로 도는 뉴스. 이번 라운드가 위쪽에서 항상 금빛으로 강조,
+     지난은 위로 살짝 굴려서(roll-up) 보고, 다음은 아래에 덜 강조로 보임 */
+  .fcreel-wrap{ flex:0 0 auto; position:relative; border-radius:var(--r);
+                background:var(--surface-2); box-shadow:inset 0 2px 7px oklch(0.55 0.05 65 / .15);
+                padding:3px 6px; }
+  .fcreel{ height:clamp(166px, 31vh, 262px); overflow-y:auto; overflow-x:hidden;
+           scroll-snap-type:y proximity; scroll-padding-top:18px; overscroll-behavior:contain;
+           -webkit-overflow-scrolling:touch; scrollbar-width:none; position:relative;
+           display:flex; flex-direction:column; gap:var(--sp-2); padding:10px 2px 14px;
+           -webkit-mask-image:linear-gradient(180deg, transparent 0, #000 5%, #000 92%, transparent 100%);
+                   mask-image:linear-gradient(180deg, transparent 0, #000 5%, #000 92%, transparent 100%); }
+  .fcreel::-webkit-scrollbar{ display:none; }
+
+  .fcrow{ scroll-snap-align:start; flex:0 0 auto; border-radius:var(--r-sm); padding:8px 12px;
+          background:var(--surface); box-shadow:var(--shadow-sm); position:relative; overflow:hidden; cursor:pointer;
+          transition:transform .22s cubic-bezier(.2,.8,.3,1), opacity .22s, box-shadow .22s, filter .22s; }
+  .fcrow .fc-rlabel{ display:flex; align-items:center; gap:7px; font-size:12px; font-weight:900;
+                     color:var(--ink-soft); margin-bottom:5px; letter-spacing:.2px; }
+  .fcrow .fc-rbody{ display:flex; flex-direction:column; gap:5px; }
+
+  /* 뉴스 = 보드게임 속보 티커 칩: 동전 메달 + 굵은 헤드라인 + 꽉 찬 컬러 배지 */
+  .fcrow .mini-ev{ display:flex; align-items:center; gap:9px; }
+  .fcrow .mi-ico{ flex:0 0 auto; width:35px; height:35px; border-radius:50%; display:grid; place-items:center;
+                  font-size:18px; line-height:1;
+                  background:radial-gradient(circle at 33% 28%, oklch(1 0 0 / .95), oklch(0.92 0.03 90 / .55) 72%);
+                  box-shadow:0 2px 0 oklch(0.80 0.04 75), inset 0 0 0 1.5px oklch(1 0 0 / .7); }
+  .fcrow .mi-tx{ flex:1; min-width:0; font-size:13.5px; font-weight:800; line-height:1.18; color:var(--ink); }
+  .fcrow .mi-ef{ flex:0 0 auto; font-size:13px; font-weight:900; white-space:nowrap; color:#fff;
+                 padding:5px 11px; border-radius:999px;
+                 box-shadow:0 2px 0 oklch(0 0 0 / .13), inset 0 1px 0 oklch(1 0 0 / .35); }
+  .fcrow .mini-ev.up   .mi-ef{ background:var(--up); }
+  .fcrow .mini-ev.down .mi-ef{ background:var(--down); }
+  .fcrow .mini-ev.dvd  .mi-ef{ background:var(--gold-deep); color:var(--ink); }
+  .fcrow .mini-ev.fog  .mi-ef{ background:oklch(0.68 0.14 300); }
+  .fcrow .mini-ev.up   .mi-ico{ background:radial-gradient(circle at 33% 28%, oklch(1 0 0 / .97), oklch(0.86 0.12 30 / .6) 72%);
+                                box-shadow:0 2px 0 oklch(0.66 0.13 30), inset 0 0 0 1.5px oklch(1 0 0 / .7); }
+  .fcrow .mini-ev.down .mi-ico{ background:radial-gradient(circle at 33% 28%, oklch(1 0 0 / .97), oklch(0.82 0.10 250 / .6) 72%);
+                                box-shadow:0 2px 0 oklch(0.60 0.12 252), inset 0 0 0 1.5px oklch(1 0 0 / .7); }
+  .fcrow .mini-ev.dvd  .mi-ico{ background:radial-gradient(circle at 33% 28%, oklch(1 0 0 / .97), oklch(0.88 0.13 85 / .65) 72%);
+                                box-shadow:0 2px 0 oklch(0.70 0.13 80), inset 0 0 0 1.5px oklch(1 0 0 / .7); }
+  .fcrow .mini-ev.fog  .mi-ico{ background:radial-gradient(circle at 33% 28%, oklch(1 0 0 / .95), oklch(0.82 0.10 300 / .55) 72%); }
+
+  /* 지난은 가장 흐릿(굴려서 보기), 다음은 덜 흐릿, 다다음 더 흐릿 */
+  .fcrow.r-past{ opacity:.52; filter:saturate(.6);  transform:scale(.975); }
+  .fcrow.r-next{ opacity:.85; transform:scale(.99); }
+  .fcrow.r-soon{ opacity:.5;  filter:saturate(.55); transform:scale(.97); }
+  .fc-hidden .fc-rbody{ flex-direction:row; align-items:center; gap:9px; }
+  .fc-hidden .fc-qm{ font-size:20px; } .fc-hidden .fc-qtx{ font-size:12px; font-weight:800; color:var(--ink-soft); }
+
+  /* 이번 라운드 — 항상 금빛 강조 + 샤인 + 흰 프로스트 서브카드로 팝업 */
+  .fcrow.lit{ opacity:1; transform:scale(1); filter:none; border-radius:var(--r); padding:11px 13px;
+              background:linear-gradient(160deg, oklch(0.975 0.055 95), oklch(0.91 0.12 82));
+              box-shadow:var(--shadow), 0 0 0 3px var(--gold), 0 0 22px oklch(0.85 0.16 84 / .45); }
+  .fcrow.lit .fc-rlabel{ color:var(--gold-deep); font-size:13px; }
+  .fcrow.lit .fc-rbody{ gap:8px; }
+  .fcrow.lit .mini-ev{ background:oklch(1 0 0 / .6); border-radius:13px; padding:7px 10px;
+                       box-shadow:0 2px 0 oklch(0.84 0.07 85 / .85), 0 3px 9px oklch(0.60 0.08 70 / .16); }
+  .fcrow.lit .mi-ico{ width:43px; height:43px; font-size:23px; }
+  .fcrow.lit .mi-tx{ font-size:16px; font-weight:900; }
+  .fcrow.lit .mi-ef{ font-size:15px; padding:6px 13px; }
+  .fcrow.lit::after{ content:""; position:absolute; inset:0; pointer-events:none; transform:translateX(-130%);
+                     background:linear-gradient(105deg, transparent 36%, oklch(1 0 0 / .55) 50%, transparent 64%); }
+
+  /* 지금(LIVE) 점멸 점 */
+  .fc-livedot{ position:relative; flex:0 0 auto; width:9px; height:9px; border-radius:50%; background:var(--up); }
+  .fc-livedot::after{ content:""; position:absolute; inset:0; border-radius:50%; background:var(--up); }
+
+  @media (prefers-reduced-motion: no-preference){
+    .fcrow.lit::after{ animation:fcshine 3.8s ease-in-out .6s infinite; }
+    .fcrow.lit .fc-rbody .mini-ev{ animation:fcpop .5s cubic-bezier(.2,.85,.3,1) both; }
+    .fcrow.lit .fc-rbody .mini-ev:nth-child(2){ animation-delay:.09s; }
+    .fc-livedot::after{ animation:fclive 1.7s ease-out infinite; }
+  }
+  @keyframes fcshine{ 0%{ transform:translateX(-130%); } 55%,100%{ transform:translateX(240%); } }
+  @keyframes fcpop{ 0%{ opacity:0; transform:translateY(7px) scale(.96); } 100%{ opacity:1; transform:none; } }
+  @keyframes fclive{ 0%{ transform:scale(1); opacity:.55; } 70%,100%{ transform:scale(2.7); opacity:0; } }
+
   /* 보드 — 타일 컴팩트(고정 높이, 공간 낭비 줄임) */
   .board{ flex:1 1 auto; align-content:center; min-height:0; display:grid; grid-template-columns:repeat(3,1fr);
           grid-auto-rows:minmax(112px, 168px); gap:var(--sp-2); }
@@ -780,7 +857,7 @@ window.startGame = function(){
     setupCount:np, setupNames:names, setupOpts:opts, setupCountry:countryKey, country,
     players, prices, prevPrices:{...prices}, priceHist, eventDeck, actionDeck, forecast,
     round:1, turnIdx:0, actionsPerTurn:(opts.actionsPerTurn||DEFAULT_ACTIONS), actionsLeft:(opts.actionsPerTurn||DEFAULT_ACTIONS), buyCountThisTurn:{}, maxBuyThisTurn:opts.buyLimit, baseBuyLimit:opts.buyLimit,
-    phase:'pass', infoPeek:null, flipNext:false, lastChanges:{},
+    phase:'pass', infoPeek:null, flipNext:false, lastChanges:{}, lastForecast:null,
     coachMode: opts.coachOn,
     log:{ delisted:[], maxConcentration:{}, divTotals:{}, peakStock:{}, trades:0, startTime:Date.now() }
   };
@@ -886,26 +963,26 @@ function miniEvHTML(ev, fog){
   // 고급 예보 안개: 회사/아이콘은 보이되 방향(▲▼·효과)을 숨김
   if(fog){
     const who = ev.who==='all'?'모든 회사':ev.who.map(id=>COMPANIES.find(c=>c.id===id).nm).join('·');
-    return `<div class="mini-ev">
+    return `<div class="mini-ev fog">
       <span class="mi-ico">${ev.ico}</span>
       <span class="mi-tx">${who}</span>
-      <span class="mi-ef" style="color:#c4b5fd;">❓ 방향 비밀</span>
+      <span class="mi-ef">❓ 비밀</span>
     </div>`;
   }
   if(ev.kind==='div'){
     const who = ev.who==='all'?'모든 회사':ev.who.map(id=>COMPANIES.find(c=>c.id===id).nm).join('·');
     const label = ev.divMul===0?'배당 X':ev.divMul<1?'배당↓':'배당↑';
-    return `<div class="mini-ev">
+    return `<div class="mini-ev dvd">
       <span class="mi-ico">${ev.ico}</span>
       <span class="mi-tx">${ev.tx}</span>
-      <span class="mi-ef ${ev.divMul>=1?'up':'down'}">${who} ${label}</span>
+      <span class="mi-ef">${who} ${label}</span>
     </div>`;
   }
   const e=evShort(ev);
-  return `<div class="mini-ev">
+  return `<div class="mini-ev ${ev.steps>0?'up':'down'}">
     <span class="mi-ico">${ev.ico}</span>
     <span class="mi-tx">${ev.tx}</span>
-    <span class="mi-ef ${ev.steps>0?'up':'down'}">${e.who} ${ev.steps>0?'▲':'▼'}${Math.abs(ev.steps)}</span>
+    <span class="mi-ef">${e.who} ${ev.steps>0?'▲':'▼'}${Math.abs(ev.steps)}</span>
   </div>`;
 }
 // 슬롯의 사건 목록을 렌더 (고급이면 index1 방향 숨김)
@@ -913,25 +990,56 @@ function slotEvsHTML(slot){
   const fog = !!(G.setupOpts && G.setupOpts.forecastFog);
   return slot.map((ev,i)=>miniEvHTML(ev, fog && i===1)).join('');
 }
-// 슬림 예보 스트립 (이번 칸 사건 + 다음)
-function fcStripHTML(){
-  const isLast = G.round===TOTAL_ROUNDS;
-  const now=G.forecast[0], next=isLast?null:G.forecast[1];
-  const fog=!!(G.setupOpts && G.setupOpts.forecastFog);
-  const evs=(slot)=>slot.map((ev,i)=>miniEvHTML(ev, fog && i===1)).join('');
-  return `<div class="fcstrip">
-    <div class="fcbox now ${fog?'fog':''}">
-      <div class="fc-lbl">이번 칸 사건</div>
-      ${evs(now)}
-    </div>
-    ${next?`<div class="fcbox next ${fog?'fog':''}">
-      <div class="fc-lbl">다음 ▸</div>
-      ${evs(next)}
-    </div>`:`<div class="fcbox next">
-      <div class="fc-lbl">다음 ▸</div>
-      <div class="mini-ev"><span class="mi-ico">❓</span><span class="mi-tx">마지막 라운드 — 다음은 비공개</span></div>
-    </div>`}
+// 예보 슬롯 릴 — 지난(흐릿) · 이번(payline·환함) · 다음 · 다다음(초급)
+function reelRowHTML(slot, kind, label, opts){
+  opts = opts || {};
+  const fog = !!opts.fog;
+  const evs = slot.map((ev,i)=>miniEvHTML(ev, fog && i===1)).join('');
+  return `<div class="fcrow r-${kind}${opts.lit?' lit':''}" onclick="reelTap(this)">
+    <div class="fc-rlabel">${label}</div>
+    <div class="fc-rbody">${evs}</div>
   </div>`;
+}
+function reelHiddenHTML(kind, label, note){
+  return `<div class="fcrow r-${kind} fc-hidden" onclick="reelTap(this)">
+    <div class="fc-rlabel">${label}</div>
+    <div class="fc-rbody"><span class="fc-qm">❓</span><span class="fc-qtx">${note}</span></div>
+  </div>`;
+}
+function fcReelHTML(){
+  const isLast = G.round===TOTAL_ROUNDS;
+  const len = G.forecast.length; // 현재 로드된 예보 슬롯 수 = 난이도별 forecastLen
+  const fog = !!(G.setupOpts && G.setupOpts.forecastFog);
+  const rows = [];
+  // 지난 라운드 (직전 1R) — 2라운드부터 존재
+  if(G.lastForecast) rows.push(reelRowHTML(G.lastForecast, 'past', '◀ 지난 라운드', {}));
+  // 이번 라운드 — payline, 기본 포커스
+  rows.push(reelRowHTML(G.forecast[0], 'cur', '<span class="fc-livedot"></span>지금 · 이번 라운드 사건 2개', {fog, lit:true}));
+  // 다음 라운드 — 예보 길이 2 이상이고 마지막 라운드 아닐 때만 공개
+  if(!isLast && len>=2 && G.forecast[1]){
+    rows.push(reelRowHTML(G.forecast[1], 'next', '다음 라운드 ▾', {fog}));
+  } else {
+    rows.push(reelHiddenHTML('next', '다음 라운드 ▾', isLast?'마지막 라운드 — 비공개':'고급 모드 — 비공개'));
+  }
+  // 다다음 (초급: 예보 길이 3) — 데이터 있을 때만, 가장 흐릿
+  if(!isLast && len>=3 && G.forecast[2]){
+    rows.push(reelRowHTML(G.forecast[2], 'soon', '다다음 라운드 ▾', {fog}));
+  }
+  return `<div class="fcreel-wrap">
+    <div class="fcreel" id="fcreel">${rows.join('')}</div>
+  </div>`;
+}
+// 릴 조작: 기본은 '이번'을 위쪽에 고정(지난은 위로 살짝 굴려 보기). 흐릿한 칸을 탭하면 그 칸을 위로.
+window.reelTap = function(row){
+  try{ row.scrollIntoView({ block:'start', behavior:'smooth' }); }catch(_){ row.scrollIntoView(); }
+};
+function setupReel(){
+  const reel = document.getElementById('fcreel');
+  if(!reel) return;
+  const cur = reel.querySelector('.fcrow.r-cur');
+  if(!cur) return;
+  // '이번' 칸을 위쪽에 붙이되, 위에 지난 뉴스가 살짝 보이게(roll-up 힌트) 16px 남김
+  requestAnimationFrame(()=>{ reel.scrollTo({ top: Math.max(0, cur.offsetTop - 16), behavior:'auto' }); });
 }
 
 // 톱바용 인라인 랭킹 (미니랭킹 줄을 톱바로 흡수)
@@ -970,7 +1078,7 @@ function renderTurn(){
       <button class="tb-ico" onclick="showGoal()">🎯</button>
     </div>
 
-    ${fcStripHTML()}
+    ${fcReelHTML()}
     ${G.infoPeek?`<div class="hint-tip">🔮 정보입수: 다다음 사건은 "${G.infoPeek}" 관련 (방향 비밀)</div>`:''}
 
     <div class="board">
@@ -1002,6 +1110,7 @@ function renderTurn(){
     <div class="mascot bull" id="bull">🐂</div>
     <div class="mascot bear" id="bear">🐻</div>
    </div>`;
+  setupReel();
 }
 
 function isLastRoundForecast(isLast){
@@ -1515,6 +1624,8 @@ function showEventReveal(){
 
 window.advanceRound = function(){
   if(G.round>=TOTAL_ROUNDS){ showResults(); return; }
+  // 방금 끝난 라운드 예보를 '지난 뉴스'로 보관 (릴 위쪽 peek)
+  G.lastForecast = G.forecast[0];
   // shift forecast slots forward, draw a new one at the end
   G.forecast.shift();
   G.forecast.push(drawPair(G.eventDeck));
@@ -1702,7 +1813,7 @@ const DOCS = {
     <h3>내 차례에 하는 일</h3>
     <p>내 차례엔 정해진 <b>행동 수</b>(설정에서 1~3번)만큼 골라서 해요. 한 번의 행동은: <b>사기(＋)</b> / <b>팔기(－)</b> / <b>대응카드 쓰기</b> / <b>패스(+500원)</b> / <b>카드 뽑기</b> 중 하나. 실수했으면 <b>↩︎ 되돌리기</b>로 직전 행동을 취소할 수 있어요.</p>
     <h3>시장 예보 보는 법</h3>
-    <p>화면 위에 <b>이번 칸 사건</b>과 <b>다음</b> 예보가 미리 보여요. 이걸 보고 오를 회사를 미리 사두는 게 핵심! <b>주가 사건</b>은 값이 오르내리고(▲▼), <b>배당 사건</b>은 용돈이 늘거나 줄어요. (고급 모드에선 예보 일부가 ❓비공개)</p>
+    <p>화면 위 <b>슬롯</b>에 뉴스가 떠요. 가운데 환하게 빛나는 <b>🎰 이번 라운드</b>가 먼저 보이고, 슬롯을 <b>위로 밀면 지난 뉴스</b>, 아래엔 <b>다음 예보</b>가 살짝 보여요. (흐릿한 줄을 톡 누르면 가운데로 와요.) 이걸 보고 오를 회사를 미리 사두는 게 핵심! <b>주가 사건</b>은 값이 오르내리고(▲▼), <b>배당 사건</b>은 용돈이 늘거나 줄어요. (고급 모드에선 예보 일부가 ❓비공개)</p>
     <h3>사고팔기 규칙</h3>
     <p>주가는 500원~5,500원 사이를 칸칸이 움직여요. 0원이 되면 <b>상장폐지</b>(휴지!), 5,500원에 닿으면 멈춰요. 한 회사는 <b>최대 6주</b>까지, 한 턴에 같은 회사는 설정한 수만큼만 살 수 있어요.</p>
     <p>💡 <b>종목(가격)을 누르면</b> 라운드별 <b>가격 변화 차트</b>와 그 회사의 <b>배당(용돈) 정보</b>를 볼 수 있어요. 사기 전에 살펴보세요!</p>
