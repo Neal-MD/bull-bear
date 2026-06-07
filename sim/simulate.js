@@ -79,16 +79,16 @@ const TOTAL_ROUNDS = 12, DEFAULT_ACTIONS = 2;
 function scaleCash(startCash, ap){ return Math.round((startCash * Math.max(1, ap/DEFAULT_ACTIONS))/500)*500; }
 
 const PRESETS = {
-  easy:   { actionsPerTurn:3, buyLimit:5, forecastLen:3, divEvery:1, startCash:25000, downsideBuffer:1, forecastFog:false },
-  normal: { actionsPerTurn:2, buyLimit:3, forecastLen:2, divEvery:1, startCash:20000, downsideBuffer:0, forecastFog:false },
-  hard:   { actionsPerTurn:2, buyLimit:2, forecastLen:1, divEvery:2, startCash:15000, downsideBuffer:0, forecastFog:true },
+  easy:   { actionsPerTurn:3, buyLimit:5, forecastLen:3, divEvery:1, startCash:35000, downsideBuffer:1, forecastFog:false },
+  normal: { actionsPerTurn:2, buyLimit:3, forecastLen:2, divEvery:1, startCash:25000, downsideBuffer:0, forecastFog:false },
+  hard:   { actionsPerTurn:2, buyLimit:2, forecastLen:1, divEvery:2, startCash:20000, downsideBuffer:0, forecastFog:true },
 };
 
 // ---------------- 헬퍼 ----------------
 function buildCompanies(countryKey){
   const country = COUNTRIES[countryKey];
   return SECTORS.map(s=>{
-    const baseStart = s.type==='growth'?2000 : s.type==='divid'?1000 : 1500;
+    const baseStart = s.type==='growth'?2500 : s.type==='divid'?1500 : 2000; // 시작가 분산 + 전부 절벽(500)에서 멀리 → 상폐 완화
     const baseDiv = s.type==='growth' ? 100 : s.type==='divid' ? 250 : 150;
     return { id:s.slot, ico:s.ico, nm:country.co[s.slot], sector:s.slot, type:s.type,
       start:Math.max(500, baseStart+country.startMod), div:Math.max(0, baseDiv+country.divMod), volMod:country.volMod };
@@ -267,7 +267,8 @@ function resolveRound(G, players){
     const steps = computeSteps(ev, G);
     if(steps===0) return;
     const applyTo=ev.who==='all'?G.companies.map(c=>c.id):ev.who;
-    applyTo.forEach(cid=>{ if(G.prices[cid]<=0) return; const before=G.prices[cid]; G.prices[cid]=moveWithFloor(G.prices[cid],steps); changes.push({cid,before,after:G.prices[cid]}); });
+    const marketWide=ev.who==='all'; // 시장 전체 악재로는 상장폐지 금지(500원에서 막힘) — 떼상폐 방지
+    applyTo.forEach(cid=>{ if(G.prices[cid]<=0) return; const before=G.prices[cid]; let after=moveWithFloor(G.prices[cid],steps); if(marketWide&&after===0) after=500; G.prices[cid]=after; changes.push({cid,before,after:G.prices[cid]}); });
     if(ev.chain && ev.who!=='all'){ const cid=ev.chain.who; let cs=flip?-ev.chain.steps:ev.chain.steps; if(G.prices[cid]>0){ const before=G.prices[cid]; G.prices[cid]=moveWithFloor(G.prices[cid],cs); changes.push({cid,before,after:G.prices[cid],chain:true}); } }
   });
   G.flipNext=false;

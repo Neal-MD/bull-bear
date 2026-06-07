@@ -11,31 +11,44 @@
 <title>불앤베어 꼬마투자단</title>
 <style>
   /* ===================================================================
-     불앤베어 — 부루마블 스타일 밝은 보드게임 테마
-     색은 OKLCH(따뜻한 보드톤). 폰트는 외부 의존성 없이 시스템 둥근체.
+     불앤베어 — 🏦 골드 볼트 은행 테마 (2026-06-07 피벗)
+     깊은 에메랄드 그린 + 금색. 본문은 밝은 아이보리(아이 가독성),
+     어두움은 헤더·금고문·LED 전광판 포인트에만. 한국 증시 색(▲빨강/▼파랑) 유지.
+     색: OKLCH(중립은 브랜드 그린으로 살짝 틴트). 폰트: 외부 의존성 0 시스템 스택.
      =================================================================== */
   :root{
-    --bg:        oklch(0.95 0.03 85);   /* 따뜻한 크림 배경 */
-    --board:     oklch(0.90 0.05 78);   /* 보드판(살짝 진한 크림) */
-    --surface:   oklch(0.99 0.012 90);  /* 타일/카드 표면 */
-    --surface-2: oklch(0.96 0.02 85);
-    --ink:       oklch(0.30 0.045 55);  /* 진한 따뜻 브라운(검정 대신) */
-    --ink-soft:  oklch(0.48 0.035 60);
-    --line:      oklch(0.85 0.03 80);
-    --gold:      oklch(0.82 0.16 84);   /* 돈/브랜드 */
-    --gold-deep: oklch(0.68 0.16 70);
-    --up:        oklch(0.64 0.21 28);   /* 상승=빨강 (한국 증시 관습: 매수도 빨강) */
+    --bg:        oklch(0.96 0.012 155);  /* 아이보리(그린 틴트) 배경 */
+    --board:     oklch(0.93 0.018 155);  /* 살짝 진한 면 */
+    --surface:   oklch(0.99 0.008 150);  /* 타일/카드 표면 */
+    --surface-2: oklch(0.96 0.014 152);
+    --ink:       oklch(0.30 0.04 165);   /* 진한 에메랄드 잉크(검정 대신) */
+    --ink-soft:  oklch(0.46 0.035 165);
+    --line:      oklch(0.86 0.02 152);
+    --vault:     oklch(0.34 0.062 165);  /* 금고/헤더 에메랄드 */
+    --vault-deep:oklch(0.24 0.05 165);   /* 더 깊은 그린(테두리/그림자) */
+    --vault-lite:oklch(0.42 0.07 165);   /* 다이얼 하이라이트 */
+    --gold:      oklch(0.83 0.135 88);   /* 금색(고L→저chroma) */
+    --gold-deep: oklch(0.68 0.13 80);
+    --gold-soft: oklch(0.90 0.07 92);    /* 금빛 하이라이트 */
+    --brass:     oklch(0.74 0.09 85);    /* 놋쇠 명패 */
+    --led-bg:    oklch(0.17 0.022 162);  /* 전광판 근검정 그린 */
+    --up:        oklch(0.64 0.21 28);    /* 상승=빨강 (한국 증시 관습) */
     --up-ink:    oklch(0.55 0.22 28);
-    --down:      oklch(0.58 0.15 250);  /* 하락=파랑 (매도도 파랑) */
+    --up-led:    oklch(0.70 0.20 30);    /* 전광판 발광 빨강 */
+    --down:      oklch(0.58 0.15 250);   /* 하락=파랑 */
     --down-ink:  oklch(0.48 0.17 252);
-    --blue:      oklch(0.66 0.14 245);  /* 예보/정보 */
-    --grow:      oklch(0.66 0.19 25);   /* 성장 섹터 */
-    --divd:      oklch(0.64 0.15 230);  /* 배당 섹터 */
-    --mid-c:     oklch(0.72 0.12 300);  /* 중간 섹터 */
-    --shadow:    0 3px 0 oklch(0.80 0.04 75), 0 6px 14px oklch(0.55 0.05 65 / .22);
-    --shadow-sm: 0 2px 0 oklch(0.82 0.04 75), 0 4px 9px oklch(0.55 0.05 65 / .18);
+    --down-led:  oklch(0.68 0.15 250);   /* 전광판 발광 파랑 */
+    --blue:      oklch(0.66 0.14 245);   /* 정보 */
+    --grow:      oklch(0.66 0.19 25);    /* 성장 섹터 */
+    --divd:      oklch(0.64 0.15 230);   /* 배당 섹터 */
+    --mid-c:     oklch(0.72 0.12 300);   /* 중간 섹터 */
+    --paper:     oklch(0.96 0.018 92);   /* 통장 종이 */
+    --shadow:    0 3px 0 oklch(0.70 0.10 82 / .55), 0 7px 16px oklch(0.30 0.05 165 / .26);
+    --shadow-sm: 0 2px 0 oklch(0.72 0.09 82 / .5), 0 4px 10px oklch(0.30 0.05 165 / .2);
+    --shadow-gold: 0 0 0 1px var(--gold), 0 4px 14px oklch(0.68 0.13 80 / .35);
     --r:14px; --r-sm:10px;
     --font: ui-rounded, 'Apple SD Gothic Neo', 'Pretendard', system-ui, sans-serif;
+    --font-led: 'DS-Digital', ui-monospace, 'SF Mono', 'Cascadia Mono', Menlo, monospace;
     --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-6:24px; --sp-8:32px;
   }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -43,8 +56,8 @@
   body {
     font-family:var(--font); color:var(--ink); overscroll-behavior:none; overflow-x:hidden;
     background:
-      radial-gradient(circle at 12% 8%, oklch(0.97 0.04 95 / .8), transparent 42%),
-      radial-gradient(circle at 88% 92%, oklch(0.93 0.06 60 / .7), transparent 45%),
+      radial-gradient(circle at 12% 6%, oklch(0.93 0.05 90 / .55), transparent 40%),   /* 금빛 코너광 */
+      radial-gradient(circle at 90% 96%, oklch(0.90 0.04 165 / .6), transparent 46%),   /* 에메랄드 코너광 */
       var(--bg);
     -webkit-font-smoothing:antialiased;
   }
@@ -65,28 +78,38 @@
                  calc(env(safe-area-inset-bottom) + 8px) calc(env(safe-area-inset-left) + 10px);
          overflow:hidden;
          background:
-           radial-gradient(circle at 50% -10%, oklch(0.97 0.05 95 / .9), transparent 55%),
+           radial-gradient(circle at 50% -8%, oklch(0.93 0.05 90 / .7), transparent 50%),
+           radial-gradient(circle at 50% 108%, oklch(0.90 0.04 165 / .55), transparent 48%),
            var(--board); }
 
-  /* 톱바 (랭킹 흡수) */
-  .topbar{ display:flex; align-items:center; gap:var(--sp-2); flex:0 0 auto; }
-  .tb-round{ background:var(--gold); color:var(--ink); font-weight:900; font-size:15px;
-             padding:6px 13px; border-radius:999px; box-shadow:var(--shadow-sm); white-space:nowrap; }
-  .tb-country{ background:var(--surface); padding:6px 12px; border-radius:999px; font-weight:800;
-               font-size:14px; box-shadow:var(--shadow-sm); white-space:nowrap; }
-  .tb-me{ display:flex; align-items:center; gap:8px; background:var(--surface); padding:5px 14px 5px 9px;
-          border-radius:18px; box-shadow:var(--shadow-sm); }
-  .tb-me .av{ font-size:24px; flex:0 0 auto; }
+  /* 톱바 — 🪟 은행 창구 카운터(에메랄드 + 골드 트림). 랭킹 흡수 */
+  .topbar{ display:flex; align-items:center; gap:var(--sp-2); flex:0 0 auto;
+           background:linear-gradient(180deg, var(--vault), var(--vault-deep));
+           border:1.5px solid var(--gold); border-radius:14px; padding:7px 9px;
+           box-shadow:var(--shadow), inset 0 1px 0 oklch(1 0 0 / .08);
+           position:relative; }
+  /* 카운터 상단 금색 라인(창구 트림) */
+  .topbar::before{ content:""; position:absolute; left:10px; right:10px; top:3px; height:2px; border-radius:2px;
+                   background:linear-gradient(90deg, transparent, var(--gold-soft), transparent); opacity:.55; }
+  .tb-round{ background:linear-gradient(180deg, var(--gold-soft), var(--gold)); color:var(--vault-deep); font-weight:900; font-size:15px;
+             padding:6px 13px; border-radius:999px; box-shadow:0 2px 0 var(--gold-deep); white-space:nowrap; }
+  .tb-country{ background:oklch(1 0 0 / .1); color:var(--gold-soft); padding:6px 12px; border-radius:999px; font-weight:800;
+               font-size:14px; border:1px solid oklch(0.83 0.135 88 / .4); white-space:nowrap; }
+  /* 🪙 놋쇠 명패: 내 이름·잔액 */
+  .tb-me{ display:flex; align-items:center; gap:8px; padding:5px 14px 5px 9px; border-radius:12px;
+          background:linear-gradient(180deg, var(--brass), oklch(0.64 0.09 82));
+          border:1px solid var(--gold-soft); box-shadow:0 2px 0 oklch(0.50 0.07 78), inset 0 1px 0 oklch(1 0 0 / .35); }
+  .tb-me .av{ font-size:24px; flex:0 0 auto; filter:drop-shadow(0 1px 0 oklch(1 0 0 / .4)); }
   .tb-me .me-fig{ display:flex; flex-direction:column; line-height:1.16; }
-  .tb-me .me-nm{ font-weight:800; font-size:11.5px; color:var(--ink-soft); }
-  .tb-me .me-total{ font-weight:900; font-size:17px; color:var(--gold-deep); }
-  .tb-me .me-split{ font-size:11px; font-weight:700; color:var(--ink-soft); }
+  .tb-me .me-nm{ font-weight:800; font-size:11.5px; color:var(--vault-deep); }
+  .tb-me .me-total{ font-weight:900; font-size:17px; color:var(--vault-deep); }
+  .tb-me .me-split{ font-size:11px; font-weight:700; color:oklch(0.32 0.05 120); }
   .tb-rank{ display:flex; gap:4px; margin-left:auto; align-items:center; overflow:hidden; }
-  .tb-rk{ font-size:12px; font-weight:800; background:var(--surface-2); padding:4px 8px; border-radius:999px;
-          white-space:nowrap; box-shadow:var(--shadow-sm); }
-  .tb-rk.me{ background:var(--gold); }
-  .tb-ico{ width:38px; height:38px; border-radius:50%; background:var(--surface); font-size:18px;
-           display:grid; place-items:center; box-shadow:var(--shadow-sm); flex:0 0 auto; }
+  .tb-rk{ font-size:12px; font-weight:800; background:oklch(1 0 0 / .1); color:var(--gold-soft); padding:4px 8px; border-radius:999px;
+          white-space:nowrap; border:1px solid oklch(1 0 0 / .12); }
+  .tb-rk.me{ background:linear-gradient(180deg, var(--gold-soft), var(--gold)); color:var(--vault-deep); border-color:var(--gold); }
+  .tb-ico{ width:38px; height:38px; border-radius:50%; background:oklch(1 0 0 / .12); font-size:18px; color:var(--gold-soft);
+           display:grid; place-items:center; border:1px solid oklch(0.83 0.135 88 / .5); flex:0 0 auto; }
 
   /* 예보 스트립 — 크고 잘 보이게 (남는 공간 차지) */
   .fcstrip{ flex:0 0 auto; display:flex; gap:var(--sp-2); align-items:stretch; }
@@ -104,9 +127,16 @@
 
   /* 예보 슬롯 릴 — 세로로 도는 뉴스. 이번 라운드가 위쪽에서 항상 금빛으로 강조,
      지난은 위로 살짝 굴려서(roll-up) 보고, 다음은 아래에 덜 강조로 보임 */
+  /* 📟 LED 시세 전광판: 근검정 보드 + 골드 프레임 */
   .fcreel-wrap{ flex:0 0 auto; position:relative; border-radius:var(--r);
-                background:var(--surface-2); box-shadow:inset 0 2px 7px oklch(0.55 0.05 65 / .15);
-                padding:3px 6px; }
+                background:
+                  radial-gradient(circle at 50% 0%, oklch(0.24 0.04 162 / .9), transparent 60%),
+                  var(--led-bg);
+                border:2px solid var(--gold); padding:3px 6px;
+                box-shadow:var(--shadow), inset 0 0 22px oklch(0 0 0 / .55), inset 0 1px 0 oklch(1 0 0 / .06); }
+  /* 전광판 스캔라인(아주 은은) */
+  .fcreel-wrap::before{ content:""; position:absolute; inset:2px; border-radius:12px; pointer-events:none; z-index:2;
+                        background:repeating-linear-gradient(0deg, transparent 0 3px, oklch(0 0 0 / .14) 3px 4px); opacity:.5; }
   .fcreel{ height:clamp(166px, 31vh, 262px); overflow-y:auto; overflow-x:hidden;
            scroll-snap-type:y proximity; scroll-padding-top:18px; overscroll-behavior:contain;
            -webkit-overflow-scrolling:touch; scrollbar-width:none; position:relative;
@@ -116,10 +146,12 @@
   .fcreel::-webkit-scrollbar{ display:none; }
 
   .fcrow{ scroll-snap-align:start; flex:0 0 auto; border-radius:var(--r-sm); padding:8px 12px;
-          background:var(--surface); box-shadow:var(--shadow-sm); position:relative; overflow:hidden; cursor:pointer;
+          background:linear-gradient(180deg, oklch(0.23 0.03 162), oklch(0.19 0.025 162));
+          border:1px solid oklch(0.83 0.135 88 / .22);
+          box-shadow:inset 0 1px 0 oklch(1 0 0 / .05); position:relative; overflow:hidden; cursor:pointer;
           transition:transform .22s cubic-bezier(.2,.8,.3,1), opacity .22s, box-shadow .22s, filter .22s; }
   .fcrow .fc-rlabel{ display:flex; align-items:center; gap:7px; font-size:12px; font-weight:900;
-                     color:var(--ink-soft); margin-bottom:5px; letter-spacing:.2px; }
+                     color:var(--gold-soft); margin-bottom:5px; letter-spacing:.4px; text-transform:none; }
   .fcrow .fc-rbody{ display:flex; flex-direction:column; gap:5px; }
 
   /* 뉴스 = 보드게임 속보 티커 칩: 동전 메달 + 굵은 헤드라인 + 꽉 찬 컬러 배지 */
@@ -128,14 +160,19 @@
                   font-size:18px; line-height:1;
                   background:radial-gradient(circle at 33% 28%, oklch(1 0 0 / .95), oklch(0.92 0.03 90 / .55) 72%);
                   box-shadow:0 2px 0 oklch(0.80 0.04 75), inset 0 0 0 1.5px oklch(1 0 0 / .7); }
-  .fcrow .mi-tx{ flex:1; min-width:0; font-size:13.5px; font-weight:800; line-height:1.18; color:var(--ink); }
+  .fcrow .mi-tx{ flex:1; min-width:0; font-size:13.5px; font-weight:800; line-height:1.18; color:oklch(0.93 0.02 150); }
   .fcrow .mi-ef{ flex:0 0 auto; font-size:13px; font-weight:900; white-space:nowrap; color:#fff;
-                 padding:5px 11px; border-radius:999px;
-                 box-shadow:0 2px 0 oklch(0 0 0 / .13), inset 0 1px 0 oklch(1 0 0 / .35); }
-  .fcrow .mini-ev.up   .mi-ef{ background:var(--up); }
-  .fcrow .mini-ev.down .mi-ef{ background:var(--down); }
-  .fcrow .mini-ev.dvd  .mi-ef{ background:var(--gold-deep); color:var(--ink); }
-  .fcrow .mini-ev.fog  .mi-ef{ background:oklch(0.68 0.14 300); }
+                 padding:5px 11px; border-radius:8px; letter-spacing:.3px;
+                 box-shadow:0 0 0 1px oklch(1 0 0 / .15), inset 0 1px 0 oklch(1 0 0 / .25); }
+  /* LED 발광 글자(빨강 오름 / 파랑 내림) */
+  .fcrow .mini-ev.up   .mi-ef{ background:oklch(0.30 0.10 28); color:var(--up-led); border:1px solid var(--up-led);
+                               text-shadow:0 0 7px var(--up-led); box-shadow:0 0 9px oklch(0.64 0.21 28 / .5); }
+  .fcrow .mini-ev.down .mi-ef{ background:oklch(0.26 0.07 250); color:var(--down-led); border:1px solid var(--down-led);
+                               text-shadow:0 0 7px var(--down-led); box-shadow:0 0 9px oklch(0.58 0.15 250 / .5); }
+  .fcrow .mini-ev.dvd  .mi-ef{ background:oklch(0.34 0.09 86); color:var(--gold-soft); border:1px solid var(--gold);
+                               text-shadow:0 0 7px var(--gold); }
+  .fcrow .mini-ev.fog  .mi-ef{ background:oklch(0.30 0.08 300); color:oklch(0.82 0.12 300); border:1px solid oklch(0.7 0.12 300);
+                               text-shadow:0 0 7px oklch(0.72 0.13 300); }
   .fcrow .mini-ev.up   .mi-ico{ background:radial-gradient(circle at 33% 28%, oklch(1 0 0 / .97), oklch(0.86 0.12 30 / .6) 72%);
                                 box-shadow:0 2px 0 oklch(0.66 0.13 30), inset 0 0 0 1.5px oklch(1 0 0 / .7); }
   .fcrow .mini-ev.down .mi-ico{ background:radial-gradient(circle at 33% 28%, oklch(1 0 0 / .97), oklch(0.82 0.10 250 / .6) 72%);
@@ -149,18 +186,19 @@
   .fcrow.r-next{ opacity:.85; transform:scale(.99); }
   .fcrow.r-soon{ opacity:.5;  filter:saturate(.55); transform:scale(.97); }
   .fc-hidden .fc-rbody{ flex-direction:row; align-items:center; gap:9px; }
-  .fc-hidden .fc-qm{ font-size:20px; } .fc-hidden .fc-qtx{ font-size:12px; font-weight:800; color:var(--ink-soft); }
+  .fc-hidden .fc-qm{ font-size:20px; color:oklch(0.72 0.13 300); text-shadow:0 0 8px oklch(0.6 0.12 300); } .fc-hidden .fc-qtx{ font-size:12px; font-weight:800; color:oklch(0.7 0.05 150); }
 
   /* 이번 라운드 — 항상 금빛 강조 + 샤인 + 흰 프로스트 서브카드로 팝업 */
   .fcrow.lit{ opacity:1; transform:scale(1); filter:none; border-radius:var(--r); padding:11px 13px;
-              background:linear-gradient(160deg, oklch(0.975 0.055 95), oklch(0.91 0.12 82));
-              box-shadow:var(--shadow), 0 0 0 3px var(--gold), 0 0 22px oklch(0.85 0.16 84 / .45); }
-  .fcrow.lit .fc-rlabel{ color:var(--gold-deep); font-size:13px; }
+              background:linear-gradient(180deg, oklch(0.28 0.045 162), oklch(0.21 0.03 162));
+              border:2px solid var(--gold);
+              box-shadow:var(--shadow), 0 0 0 1px var(--gold-soft) inset, 0 0 26px oklch(0.83 0.135 88 / .4); }
+  .fcrow.lit .fc-rlabel{ color:var(--gold-soft); font-size:13px; text-shadow:0 0 8px oklch(0.83 0.135 88 / .6); }
   .fcrow.lit .fc-rbody{ gap:8px; }
-  .fcrow.lit .mini-ev{ background:oklch(1 0 0 / .6); border-radius:13px; padding:7px 10px;
-                       box-shadow:0 2px 0 oklch(0.84 0.07 85 / .85), 0 3px 9px oklch(0.60 0.08 70 / .16); }
+  .fcrow.lit .mini-ev{ background:oklch(0.16 0.02 162 / .85); border-radius:11px; padding:7px 10px;
+                       border:1px solid oklch(0.83 0.135 88 / .25); box-shadow:inset 0 0 14px oklch(0 0 0 / .5); }
   .fcrow.lit .mi-ico{ width:43px; height:43px; font-size:23px; }
-  .fcrow.lit .mi-tx{ font-size:16px; font-weight:900; }
+  .fcrow.lit .mi-tx{ font-size:16px; font-weight:900; color:oklch(0.96 0.02 150); }
   .fcrow.lit .mi-ef{ font-size:15px; padding:6px 13px; }
   .fcrow.lit::after{ content:""; position:absolute; inset:0; pointer-events:none; transform:translateX(-130%);
                      background:linear-gradient(105deg, transparent 36%, oklch(1 0 0 / .55) 50%, transparent 64%); }
@@ -182,8 +220,12 @@
   /* 보드 — 타일 컴팩트(고정 높이, 공간 낭비 줄임) */
   .board{ flex:1 1 auto; align-content:center; min-height:0; display:grid; grid-template-columns:repeat(3,1fr);
           grid-auto-rows:minmax(112px, 168px); gap:var(--sp-2); }
-  .tile{ background:var(--surface); border-radius:var(--r); box-shadow:var(--shadow); position:relative;
-         display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+  /* 🪙 금고 자산 카드: 골드 헤어라인 + 살짝 금빛 인셋 */
+  .tile{ background:
+           radial-gradient(circle at 50% 12%, oklch(0.97 0.03 92 / .7), transparent 60%),
+           var(--surface);
+         border-radius:var(--r); box-shadow:var(--shadow), inset 0 0 0 1px oklch(0.83 0.135 88 / .35);
+         position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
          padding:7px 6px; overflow:hidden; border-top:6px solid var(--mid-c); }
   .tile.growth{ border-top-color:var(--grow); }
   .tile.divid{ border-top-color:var(--divd); }
@@ -227,11 +269,13 @@
   .act-dot{ width:13px; height:13px; border-radius:50%; background:var(--line); transition:background .2s, transform .2s; }
   .act-dot.on{ background:var(--gold-deep); transform:scale(1.1); }
   .actionbar .ab-btn{ padding:11px 14px; font-size:14px; font-weight:800; border-radius:var(--r-sm);
-                      background:var(--surface); box-shadow:var(--shadow-sm); }
-  .actionbar .ab-card{ background:oklch(0.86 0.12 300); color:var(--ink); }
-  .actionbar .ab-pass{ background:oklch(0.90 0.10 90); }
+                      background:var(--surface); box-shadow:var(--shadow-sm); border:1px solid var(--line); }
+  .actionbar .ab-card{ background:oklch(0.86 0.12 300); color:var(--ink); border-color:transparent; }
+  .actionbar .ab-pass{ background:linear-gradient(180deg, var(--gold-soft), var(--gold)); color:var(--vault-deep); border-color:var(--gold-deep); }
   .actionbar .ab-undo{ background:var(--surface-2); }
-  .actionbar .ab-end{ background:var(--up); color:#fff; margin-left:auto; padding:11px 20px; font-size:15px; }
+  .actionbar .ab-end{ background:linear-gradient(180deg, var(--vault-lite), var(--vault)); color:var(--gold-soft);
+                      border:1px solid var(--gold); margin-left:auto; padding:11px 20px; font-size:15px; box-shadow:var(--shadow-sm); }
+  .act-left{ border:1px solid var(--line); }
 
   /* 마스코트 */
   /* 마스코트 — 평소엔 숨김, 거래 시에만 팡! */
@@ -268,11 +312,14 @@
   .setup{ position:fixed; inset:0; overflow:hidden; display:flex; flex-direction:column; gap:8px;
           padding:calc(env(safe-area-inset-top) + 12px) calc(env(safe-area-inset-right) + 14px)
                   calc(env(safe-area-inset-bottom) + 8px) calc(env(safe-area-inset-left) + 14px);
-          background:radial-gradient(circle at 50% -8%, oklch(0.97 0.05 95 /.9), transparent 50%), var(--board); }
+          background:
+            radial-gradient(circle at 50% -8%, oklch(0.93 0.05 90 /.7), transparent 48%),
+            radial-gradient(circle at 50% 108%, oklch(0.90 0.04 165 /.5), transparent 46%),
+            var(--board); }
   .setup-head{ text-align:center; flex:0 0 auto; }
-  .setup .logo{ font-size:32px; line-height:1; filter:drop-shadow(0 3px 4px oklch(0.5 0.06 60 /.25)); }
+  .setup .logo{ font-size:32px; line-height:1; filter:drop-shadow(0 3px 4px oklch(0.3 0.05 165 /.25)); }
   .brand{ font-size:clamp(30px,7vw,48px); font-weight:900; line-height:.92; letter-spacing:-.03em;
-          text-shadow:0 3px 0 oklch(0.86 0.04 78); }
+          text-shadow:0 3px 0 oklch(0.88 0.05 92); }
   .brand .b-bull{ color:var(--up-ink); }
   .brand .b-bear{ color:var(--down-ink); }
   .brand .b-amp{ color:var(--gold-deep); margin:0 .1em; font-size:.78em; vertical-align:.06em; }
@@ -280,7 +327,7 @@
 
   .setup-cols{ flex:1 1 auto; min-height:0; display:grid; grid-template-columns:1fr 1fr; gap:10px; align-items:stretch; }
   .setup .card{ background:var(--surface); border-radius:var(--r); padding:13px 14px; text-align:left;
-                box-shadow:var(--shadow); overflow:hidden; }
+                box-shadow:var(--shadow), inset 0 0 0 1px oklch(0.83 0.135 88 / .3); overflow:hidden; }
   .setup .card h3{ font-size:12.5px; margin-bottom:7px; color:var(--ink-soft); font-weight:900; }
   .setup .card h3.mt{ margin-top:12px; }
 
@@ -344,16 +391,27 @@
   /* ===================================================================
      MODAL / OVERLAY / TOAST — 밝게
      =================================================================== */
-  .overlay{ position:fixed; inset:0; background:oklch(0.30 0.04 60 / .55); display:flex; align-items:center;
+  .overlay{ position:fixed; inset:0; background:oklch(0.20 0.045 165 / .62); display:flex; align-items:center;
             justify-content:center; z-index:200; padding:20px; backdrop-filter:blur(2px); }
   .modal{ background:var(--surface); border-radius:20px; padding:24px; max-width:440px; width:100%;
-          text-align:center; box-shadow:0 18px 50px oklch(0.4 0.05 60 / .35); }
+          text-align:center; border:2px solid var(--gold);
+          box-shadow:0 18px 50px oklch(0.2 0.04 165 / .45), inset 0 1px 0 oklch(1 0 0 / .5); }
   .modal .mi{ font-size:52px; }
-  .modal h2{ font-size:23px; margin:8px 0; font-weight:900; }
+  .modal h2{ font-size:23px; margin:8px 0; font-weight:900; color:var(--vault); }
   .modal p{ color:var(--ink-soft); margin-bottom:16px; line-height:1.5; font-size:14px; }
-  .modal .mbtn{ width:100%; padding:15px; background:var(--gold); font-size:16px; box-shadow:var(--shadow-sm); }
-  .modal .mbtn.sec{ background:var(--surface-2); margin-top:8px; }
-  .pass-player{ background:linear-gradient(160deg, oklch(0.97 0.04 95), oklch(0.92 0.08 80)); }
+  .modal .mbtn{ width:100%; padding:15px; font-size:16px; color:var(--vault-deep); border:1px solid var(--gold-deep);
+                background:linear-gradient(180deg, var(--gold-soft), var(--gold)); box-shadow:0 3px 0 var(--gold-deep); }
+  .modal .mbtn.sec{ background:var(--surface-2); color:var(--ink); border-color:var(--line); box-shadow:var(--shadow-sm); margin-top:8px; }
+  .modal .mbtn.ghost{ background:oklch(0.97 0.012 150); color:var(--vault); border:1.5px solid var(--vault-lite);
+                      box-shadow:none; margin-top:10px; font-size:14px; padding:12px; }
+  /* 🏦 금고 입장 느낌 패스 화면 */
+  .pass-player{ background:linear-gradient(165deg, oklch(0.97 0.02 150), oklch(0.93 0.03 120)); position:relative; }
+  .pass-player .vault-badge{ font-size:30px; width:54px; height:54px; margin:0 auto 2px; border-radius:50%;
+        display:grid; place-items:center; background:linear-gradient(180deg, var(--vault-lite), var(--vault));
+        color:var(--gold-soft); border:2px solid var(--gold); box-shadow:0 3px 0 var(--vault-deep); }
+  .order-banner{ background:oklch(0.96 0.03 92); border:1px dashed var(--gold-deep); border-radius:var(--r-sm);
+                 padding:10px 12px; margin-bottom:12px; font-size:12.5px; color:var(--ink); font-weight:700; line-height:1.6; }
+  .order-banner b{ color:var(--vault); font-size:14px; }
 
   .toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:var(--ink); color:oklch(0.97 0.02 90);
           padding:12px 22px; border-radius:999px; z-index:300; font-size:14px; font-weight:800;
@@ -371,9 +429,16 @@
   .ev-one .eo-ef{ font-size:12px; font-weight:800; color:var(--ink-soft); }
   .ev-one.up .eo-ef{ color:var(--up-ink); } .ev-one.down .eo-ef{ color:var(--down-ink); }
   .event-reveal .mi{ font-size:60px; }
+  /* 📔 통장 결산: 종이 + 장부 줄 */
+  .modal.event-reveal{ background:
+        linear-gradient(180deg, oklch(0.99 0.01 92), var(--paper));
+        border:2px solid var(--gold); }
   .ev-effect{ font-size:18px; font-weight:900; margin:10px 0; }
-  .ev-detail{ background:var(--surface-2); border-radius:var(--r-sm); padding:12px; font-size:13px; margin-bottom:14px; text-align:left; }
-  .ev-detail .row{ display:flex; justify-content:space-between; padding:3px 0; }
+  .ev-detail{ background:var(--paper); border:1px solid oklch(0.83 0.135 88 / .4); border-radius:var(--r-sm);
+              padding:12px; font-size:13px; margin-bottom:14px; text-align:left; }
+  .ev-detail>div:first-child{ color:var(--vault); }
+  .ev-detail .row{ display:flex; justify-content:space-between; padding:5px 1px; border-bottom:1px dashed oklch(0.78 0.04 92); }
+  .ev-detail .row:last-child{ border-bottom:none; }
   .ev-detail .row .up{ color:var(--up-ink); font-weight:800; } .ev-detail .row .down{ color:var(--down-ink); font-weight:800; }
   .rank-row{ font-weight:700; }
   .delta{ font-size:11px; font-weight:900; margin-left:4px; }
@@ -435,10 +500,56 @@
   @keyframes bearDrop{ 0%{ opacity:0; transform:translateY(-8px) scale(.7); } 25%{ opacity:1; transform:translateY(12px) rotate(9deg) scale(1.1); } 70%{ opacity:1; } 100%{ opacity:0; transform:translateY(0) scale(1); } }
   @keyframes flipIn{ from{ opacity:0; transform:perspective(600px) rotateX(40deg) translateY(10px); } to{ opacity:1; transform:none; } }
   @keyframes shake{ 0%,100%{ transform:translateX(0); } 20%{ transform:translateX(-7px); } 40%{ transform:translateX(6px); } 60%{ transform:translateX(-4px); } 80%{ transform:translateX(3px); } }
-  .coin{ position:fixed; font-size:26px; z-index:400; pointer-events:none; animation:coinFly .7s ease-out forwards; }
-  @keyframes coinFly{ 0%{ opacity:1; transform:translateY(0) scale(1); } 100%{ opacity:0; transform:translateY(-70px) scale(1.5); } }
+  .coin{ position:fixed; font-size:26px; z-index:400; pointer-events:none; will-change:transform,opacity;
+         animation:coinFly .9s cubic-bezier(.25,.7,.4,1) forwards; }
+  @keyframes coinFly{ 0%{ opacity:0; transform:translate(0,4px) scale(.6); }
+                      18%{ opacity:1; transform:translate(calc(var(--cdx,0)*.4), -34px) scale(1.25); }
+                      100%{ opacity:0; transform:translate(var(--cdx,0), -92px) scale(1.05) rotate(20deg); } }
   .confetti{ position:fixed; top:-12px; width:11px; height:16px; z-index:400; pointer-events:none; border-radius:2px; animation:confFall linear forwards; }
   @keyframes confFall{ to{ transform:translateY(105vh) rotate(720deg); opacity:.85; } }
+
+  /* ===================================================================
+     🔐 금고문 시작 화면 (vault intro)
+     =================================================================== */
+  .vault-intro{ position:fixed; inset:0; z-index:250; display:flex; flex-direction:column;
+                align-items:center; justify-content:center; gap:14px; padding:24px;
+                background:
+                  radial-gradient(circle at 50% 32%, oklch(0.40 0.06 165), oklch(0.24 0.05 165) 62%, var(--vault-deep)); }
+  .vault-intro .vi-title{ font-size:clamp(26px,6.4vw,40px); font-weight:900; color:var(--gold-soft);
+                          letter-spacing:1px; text-shadow:0 2px 0 var(--vault-deep), 0 0 24px oklch(0.83 0.135 88 / .4); }
+  .vault-intro .vi-sub{ font-size:14px; color:oklch(0.82 0.05 150); margin-top:-6px; font-weight:700; }
+  .vault-door{ position:relative; width:min(62vw,250px); aspect-ratio:1; border-radius:22px;
+               background:radial-gradient(circle at 38% 30%, var(--vault-lite), var(--vault) 55%, var(--vault-deep));
+               border:7px solid var(--gold); box-shadow:0 0 0 4px var(--vault-deep), 0 16px 36px oklch(0 0 0 / .5), inset 0 0 36px oklch(0 0 0 / .4);
+               transform-origin:50% 50%; }
+  .vault-door::before{ content:""; position:absolute; inset:16px; border:2px dashed oklch(0.83 0.135 88 / .5); border-radius:14px; }
+  .vd-dial{ position:absolute; left:50%; top:50%; width:42%; aspect-ratio:1; transform:translate(-50%,-50%);
+            border-radius:50%; background:conic-gradient(var(--gold-soft),var(--gold-deep),var(--gold-soft),var(--gold-deep),var(--gold-soft));
+            box-shadow:inset 0 0 16px oklch(0 0 0 / .5); display:grid; place-items:center; }
+  .vd-knob{ width:62%; aspect-ratio:1; border-radius:50%; background:var(--vault-deep); border:3px solid var(--gold);
+            display:grid; place-items:center; font-size:26px; color:var(--gold-soft); }
+  .vd-spoke{ position:absolute; background:oklch(0.83 0.135 88 / .5); border-radius:3px; }
+  .vd-spoke.h{ left:9px; right:9px; top:50%; height:4px; transform:translateY(-50%); }
+  .vd-spoke.v{ top:9px; bottom:9px; left:50%; width:4px; transform:translateX(-50%); }
+  .vault-intro .vi-btn{ margin-top:6px; padding:14px 30px; font-size:17px; font-weight:900; border-radius:999px;
+                        color:var(--vault-deep); background:linear-gradient(180deg, var(--gold-soft), var(--gold));
+                        border:1px solid var(--gold-deep); box-shadow:0 4px 0 var(--gold-deep), 0 8px 20px oklch(0 0 0 / .3); }
+  .vault-intro .vi-hint{ font-size:12px; color:oklch(0.78 0.05 150); }
+  @media (prefers-reduced-motion: no-preference){
+    .vd-dial{ animation:dialIdle 9s linear infinite; }
+    .vault-intro .vi-btn{ animation:viPulse 2.4s ease-in-out infinite; }
+    .vault-intro.opening .vd-dial{ animation:dialSpin .85s cubic-bezier(.4,0,.2,1) forwards; }
+    .vault-intro.opening .vault-door{ animation:doorOpen .85s .28s cubic-bezier(.5,0,.2,1) forwards; }
+    .vault-intro.opening .vi-btn, .vault-intro.opening .vi-hint, .vault-intro.opening .vi-title, .vault-intro.opening .vi-sub{ animation:fadeOutUp .35s forwards; }
+    .vault-intro.opening{ animation:introFade .45s .62s forwards; }
+  }
+  @keyframes dialIdle{ to{ transform:translate(-50%,-50%) rotate(360deg); } }
+  @keyframes dialSpin{ 0%{ transform:translate(-50%,-50%) rotate(0); } 100%{ transform:translate(-50%,-50%) rotate(540deg); } }
+  @keyframes doorOpen{ 0%{ transform:perspective(900px) rotateY(0); opacity:1; }
+                       100%{ transform:perspective(900px) rotateY(-78deg) translateX(-18%) scale(1.06); opacity:0; } }
+  @keyframes viPulse{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-3px); } }
+  @keyframes fadeOutUp{ to{ opacity:0; transform:translateY(-10px); } }
+  @keyframes introFade{ to{ opacity:0; visibility:hidden; } }
 
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
@@ -535,7 +646,7 @@ const COUNTRIES = {
 function buildCompanies(countryKey){
   const country = COUNTRIES[countryKey];
   return SECTORS.map(s=>{
-    const baseStart = s.type==='growth'?2000 : s.type==='divid'?1000 : 1500;
+    const baseStart = s.type==='growth'?2500 : s.type==='divid'?1500 : 2000; // 시작가 분산 + 전부 절벽(500)에서 멀리 → 상폐 완화
     const baseDiv = s.type==='growth' ? (s.slot==='tech'?100:100) : s.type==='divid' ? 250 : 150;
     return {
       id: s.slot,
@@ -623,9 +734,9 @@ const TOTAL_ROUNDS = 12, DEFAULT_ACTIONS = 2;
 
 // ---------- 난이도 옵션 ----------
 const PRESETS = {
-  easy:   { name:'초급',  desc:'쉽고 여유롭게 (처음 배울 때)', buyLimit:5, forecastLen:3, divEvery:1, startCash:25000, coachOn:true,  downsideBuffer:1, forecastFog:false, actionsPerTurn:3 },
-  normal: { name:'표준',  desc:'균형 잡힌 기본 모드',            buyLimit:3, forecastLen:2, divEvery:1, startCash:20000, coachOn:false, downsideBuffer:0, forecastFog:false, actionsPerTurn:2 },
-  hard:   { name:'고급',  desc:'전략적 도전 (가족 고수용)',      buyLimit:2, forecastLen:1, divEvery:2, startCash:15000, coachOn:false, downsideBuffer:0, forecastFog:true,  actionsPerTurn:2 },
+  easy:   { name:'초급',  desc:'쉽고 여유롭게 (처음 배울 때)', buyLimit:5, forecastLen:3, divEvery:1, startCash:35000, coachOn:true,  downsideBuffer:1, forecastFog:false, actionsPerTurn:3 },
+  normal: { name:'표준',  desc:'균형 잡힌 기본 모드',            buyLimit:3, forecastLen:2, divEvery:1, startCash:25000, coachOn:false, downsideBuffer:0, forecastFog:false, actionsPerTurn:2 },
+  hard:   { name:'고급',  desc:'전략적 도전 (가족 고수용)',      buyLimit:2, forecastLen:1, divEvery:2, startCash:20000, coachOn:false, downsideBuffer:0, forecastFog:true,  actionsPerTurn:2 },
 };
 // forecastLen: 1=이번만, 2=이번+다음, 3=이번+다음+다다음 (각 슬롯은 사건 2개)
 // divEvery: 1=매라운드, 2=2라운드마다, 3=3라운드마다
@@ -642,6 +753,7 @@ function analyzeAdvice(opt){
     const when = slot===0 ? '곧' : slot===1 ? '다음 라운드에' : `${slot+1}라운드 뒤에`;
     const targets = ev.who==='all' ? COMPANIES.map(c=>c.id) : ev.who;
     targets.forEach(cid=>{
+      if(G.prices[cid]<=0) return; // 상폐(0원) 회사는 예보 분석에서 제외 — 죽은 회사가 오른다고 표시되지 않게
       const nm=COMPANIES.find(c=>c.id===cid).nm;
       if(ev.kind==='div'){
         if(ev.divMul>1){ advice[cid].score+=1; advice[cid].reasons.push(`${when} ${nm} 배당이 늘어요 (${ev.tx})`); }
@@ -651,7 +763,7 @@ function analyzeAdvice(opt){
         else if(ev.steps<0){ advice[cid].score+=ev.steps; advice[cid].reasons.push(`${when} ${nm} 주가가 내려요 (${ev.tx})`); }
       }
     });
-    if(ev.chain && ev.who!=='all'){
+    if(ev.chain && ev.who!=='all' && G.prices[ev.chain.who]>0){
       const cid=ev.chain.who; const nm=COMPANIES.find(c=>c.id===cid).nm;
       if(ev.chain.steps>0){ advice[cid].score+=ev.chain.steps; advice[cid].reasons.push(`${when} ${nm} 주가가 함께 올라요 (연동)`); }
       else if(ev.chain.steps<0){ advice[cid].score+=ev.chain.steps; advice[cid].reasons.push(`${when} ${nm} 주가가 함께 내려요 (연동)`); }
@@ -731,15 +843,15 @@ function renderSetup(){
   if(!G) G={};
   if(!G.setupOpts) G.setupOpts = {...PRESETS.normal, preset:'normal'};
   const opts = G.setupOpts;
-  const cashLbl={15000:'1.5만',20000:'2만',25000:'2.5만',30000:'3만'};
+  const cashLbl={20000:'2만',25000:'2.5만',30000:'3만',35000:'3.5만'};
   const cbtn=(key,val,txt)=>`<button class="${opts[key]===val?'sel':''}" onclick="setOpt('${key}',${val})">${txt}</button>`;
   const optRow=(label,btns)=>`<div class="opt-row"><span class="opt-lbl">${label}</span><div class="opt-btns">${btns}</div></div>`;
   $('#app').innerHTML = `
    <div class="setup">
     <div class="setup-head">
-      <div class="logo">🐂🐻</div>
+      <div class="logo">🐂🏦🐻</div>
       <h1 class="brand"><span class="b-bull">Bull</span><span class="b-amp">&</span><span class="b-bear">Bear</span></h1>
-      <div class="brand-sub">불앤베어 꼬마투자단 · 가족 주식 보드게임</div>
+      <div class="brand-sub">🏦 불앤베어 은행 · 가족 금융 게임</div>
     </div>
 
     <div class="setup-cols">
@@ -775,7 +887,7 @@ function renderSetup(){
           ${optRow('한 턴 같은 회사 매수', [2,3,5].map(n=>cbtn('buyLimit',n,`${n}주`)).join(''))}
           ${optRow('예보 길이', cbtn('forecastLen',1,'이번만')+cbtn('forecastLen',2,'이번+다음')+cbtn('forecastLen',3,'3R 앞'))}
           ${optRow('배당 주기', cbtn('divEvery',1,'매R')+cbtn('divEvery',2,'2R')+cbtn('divEvery',3,'3R'))}
-          ${optRow('시작 자금', [15000,20000,25000,30000].map(n=>cbtn('startCash',n,cashLbl[n])).join(''))}
+          ${optRow('시작 자금', [20000,25000,30000,35000].map(n=>cbtn('startCash',n,cashLbl[n])).join(''))}
           ${optRow('투자 도우미', `<button class="${opts.coachOn?'sel':''}" onclick="setOpt('coachOn',true)">켜짐</button><button class="${!opts.coachOn?'sel':''}" onclick="setOpt('coachOn',false)">꺼짐</button>`)}
         </div>
         <button class="start-btn" onclick="startGame()">게임 시작</button>
@@ -849,13 +961,15 @@ window.startGame = function(){
   }
   let actionDeck = shuffle([...ACTIONS, ...ACTIONS]);
   players.forEach(p=>{ p.hand=[actionDeck.pop(), actionDeck.pop()]; });
+  // 🎲 시작 순서 무작위 — 아빠가 늘 먼저 하지 않게 (기능 #2). 각자 이름·아바타·목표는 그대로 따라감.
+  const seated = shuffle(players);
   let eventDeck = shuffle([...EVENTS, ...EVENTS, ...EVENTS]);
   const forecast = [];
   for(let i=0;i<opts.forecastLen;i++) forecast.push(drawPair(eventDeck));
 
   G = {
     setupCount:np, setupNames:names, setupOpts:opts, setupCountry:countryKey, country,
-    players, prices, prevPrices:{...prices}, priceHist, eventDeck, actionDeck, forecast,
+    players:seated, prices, prevPrices:{...prices}, priceHist, eventDeck, actionDeck, forecast,
     round:1, turnIdx:0, actionsPerTurn:(opts.actionsPerTurn||DEFAULT_ACTIONS), actionsLeft:(opts.actionsPerTurn||DEFAULT_ACTIONS), buyCountThisTurn:{}, maxBuyThisTurn:opts.buyLimit, baseBuyLimit:opts.buyLimit,
     phase:'pass', infoPeek:null, flipNext:false, lastChanges:{}, lastForecast:null,
     coachMode: opts.coachOn,
@@ -868,12 +982,21 @@ window.startGame = function(){
 // ---------- PASS SCREEN (hand to next player) ----------
 function showPassScreen(){
   const p = G.players[G.turnIdx];
+  // 🎲 시작 순서 안내 — 1라운드 첫 차례에 한 번 (기능 #2)
+  const showOrder = G.round===1 && G.turnIdx===0 && !G._orderShown;
+  if(showOrder) G._orderShown = true;
+  const orderLine = G.players.map((pl,i)=>`${i===0?'':' → '}${pl.av}${pl.name}`).join('');
+  // 📔 지난 라운드 결과 다시 보기 — 첫 결산 이후에만 (기능 #1)
+  const canReview = !!(G.lastChanges && G.lastChanges.changes && G.lastChanges.changes.length!==undefined);
   $('#app').innerHTML = `
     <div class="overlay">
       <div class="modal pass-player">
+        <div class="vault-badge">🏦</div>
         <div class="mi">${p.av}</div>
         <h2>${p.name}님 차례</h2>
         <p>${G.round}라운드 · 기기를 ${p.name}님께 전달하세요.<br>준비되면 시작을 눌러주세요.</p>
+        ${showOrder?`<div class="order-banner">🎲 이번 판 순서 (무작위로 정했어요)<br><b>${orderLine}</b></div>`:''}
+        ${canReview?`<button class="mbtn ghost" onclick="viewLastRound()">📔 지난 라운드 결과 보기</button>`:''}
         <button class="mbtn" onclick="beginTurn()">내 차례 시작 ▶</button>
       </div>
     </div>`;
@@ -955,14 +1078,20 @@ function boardTileHTML(c,p){
   </div>`;
 }
 
+// 이벤트 대상 회사 라벨 — 상폐(0원) 회사명은 제외(죽은 회사가 예보에 표시되지 않게)
+function whoLabel(ev){
+  if(ev.who==='all') return '모든 회사';
+  const live = id => !G || !G.prices || G.prices[id]>0;
+  const names = ev.who.filter(live).map(id=>COMPANIES.find(c=>c.id===id).nm);
+  return names.length ? names.join('·') : '모든 회사';
+}
 function evShort(ev){
-  const who = ev.who==='all'?'모든 회사':ev.who.map(id=>COMPANIES.find(c=>c.id===id).nm).join('·');
-  return { who, steps:ev.steps };
+  return { who: whoLabel(ev), steps:ev.steps };
 }
 function miniEvHTML(ev, fog){
   // 고급 예보 안개: 회사/아이콘은 보이되 방향(▲▼·효과)을 숨김
   if(fog){
-    const who = ev.who==='all'?'모든 회사':ev.who.map(id=>COMPANIES.find(c=>c.id===id).nm).join('·');
+    const who = whoLabel(ev);
     return `<div class="mini-ev fog">
       <span class="mi-ico">${ev.ico}</span>
       <span class="mi-tx">${who}</span>
@@ -970,7 +1099,7 @@ function miniEvHTML(ev, fog){
     </div>`;
   }
   if(ev.kind==='div'){
-    const who = ev.who==='all'?'모든 회사':ev.who.map(id=>COMPANIES.find(c=>c.id===id).nm).join('·');
+    const who = whoLabel(ev);
     const label = ev.divMul===0?'배당 X':ev.divMul<1?'배당↓':'배당↑';
     return `<div class="mini-ev dvd">
       <span class="mi-ico">${ev.ico}</span>
@@ -1187,11 +1316,23 @@ function tileFx(cid, dir){
   const tile=$('#tile-'+cid); if(tile){
     tile.classList.add(dir>0?'flash-up':'flash-down');
     const r=tile.getBoundingClientRect();
-    const c=document.createElement('div'); c.className='coin'; c.textContent=dir>0?'🪙':'💸';
-    c.style.left=(r.left+r.width/2-13)+'px'; c.style.top=(r.top+6)+'px';
-    document.body.appendChild(c); setTimeout(()=>c.remove(),760);
+    // 🪙 동전 버스트: 여러 개가 팡 튀어오름(매수=금화, 매도=지폐)
+    coinShower(r.left+r.width/2, r.top+8, dir>0?5:3, dir>0?'🪙':'💸');
   }
   const m=$(dir>0?'#bull':'#bear'); if(m){ m.classList.add(dir>0?'cheer':'boo'); }
+}
+// 동전이 한 지점에서 부채꼴로 팡 튀는 연출 (transform/opacity)
+function coinShower(x, y, n, glyph){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) n=Math.min(n,1);
+  glyph=glyph||'🪙';
+  for(let i=0;i<n;i++){
+    const c=document.createElement('div'); c.className='coin'; c.textContent=glyph;
+    const dx=(i-(n-1)/2)*22 + (i*7%11-5);
+    c.style.left=(x-13)+'px'; c.style.top=y+'px';
+    c.style.setProperty('--cdx', dx+'px');
+    c.style.animationDelay=(i*55)+'ms';
+    document.body.appendChild(c); setTimeout(()=>c.remove(),900+i*55);
+  }
 }
 function confettiBurst(n){
   const cols=['#ffd23f','#5dd39e','#ff7a85','#6db3ff','#c79bff','#ffb061'];
@@ -1451,10 +1592,13 @@ function resolveRound(){
     const steps = computeSteps(ev, G);
     if(steps===0) return;
     const applyTo = ev.who==='all' ? COMPANIES.map(c=>c.id) : ev.who;
+    const marketWide = ev.who==='all'; // 시장 전체 악재로는 상장폐지 금지(500원에서 막힘) — 떼상폐 방지
     applyTo.forEach(cid=>{
       if(G.prices[cid]<=0) return;
       const before=G.prices[cid];
-      G.prices[cid]=moveWithFloor(G.prices[cid], steps);
+      let after=moveWithFloor(G.prices[cid], steps);
+      if(marketWide && after===0) after=500; // 개별 악재·깜짝사건만 0원(상폐) 가능
+      G.prices[cid]=after;
       changes.push({cid, before, after:G.prices[cid], evIco:ev.ico, evTx:ev.tx});
     });
     if(ev.chain && ev.who!=='all'){
@@ -1530,13 +1674,15 @@ function resolveRound(){
     }
   }
 
-  G.lastChanges={events, flip, changes, divPaid, divEvents, justDelisted};
+  G.lastChanges={events, flip, changes, divPaid, divEvents, justDelisted, round:G.round};
   showEventReveal();
 }
 
-function showEventReveal(){
+// review=true → '지난 라운드 결과 다시 보기'(닫기 버튼). 기본=라운드 직후 결산(다음 라운드로).
+function showEventReveal(review){
   const {events, changes, divPaid, divEvents}=G.lastChanges;
-  const isLast = G.round===TOTAL_ROUNDS;
+  const shownRound = G.lastChanges.round || G.round;   // 결산이 속한 라운드(리뷰 시 G.round는 이미 +1됨)
+  const isLast = shownRound===TOTAL_ROUNDS && !review;
 
   // ranking with delta from previous round
   const ranked=G.players.map((p,idx)=>{
@@ -1567,7 +1713,7 @@ function showEventReveal(){
   $('#app').innerHTML = `
     <div class="overlay">
       <div class="modal event-reveal" style="max-width:460px;">
-        <div style="font-size:13px;opacity:.7;margin-bottom:6px;">${G.round}라운드 결과</div>
+        <div style="font-size:13px;opacity:.7;margin-bottom:6px;">${review?`📔 지난 ${shownRound}라운드 결과 (다시 보기)`:`${shownRound}라운드 결과`}</div>
         <div class="ev-pair">
           ${events.map(evCardHTML).join('')}
         </div>
@@ -1612,15 +1758,23 @@ function showEventReveal(){
 
         <div class="ev-detail">
           <div style="font-weight:700;margin-bottom:4px;font-size:12px;">💰 배당금 ${G.setupOpts.divEvery>1?`(${G.setupOpts.divEvery}라운드마다 지급)`:''}</div>
-          ${(G.round % G.setupOpts.divEvery !== 0) ? `<div style="text-align:center;opacity:.6;font-size:12px;padding:4px;">이번 라운드는 배당이 없어요. 다음 배당까지 ${G.setupOpts.divEvery - (G.round % G.setupOpts.divEvery)}라운드 남았어요.</div>` : 
+          ${(shownRound % G.setupOpts.divEvery !== 0) ? `<div style="text-align:center;opacity:.6;font-size:12px;padding:4px;">이번 라운드는 배당이 없어요. 다음 배당까지 ${G.setupOpts.divEvery - (shownRound % G.setupOpts.divEvery)}라운드 남았어요.</div>` :
             divPaid.map(d=>`<div class="row"><span>${d.av} ${d.name}</span><span class="${d.amount>0?'up':''}">${d.amount>0?'+'+won(d.amount):'-'}</span></div>`).join('')
           }
         </div>
 
-        <button class="mbtn" onclick="advanceRound()">${isLast?'🏁 최종 결과 보기':`${G.round+1}라운드로 ▶`}</button>
+        <button class="mbtn" onclick="${review?'closeReview()':'advanceRound()'}">${review?'닫기':(isLast?'🏁 최종 결과 보기':`${shownRound+1}라운드로 ▶`)}</button>
       </div>
     </div>`;
+  // 🪙 배당이 지급된 라운드면 동전 샤워(다시 보기에선 생략)
+  if(!review && divPaid && divPaid.some(d=>d.amount>0)){
+    setTimeout(()=>coinShower(innerWidth/2, innerHeight*0.6, 8, '🪙'), 280);
+  }
 }
+
+// 지난 라운드 결과 다시 보기 (pass-and-play에서 마지막 턴 사람만 보던 결산을 누구나 다시) — 기능 #1
+window.viewLastRound = function(){ if(G && G.lastChanges && G.lastChanges.changes) showEventReveal(true); };
+window.closeReview = function(){ if(G.phase==='turn') render(); else showPassScreen(); };
 
 window.advanceRound = function(){
   if(G.round>=TOTAL_ROUNDS){ showResults(); return; }
@@ -1820,7 +1974,7 @@ const DOCS = {
     <h3>배당(용돈)과 분산 보너스</h3>
     <p>주식을 가지고만 있어도 배당(용돈)이 들어와요 — 이게 바로 <b>금융소득</b>! 그리고 <b>서로 다른 4종류 이상</b> 회사를 가지면 <b>분산 보너스</b> 용돈을 더 줘요. 골고루 나눠 사면 이득!</p>
     <h3>상장폐지 & 깜짝 사건</h3>
-    <p>주가가 크게 떨어지면 먼저 500원에서 한 번 멈춰요(경고!). 그때 안 팔고 또 맞으면 0원이 되어 사라져요. 또 가끔 <b>예보에 없던 깜짝 사건</b>으로 한 회사가 뚝 떨어져요(중국은 특히). 그래서 한 곳에 다 걸면 위험해요.</p>
+    <p>주가가 크게 떨어지면 먼저 500원에서 한 번 멈춰요(경고!). 그때 안 팔고 또 맞으면 0원이 되어 사라져요. <b>단, '경기 침체'처럼 모든 회사가 같이 떨어지는 사건으로는 상장폐지되지 않아요(500원에서 멈춤).</b> 회사 하나만 겨냥한 나쁜 소식이나 <b>예보에 없던 깜짝 사건</b>(중국은 특히)일 때만 0원이 돼요. 그래서 한 곳에 다 걸면 위험해요.</p>
     <h3>대응 카드</h3>
     <p>게임 중 뽑거나 가진 <b>대응 카드</b>로 위기를 넘기거나 기회를 잡아요:</p>
     ${ACTIONS.map(a=>`<p>${a.ico} <b>${a.nm}</b> — ${a.desc}</p>`).join('')}
@@ -1855,7 +2009,7 @@ const DOCS = {
     <h3>📊 사건의 종류</h3>
     <p><b>주가 사건:</b> 회사 주가가 오르거나 내려요. <b>배당 사건:</b> 주가는 그대로지만 배당이 늘거나 줄거나 없어져요.</p>
     <h3>⚠️ 꼭 알아두기</h3>
-    <p>주가가 0원이 되면 <b>상장폐지</b>(주식이 휴지가 돼요!). 상장폐지된 회사 예고는 더 이상 나오지 않아요. 5,500원에 닿으면 거기서 멈춰요. 한 회사는 <b>최대 6주</b>까지만 살 수 있어요.</p>
+    <p>주가가 0원이 되면 <b>상장폐지</b>(주식이 휴지가 돼요!). 단, 크게 떨어져도 먼저 <b>500원에서 한 번 멈춰요</b>(경고). <b>모든 회사가 같이 떨어지는 사건(예: 경기 침체)으로는 상장폐지되지 않고</b>, 회사 하나만 겨냥한 나쁜 소식이나 깜짝 사건일 때만 0원이 돼요. 상장폐지된 회사 예고는 더 이상 나오지 않아요. 5,500원에 닿으면 거기서 멈춰요. 한 회사는 <b>최대 6주</b>까지만 살 수 있어요.</p>
     <h3>🌈 분산 보너스</h3>
     <p>배당 받을 때 <b>서로 다른 4종류 이상</b> 회사를 가지고 있으면 보너스 용돈을 더 줘요. 골고루 나눠 사면 좋아요!</p>
     <h3>❗ 깜짝 사건</h3>
@@ -1908,8 +2062,30 @@ window.showDoc = function(key){
   </div>`;
 };
 
+// ---------- 🔐 금고문 시작 화면 ----------
+function showVaultIntro(){
+  $('#app').innerHTML = `
+    <div class="vault-intro" id="vaultIntro">
+      <div class="vi-title">🏦 불앤베어 은행</div>
+      <div class="vi-sub">꼬마 투자단 · 가족 금융 게임</div>
+      <div class="vault-door">
+        <span class="vd-spoke h"></span><span class="vd-spoke v"></span>
+        <div class="vd-dial"><div class="vd-knob">🔐</div></div>
+      </div>
+      <button class="vi-btn" onclick="enterVault()">🔐 금고 열기 ▶</button>
+      <div class="vi-hint">누르면 금고문이 스르륵 열려요</div>
+    </div>`;
+}
+window.enterVault = function(){
+  const intro = document.getElementById('vaultIntro');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!intro || reduce){ renderSetup(); return; }
+  intro.classList.add('opening');
+  setTimeout(renderSetup, 1000);
+};
+
 // ---------- INIT ----------
-renderSetup();
+showVaultIntro();
 </script>
 </body>
 </html>

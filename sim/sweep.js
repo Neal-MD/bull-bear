@@ -75,7 +75,7 @@ const OPT = {
   buyLimit:       [2,3,5],                    // 한 턴 같은 회사 매수
   forecastLen:    [1,2,3],                    // 예보 길이
   divEvery:       [1,2,3],                    // 배당 주기
-  startCash:      [15000,20000,25000,30000],  // 시작 자금
+  startCash:      [20000,25000,30000,35000],  // 시작 자금
   // coachOn 은 추천 표시일 뿐 — 게임 메커니즘/밸런스에 영향 없음 → 스윕 제외
 };
 
@@ -89,7 +89,7 @@ function scaleCash(startCash, actionsPerTurn){
 function buildCompanies(countryKey){
   const country=COUNTRIES[countryKey];
   return SECTORS.map(s=>{
-    const baseStart=s.type==='growth'?2000:s.type==='divid'?1000:1500;
+    const baseStart=s.type==='growth'?2500:s.type==='divid'?1500:2000; // 시작가 분산 + 절벽(500)에서 멀리
     const baseDiv=s.type==='growth'?100:s.type==='divid'?250:150;
     return { id:s.slot, ico:s.ico, sector:s.slot, type:s.type,
       start:Math.max(500,baseStart+country.startMod), div:Math.max(0,baseDiv+country.divMod), volMod:country.volMod };
@@ -202,7 +202,8 @@ function resolveRound(G,players){
     if(ev.kind==='div'){ const t=ev.who==='all'?G.companies.map(c=>c.id):ev.who; t.forEach(cid=>divMul[cid]=ev.divMul); return; }
     const steps=computeSteps(ev,G); if(steps===0)return;
     const t=ev.who==='all'?G.companies.map(c=>c.id):ev.who;
-    t.forEach(cid=>{ if(G.prices[cid]<=0)return; G.prices[cid]=moveWithFloor(G.prices[cid],steps); changes.push({cid,after:G.prices[cid]}); });
+    const marketWide=ev.who==='all'; // 전체 악재로는 상폐 금지(500서 막힘)
+    t.forEach(cid=>{ if(G.prices[cid]<=0)return; let after=moveWithFloor(G.prices[cid],steps); if(marketWide&&after===0)after=500; G.prices[cid]=after; changes.push({cid,after:G.prices[cid]}); });
     if(ev.chain&&ev.who!=='all'){ const cid=ev.chain.who; const cs=flip?-ev.chain.steps:ev.chain.steps; if(G.prices[cid]>0){ G.prices[cid]=moveWithFloor(G.prices[cid],cs); changes.push({cid,after:G.prices[cid]}); } }
   });
   G.flipNext=false;
